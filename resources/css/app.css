@@ -1,126 +1,217 @@
-/* Tailwind CSS Imports */
 @import "tailwindcss";
 
-/* Custom Styles */
 @layer components {
-    /* Tombol Primary */
+
+    /* =========================================
+       TOMBOL - BRD palet: #0F2F6B, #1E63D6, #1F8A4C, #FFC20E
+       ========================================= */
     .btn-primary {
-        @apply px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold transition-all duration-300 hover:bg-blue-700 active:scale-95;
+        @apply inline-block px-6 py-3 bg-[#1E63D6] text-white rounded-lg font-semibold transition-all duration-300 hover:bg-[#0F2F6B] active:scale-95;
     }
 
-    /* Tombol Secondary */
     .btn-secondary {
-        @apply px-6 py-3 bg-cyan-500 text-white rounded-lg font-semibold transition-all duration-300 hover:bg-cyan-600 active:scale-95;
+        @apply inline-block px-6 py-3 bg-[#1F8A4C] text-white rounded-lg font-semibold transition-all duration-300 hover:bg-green-800 active:scale-95;
     }
 
-    /* Tombol Outline */
+    /* Hanya digunakan pada latar kuning (sesuai BRD) */
+    .btn-cta {
+        @apply inline-block px-6 py-3 bg-[#FFC20E] text-[#0F2F6B] rounded-lg font-bold transition-all duration-300 hover:bg-yellow-300 active:scale-95;
+    }
+
     .btn-outline {
-        @apply px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-600 hover:text-white active:scale-95;
+        @apply inline-block px-6 py-3 border-2 border-[#1E63D6] text-[#1E63D6] rounded-lg font-semibold transition-all duration-300 hover:bg-[#1E63D6] hover:text-white active:scale-95;
     }
 
-    /* Card */
+    /* =========================================
+       CARD
+       ========================================= */
     .card {
         @apply bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
     }
 
-    /* Section Title */
+    /* =========================================
+       SECTION TITLE
+       ========================================= */
     .section-title {
         @apply text-3xl md:text-4xl font-bold text-gray-900 mb-4;
     }
 
-    /* Smooth scroll */
+    /* =========================================
+       SMOOTH SCROLL
+       ========================================= */
     html {
         scroll-behavior: smooth;
     }
 
+    /* =========================================
+       HERO CAROUSEL
+       ========================================= */
+    .hero-carousel {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
 
+    .hero-slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 0.6s ease-in-out;
+    }
+
+    .hero-slide.active {
+        opacity: 1;
+    }
+
+    .carousel-control {
+        @apply w-10 h-10 rounded-full bg-white/20 border border-white/30 text-white flex items-center justify-center transition-all duration-300 hover:bg-white/40 active:scale-95;
+    }
+
+    .carousel-dot {
+        @apply w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300 cursor-pointer hover:bg-white/60;
+    }
+
+    .carousel-dot.active {
+        @apply bg-[#FFC20E] w-8;
+    }
+
+    /* =========================================
+       MARQUEE PENGUMUMAN
+       ========================================= */
+    .marquee-track {
+        display: inline-flex;
+        gap: 3rem;
+        white-space: nowrap;
+        animation: marquee 28s linear infinite;
+    }
+
+    .marquee-track:hover {
+        animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* =========================================
+       TEACHER CARD (accordion panel)
+       ========================================= */
     .teacher-card {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-.teacher-row {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    height: 254px;
-}
+    .teacher-row {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        height: 254px;
+    }
 
-.teacher-panel {
-    flex: 0 0 60px;
-    height: 254px;
-    background-color: #48cbff;
-    background-size: cover;
-    background-position: center top;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    cursor: pointer;
-    border-radius: 6px;
-    border: 1px solid #0EA5E9;
-    overflow: hidden;
-    transition: flex-basis 0.5s ease, box-shadow 0.3s;
-}
+    .teacher-panel {
+        flex: 0 0 60px;
+        height: 254px;
+        background-color: #0F2F6B;
+        background-size: cover;
+        background-position: center top;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        cursor: pointer;
+        border-radius: 8px;
+        border: 2px solid var(--panel-color, #1E63D6);
+        overflow: hidden;
+        transition: flex-basis 0.5s ease, box-shadow 0.3s, border-color 0.3s;
+    }
 
-.teacher-panel:hover {
-    flex-basis: 200px;
-    box-shadow: 0 8px 30px rgba(30, 64, 175, 0.4);
-}
+    .teacher-panel:hover,
+    .teacher-panel.active {
+        flex-basis: 200px;
+        box-shadow: 0 8px 30px rgba(30, 99, 214, 0.4);
+        border-color: var(--panel-color, #1E63D6);
+        border-width: 3px;
+    }
 
-.teacher-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, #ea8e24 0%, #af1e1e88 20%, transparent 100%);
-}
+    .teacher-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(15, 47, 107, 0.95) 0%, rgba(30, 99, 214, 0.3) 30%, transparent 100%);
+        transition: background 0.3s;
+    }
 
-.teacher-info {
-    position: relative;
-    z-index: 1;
-    padding: 0.75rem;
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-}
+    .teacher-panel:hover .teacher-overlay,
+    .teacher-panel.active .teacher-overlay {
+        background: linear-gradient(to top, rgba(15, 47, 107, 0.92) 0%, rgba(30, 99, 214, 0.5) 25%, transparent 100%);
+    }
 
-.teacher-subject {
-    display: block;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #93c5fd;
-    margin-bottom: 3px;
-    opacity: 0;
-    transform: translateY(6px);
-    transition: all 0.4s 0.1s;
-}
+    .teacher-info {
+        position: relative;
+        z-index: 1;
+        padding: 0.75rem;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
-.teacher-name {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #fff;
-    opacity: 0;
-    transform: translateY(6px);
-    transition: all 0.4s 0.15s;
-}
+    .teacher-subject {
+        display: block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #FFC20E;
+        margin-bottom: 3px;
+        opacity: 0;
+        transform: translateY(6px);
+        transition: all 0.4s 0.1s;
+    }
 
-.teacher-panel:hover .teacher-subject,
-.teacher-panel:hover .teacher-name {
-    opacity: 1;
-    transform: translateY(0);
-}
+    .teacher-name {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #fff;
+        opacity: 0;
+        transform: translateY(6px);
+        transition: all 0.4s 0.15s;
+    }
 
-@media (max-width: 768px) {
-    .teacher-row { height: 220px; }
-    .teacher-panel { flex: 0 0 50px; height: 220px; }
-    .teacher-panel:hover { flex-basis: 160px; }
-}
+    .teacher-panel:hover .teacher-subject,
+    .teacher-panel:hover .teacher-name,
+    .teacher-panel.active .teacher-subject,
+    .teacher-panel.active .teacher-name {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-@media (max-width: 480px) {
-    .teacher-row { height: 180px; }
-    .teacher-panel { flex: 0 0 40px; height: 180px; }
-    .teacher-panel:hover { flex-basis: 130px; }
-}
+    /* =========================================
+       RESPONSIVE TEACHER PANEL
+       ========================================= */
+    @media (max-width: 768px) {
+        .teacher-row  { height: 220px; }
+        .teacher-panel { flex: 0 0 50px; height: 220px; }
+        .teacher-panel:hover,
+        .teacher-panel.active { flex-basis: 160px; }
+    }
+
+    @media (max-width: 480px) {
+        .teacher-row  { height: 180px; }
+        .teacher-panel { flex: 0 0 40px; height: 180px; }
+        .teacher-panel:hover,
+        .teacher-panel.active { flex-basis: 130px; }
+    }
+
+    /* =========================================
+       LINE CLAMP
+       ========================================= */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 }

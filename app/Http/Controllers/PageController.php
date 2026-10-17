@@ -75,4 +75,40 @@ class PageController extends Controller
         return redirect('/')
             ->with('success', 'Terima kasih! Data pendaftaran Anda telah diterima.');
     }
+
+    /**
+     * Tampilkan halaman About
+     * Route: /about
+     */
+    public function about()
+    {
+        return view('pages.about');
+    }
+
+    /**
+     * Tampilkan halaman Facilities
+     * Route: /facilities
+     */
+    public function facilities()
+    {
+        return view('pages.facilities');
+    }
+
+    /**
+     * Tampilkan halaman Teachers
+     * Route: /teachers
+     */
+    public function teachers()
+    {
+        return view('pages.teachers');
+    }
+
+    /**
+     * Tampilkan halaman Berita
+     * Route: /berita
+     */
+    public function berita()
+    {
+        return view('pages.berita');
+    }
 }

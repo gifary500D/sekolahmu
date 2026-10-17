@@ -3,460 +3,471 @@
 @section('title', 'Beranda')
 
 @section('content')
-<!-- Hero Section -->
-<section class="relative bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 min-h-screen flex items-center overflow-hidden">
-    <!-- Background Decoration -->
-    <div class="absolute top-0 right-0 w-72 h-72 sm:w-96 sm:h-96 bg-amber-400/10 rounded-full -mr-24 -mt-24 sm:-mr-48 sm:-mt-48"></div>
-    <div class="absolute bottom-0 left-0 w-56 h-56 sm:w-72 sm:h-72 bg-cyan-400/10 rounded-full -ml-20 -mb-20 sm:-ml-36 sm:-mb-36"></div>
-    <div class="absolute inset-0 opacity-[0.07]" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 28px 28px;"></div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
-            <!-- Content -->
+{{-- =============================================
+     HERO SECTION - BRD M1-F01
+     ============================================= --}}
+<section class="relative bg-[#0F2F6B] overflow-hidden w-full aspect-[2/1] min-h-[300px] max-h-[640px]">
+
+    {{-- Carousel Background --}}
+    <div class="absolute inset-0">
+        <div class="hero-carousel w-full h-full">
+            <div class="hero-slide active"
+                 style="background-image: url('{{ asset('images/spanduk1.jpg') }}');">
+            </div>
+            <div class="hero-slide"
+                 style="background-image: url('{{ asset('images/spanduk2.jpg') }}');">
+            </div>
+            <div class="hero-slide"
+                 style="background-image: url('{{ asset('images/spanduk3.jpg') }}');">
+            </div>
+        </div>
+        <div class="absolute inset-0 bg-[#0F2F6B]/70"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full relative z-10 w-full flex items-center">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center w-full">
+
+            {{-- Konten Hero --}}
             <div class="text-white text-center md:text-left">
-                <span class="inline-block px-4 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 text-xs sm:text-sm font-semibold tracking-wide uppercase mb-5">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-[#FFC20E]/15 border border-[#FFC20E]/30 text-[#FFC20E] text-xs sm:text-sm font-semibold tracking-wide uppercase mb-3">
                     Sekolah Menengah Atas Negeri
                 </span>
-                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                    Selamat Datang di <span class="text-amber-300">SMA Negeri 1 Medan</span>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                    Selamat Datang di <span class="text-[#FFC20E]">SMA Negeri 1 Medan</span>
                 </h1>
-                <p class="text-base sm:text-lg md:text-xl mb-8 text-blue-100 max-w-xl mx-auto md:mx-0">
+                <p class="text-sm sm:text-base md:text-lg mb-6 text-blue-100 max-w-xl mx-auto md:mx-0">
                     Membangun generasi muda yang berkarakter, cerdas, dan berdaya saing global.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <a href="/daftar" class="bg-amber-400 text-blue-950 px-8 py-3 rounded-lg font-bold hover:bg-amber-300 transition-all duration-300 text-center hover:shadow-lg hover:shadow-amber-400/30">
+                <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+                    <a href="{{ url('/daftar') }}"
+                       class="bg-[#FFC20E] text-[#0F2F6B] px-6 py-2.5 rounded-lg font-bold hover:bg-yellow-300 transition-all duration-300 text-center hover:shadow-lg hover:shadow-[#FFC20E]/30 text-sm sm:text-base">
                         Daftar Sekarang
                     </a>
-                    <a href="#tentang" class="border-2 border-white/40 text-white px-8 py-3 rounded-lg font-bold hover:bg-white/10 hover:border-white transition-all duration-300 text-center">
+                    <a href="#tentang"
+                       class="border-2 border-white/40 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-white/10 hover:border-white transition-all duration-300 text-center text-sm sm:text-base">
                         Pelajari Lebih Lanjut
                     </a>
                 </div>
             </div>
 
-            <!-- Illustration -->
+            {{-- Ilustrasi Hero --}}
             <div class="hidden md:block">
                 <div class="relative">
-                    <div class="absolute inset-0 bg-amber-400/10 rounded-3xl blur-3xl"></div>
-                    <div class="relative bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 backdrop-blur-md border border-white/10">
-                        <svg class="w-full h-auto" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Gedung Sekolah -->
-                            <rect x="50" y="100" width="200" height="150" fill="white" opacity="0.95"/>
-                            <rect x="50" y="100" width="200" height="20" fill="#1e3a8a"/>
-                            <!-- Windows -->
-                            <rect x="70" y="130" width="25" height="25" fill="#1e3a8a"/>
-                            <rect x="110" y="130" width="25" height="25" fill="#1e3a8a"/>
-                            <rect x="150" y="130" width="25" height="25" fill="#1e3a8a"/>
-                            <rect x="190" y="130" width="25" height="25" fill="#1e3a8a"/>
-                            <rect x="70" y="170" width="25" height="25" fill="#1e3a8a"/>
-                            <rect x="110" y="170" width="25" height="25" fill="#1e3a8a"/>
-                            <rect x="150" y="170" width="25" height="25" fill="#1e3a8a"/>
-                            <rect x="190" y="170" width="25" height="25" fill="#1e3a8a"/>
-                            <!-- Door -->
-                            <rect x="135" y="200" width="30" height="50" fill="#f59e0b"/>
-                            <!-- Roof -->
-                            <polygon points="50,100 150,30 250,100" fill="#f59e0b"/>
-                            <!-- Flag -->
-                            <rect x="148" y="10" width="3" height="25" fill="#e5e7eb"/>
-                            <rect x="151" y="10" width="18" height="12" fill="#f59e0b"/>
-                        </svg>
+                    <div class="absolute inset-0 bg-[#FFC20E]/10 rounded-3xl blur-3xl"></div>
+                    <div class="relative bg-white/5 rounded-3xl p-6 backdrop-blur-md border border-white/10 aspect-square flex items-center justify-center">
+                        {{-- Kosongkan: isi dengan gambar gedung/logo sekolah --}}
+                        <div class="text-center text-white/40">
+                            <div class="w-24 h-24 mx-auto mb-3 rounded-full bg-white/10 border-2 border-dashed border-white/20 flex items-center justify-center">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 21h19.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                                </svg>
+                            </div>
+                            <p class="text-sm">Foto / Ilustrasi Sekolah</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-14 sm:mt-20">
-            <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 text-white text-center">
-                <h3 class="text-3xl font-bold mb-2 text-amber-300">50+</h3>
-                <p class="text-blue-100">Tahun Berdiri</p>
+    {{-- Carousel Controls --}}
+    <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
+        <button onclick="prevSlide()" aria-label="Slide sebelumnya" class="carousel-control">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        <div class="flex gap-2 items-center">
+            <button onclick="goToSlide(0)" aria-label="Slide 1" class="carousel-dot active"></button>
+            <button onclick="goToSlide(1)" aria-label="Slide 2" class="carousel-dot"></button>
+            <button onclick="goToSlide(2)" aria-label="Slide 3" class="carousel-dot"></button>
+        </div>
+        <button onclick="nextSlide()" aria-label="Slide berikutnya" class="carousel-control">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </button>
+    </div>
+</section>
+
+
+{{-- =============================================
+     PENGUMUMAN - BRD M1-F01 (tambahan dari BRD)
+     ============================================= --}}
+<div class="bg-[#1E63D6] text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-4 py-3 overflow-hidden">
+            <span class="flex-shrink-0 bg-[#FFC20E] text-[#0F2F6B] text-xs font-bold px-3 py-1 rounded uppercase tracking-wide">
+                Pengumuman
+            </span>
+            <div class="overflow-hidden flex-1">
+                <div class="marquee-track flex gap-12 text-sm font-medium whitespace-nowrap">
+                    {{-- Kosongkan: isi dengan data pengumuman dari database --}}
+                    <span>Pengumuman sekolah akan ditampilkan di sini setelah data tersedia.</span>
+                    <span>Informasi kegiatan dan agenda penting akan diperbarui secara berkala.</span>
+                </div>
             </div>
-            <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 text-white text-center">
-                <h3 class="text-3xl font-bold mb-2 text-amber-300">1000+</h3>
-                <p class="text-blue-100">Siswa Aktif</p>
+        </div>
+    </div>
+</div>
+
+
+{{-- =============================================
+     BERITA TERBARU - BRD M1-F03
+     ============================================= --}}
+<section id="berita" class="py-16 sm:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-12">
+            <span class="inline-block text-[#FFC20E] font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Informasi Terkini</span>
+            <h2 class="section-title mx-auto max-w-2xl">Berita Terbaru</h2>
+            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
+                Dapatkan informasi terkini seputar kegiatan dan prestasi SMA Negeri 1 Medan
+            </p>
+        </div>
+
+        {{-- State: Data berita (akan diisi dari database) --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+
+            {{-- Card Berita: kosongkan gambar, isi dari DB --}}
+            @for ($i = 0; $i < 3; $i++)
+            <div class="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 group">
+                <div class="relative h-48 overflow-hidden bg-[#0F2F6B]/10 flex items-center justify-center">
+                    {{-- Kosongkan: ganti dengan {{ $berita->thumbnail }} --}}
+                    <div class="text-center text-gray-400">
+                        <svg class="w-10 h-10 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 18h16.5M3.75 6h16.5" />
+                        </svg>
+                        <p class="text-xs">Gambar Berita</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs font-bold text-[#FFC20E] uppercase tracking-wide">Kategori</span>
+                    <h3 class="text-lg font-bold text-gray-900 mt-2 mb-3 group-hover:text-[#1E63D6] transition-colors line-clamp-2">
+                        Judul berita akan ditampilkan di sini
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                        Ringkasan berita akan ditampilkan di sini setelah data tersedia dari database.
+                    </p>
+                    <a href="#" class="text-[#1E63D6] font-semibold text-sm hover:text-[#0F2F6B] transition-colors inline-flex items-center gap-1">
+                        Baca Selengkapnya
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
-            <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 text-white text-center">
-                <h3 class="text-3xl font-bold mb-2 text-amber-300">95%</h3>
-                <p class="text-blue-100">Lulus Ujian</p>
-            </div>
+            @endfor
+
+        </div>
+
+        <div class="text-center mt-12">
+            <a href="{{ url('/berita') }}" class="btn-primary">Lihat Semua Berita</a>
         </div>
     </div>
 </section>
 
-<!-- Tentang Kami -->
+
+{{-- =============================================
+     AGENDA - BRD M1-F04 (BARU - wajib BRD)
+     ============================================= --}}
+<section id="agenda" class="py-16 sm:py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-12">
+            <span class="inline-block text-[#FFC20E] font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Kegiatan Sekolah</span>
+            <h2 class="section-title mx-auto max-w-2xl">Agenda Mendatang</h2>
+            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
+                Pantau jadwal kegiatan dan acara penting sekolah
+            </p>
+        </div>
+
+        {{-- Layout agenda: daftar kiri + highlight kanan --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+
+            {{-- Daftar Agenda --}}
+            <div class="lg:col-span-2 space-y-4">
+
+                {{-- Item agenda - kosongkan, isi dari DB --}}
+                @for ($i = 0; $i < 4; $i++)
+                <div class="bg-white rounded-xl p-5 border border-gray-100 hover:border-[#1E63D6]/30 hover:shadow-lg transition-all duration-300 flex gap-4 items-start group">
+                    {{-- Tanggal --}}
+                    <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-[#0F2F6B] flex flex-col items-center justify-center text-white group-hover:bg-[#1E63D6] transition-colors">
+                        <span class="text-lg font-bold leading-none">--</span>
+                        <span class="text-xs uppercase mt-0.5 text-[#FFC20E]">Bln</span>
+                    </div>
+                    {{-- Detail --}}
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-semibold text-gray-900 group-hover:text-[#1E63D6] transition-colors mb-1">
+                            Judul agenda akan diisi dari database
+                        </h4>
+                        <p class="text-sm text-gray-500 mb-2 line-clamp-2">
+                            Deskripsi agenda akan ditampilkan di sini.
+                        </p>
+                        <div class="flex items-center gap-3 text-xs text-gray-400">
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2m8-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                --:-- WIB
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+                                </svg>
+                                Lokasi belum tersedia
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @endfor
+
+            </div>
+
+            {{-- Kalender Mini / Highlight --}}
+            <div class="lg:col-span-1">
+                <div class="bg-[#0F2F6B] rounded-xl p-6 text-white h-full min-h-[280px] flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Kalender Akademik</h3>
+                        <p class="text-blue-200 text-sm mb-6">Tahun Pelajaran 2026/2027</p>
+                        {{-- Kosongkan: isi dengan komponen kalender atau highlight semester --}}
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-white/10">
+                                <div class="w-2 h-2 rounded-full bg-[#FFC20E] flex-shrink-0"></div>
+                                <span class="text-sm">Data semester akan diisi dari database</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-white/10">
+                                <div class="w-2 h-2 rounded-full bg-[#1F8A4C] flex-shrink-0"></div>
+                                <span class="text-sm">Informasi libur nasional</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="mt-6 block text-center bg-[#FFC20E] text-[#0F2F6B] font-bold py-2.5 rounded-lg hover:bg-yellow-300 transition-colors text-sm">
+                        Lihat Semua Agenda
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+{{-- =============================================
+     TENTANG KAMI - BRD M1-F02
+     ============================================= --}}
 <section id="tentang" class="py-16 sm:py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
-            <!-- Content -->
-            <div class="order-2 md:order-1">
-                <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Tentang Sekolah</span>
-                <h2 class="section-title">Tentang Kami</h2>
-                <p class="text-gray-600 text-base sm:text-lg leading-relaxed mb-6">
-                    SMA Negeri 1 Medan adalah institusi pendidikan terkemuka yang berkomitmen untuk memberikan pendidikan berkualitas tinggi dengan pendekatan holistik. Kami percaya bahwa setiap siswa memiliki potensi unik yang perlu dikembangkan secara optimal.
-                </p>
-                <p class="text-gray-600 text-base sm:text-lg leading-relaxed mb-8">
-                    Dengan fasilitas modern, tenaga pengajar berpengalaman, dan lingkungan belajar yang kondusif, kami siap membentuk generasi pemimpin masa depan yang berakhlak mulia dan berdaya saing tinggi.
-                </p>
-                <div class="space-y-4">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <div class="flex items-center justify-center h-10 w-10 rounded-md bg-blue-900 text-amber-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>
-                            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+
+            {{-- Gambar --}}
+            <div class="order-1 md:order-1">
+                <div class="bg-[#0F2F6B] rounded-2xl aspect-[4/3] flex items-center justify-center text-white relative overflow-hidden group hover:shadow-2xl transition-shadow">
+                    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+                    {{-- Kosongkan: ganti dengan <img> foto gedung sekolah --}}
+                    <div class="text-center relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-white/10 border-2 border-dashed border-white/20 flex items-center justify-center">
+                            <svg class="w-9 h-9 text-[#FFC20E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 21h19.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                            </svg>
                         </div>
-                        <div class="ml-4">
-                            <h4 class="text-lg font-semibold text-gray-900">Kurikulum Nasional</h4>
-                            <p class="text-gray-600">Mengikuti standar kurikulum nasional terbaru</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <div class="flex items-center justify-center h-10 w-10 rounded-md bg-blue-900 text-amber-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-4">
-                            <h4 class="text-lg font-semibold text-gray-900">Ekstrakurikuler Lengkap</h4>
-                            <p class="text-gray-600">Berbagai pilihan kegiatan pengembangan diri</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <div class="flex items-center justify-center h-10 w-10 rounded-md bg-blue-900 text-amber-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-4">
-                            <h4 class="text-lg font-semibold text-gray-900">Bimbingan Akademik</h4>
-                            <p class="text-gray-600">Program bimbingan belajar dan konseling siswa</p>
-                        </div>
+                        <p class="text-sm text-blue-200">Foto Gedung Sekolah</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Image Placeholder -->
-            <div class="order-1 md:order-2">
-                <div class="bg-gradient-to-br from-blue-900 to-indigo-950 rounded-2xl aspect-square flex items-center justify-center text-white relative overflow-hidden">
-                    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
-                    <div class="text-center relative z-10">
-                        <svg class="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-4 text-amber-300" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9.75L12 4l9 5.75M4.5 10.5v8.25A1.25 1.25 0 005.75 20h12.5A1.25 1.25 0 0019.5 18.75V10.5" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 20v-5.25h4.5V20" />
-                        </svg>
-                        <p class="text-lg sm:text-xl font-semibold text-blue-100">Foto Sekolah</p>
+            {{-- Konten --}}
+            <div class="order-2 md:order-2">
+                <span class="inline-block text-[#FFC20E] font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Tentang Sekolah</span>
+                <h2 class="section-title">Tentang Kami</h2>
+                {{-- Kosongkan: isi dengan deskripsi resmi dari sekolah --}}
+                <p class="text-gray-600 text-base sm:text-lg leading-relaxed mb-4">
+                    SMA Negeri 1 Medan adalah institusi pendidikan terkemuka yang berkomitmen memberikan
+                    pendidikan berkualitas tinggi dengan pendekatan holistik.
+                </p>
+                <p class="text-gray-500 text-sm leading-relaxed mb-8 border-l-4 border-[#FFC20E] pl-4">
+                    Informasi visi, misi, dan sejarah sekolah akan ditampilkan di sini setelah dikonfirmasi pihak sekolah.
+                </p>
+
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4 group">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-[#0F2F6B] flex items-center justify-center group-hover:bg-[#FFC20E] transition-colors">
+                            <svg class="w-5 h-5 text-[#FFC20E] group-hover:text-[#0F2F6B] transition-colors" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 group-hover:text-[#1E63D6] transition-colors">Kurikulum Nasional</h4>
+                            <p class="text-gray-500 text-sm">Mengikuti standar kurikulum nasional terbaru</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 group">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-[#0F2F6B] flex items-center justify-center group-hover:bg-[#FFC20E] transition-colors">
+                            <svg class="w-5 h-5 text-[#FFC20E] group-hover:text-[#0F2F6B] transition-colors" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 group-hover:text-[#1E63D6] transition-colors">Ekstrakurikuler Lengkap</h4>
+                            <p class="text-gray-500 text-sm">Berbagai pilihan kegiatan pengembangan diri</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 group">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-[#0F2F6B] flex items-center justify-center group-hover:bg-[#FFC20E] transition-colors">
+                            <svg class="w-5 h-5 text-[#FFC20E] group-hover:text-[#0F2F6B] transition-colors" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 group-hover:text-[#1E63D6] transition-colors">Bimbingan Akademik</h4>
+                            <p class="text-gray-500 text-sm">Program bimbingan belajar dan konseling siswa</p>
+                        </div>
                     </div>
                 </div>
+
+                <a href="{{ url('/tentang') }}" class="inline-flex items-center gap-2 mt-8 text-[#1E63D6] font-semibold hover:text-[#0F2F6B] transition-colors">
+                    Selengkapnya
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
+
         </div>
     </div>
 </section>
 
-<!-- Tenaga Pengajar -->
-<section id="guru" class="py-16 sm:py-20 bg-gray-50">
+
+{{-- =============================================
+     GALERI - BRD M1-F06 (BARU - wajib BRD)
+     ============================================= --}}
+<section id="galeri" class="py-16 sm:py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Pendidik Kami</span>
-            <h2 class="section-title mx-auto max-w-2xl">Tenaga Pengajar</h2>
+
+        <div class="text-center mb-12">
+            <span class="inline-block text-[#FFC20E] font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Dokumentasi</span>
+            <h2 class="section-title mx-auto max-w-2xl">Galeri Sekolah</h2>
             <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
+                Sekilas kegiatan dan momen berharga di SMA Negeri 1 Medan
+            </p>
+        </div>
+
+        {{-- Grid Galeri --}}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+
+            {{-- Item galeri kosong - isi dengan gambar dari DB --}}
+            @for ($i = 0; $i < 8; $i++)
+            <div class="relative group rounded-xl overflow-hidden bg-[#0F2F6B]/10 aspect-square border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
+                {{-- Kosongkan: ganti dengan <img src="{{ $item->image_path }}" alt="{{ $item->alt_text }}" ...> --}}
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                    <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 18h16.5M3.75 6h16.5" />
+                    </svg>
+                    <span class="text-xs">Foto {{ $i + 1 }}</span>
+                </div>
+                <div class="absolute inset-0 bg-[#0F2F6B]/0 group-hover:bg-[#0F2F6B]/50 transition-colors duration-300 flex items-center justify-center">
+                    <span class="text-white font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        Lihat
+                    </span>
+                </div>
+            </div>
+            @endfor
+
+        </div>
+
+        <div class="text-center mt-10">
+            <a href="{{ url('/galeri') }}" class="btn-outline">Lihat Semua Galeri</a>
+        </div>
+    </div>
+</section>
+
+
+{{-- =============================================
+     TENAGA PENGAJAR - BRD (ada di halaman /guru)
+     ============================================= --}}
+<section id="guru" class="relative py-16 sm:py-20 bg-slate-900">
+
+    <div class="absolute top-0 left-0 w-full overflow-hidden leading-none" style="transform: translateY(-1px);">
+        <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-16 sm:h-20">
+            <path d="M0,40 C180,80 360,0 540,40 C720,80 900,0 1080,40 C1260,80 1440,20 1440,20 L1440,0 L0,0 Z" fill="#f9fafb"/>
+            <path d="M0,60 C200,20 400,80 600,50 C800,20 1000,70 1200,45 C1320,30 1400,55 1440,50 L1440,0 L0,0 Z" fill="#f9fafb" opacity="0.4"/>
+        </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <span class="inline-block text-[#FFC20E] font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Pendidik Kami</span>
+            <h2 class="section-title mx-auto max-w-2xl text-white">Tenaga Pengajar</h2>
+            <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
                 Didukung oleh guru-guru berpengalaman dan berdedikasi tinggi
             </p>
         </div>
 
-        <div class="teacher-card">
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru1.jpg') }}')">
+        {{-- Teacher accordion panels - kosongkan gambar, isi dari DB --}}
+        <div class="teacher-card" id="teacherCard">
+            {{-- Panel akan diisi dari data sekolah. Contoh placeholder: --}}
+            <div class="teacher-panel" style="background-color: #0F2F6B; --panel-color: #1E63D6;">
                 <div class="teacher-overlay"></div>
                 <div class="teacher-info">
-                    <span class="teacher-subject">Matematika</span>
-                    <span class="teacher-name">Drs. Ahmad Fauzi, M.M</span>
+                    <span class="teacher-subject">Mata Pelajaran</span>
+                    <span class="teacher-name">Nama Guru, Gelar</span>
                 </div>
             </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru2.jpg') }}')">
+            <div class="teacher-panel" style="background-color: #1E63D6; --panel-color: #1E63D6;">
                 <div class="teacher-overlay"></div>
                 <div class="teacher-info">
-                    <span class="teacher-subject">Fisika</span>
-                    <span class="teacher-name">Ibu Sari Dewi, M.Si</span>
+                    <span class="teacher-subject">Mata Pelajaran</span>
+                    <span class="teacher-name">Nama Guru, Gelar</span>
                 </div>
             </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru3.jpg') }}')">
+            <div class="teacher-panel" style="background-color: #1F8A4C; --panel-color: #1F8A4C;">
                 <div class="teacher-overlay"></div>
                 <div class="teacher-info">
-                    <span class="teacher-subject">Bahasa Inggris</span>
-                    <span class="teacher-name">Bpk. Reza Pratama, M.Hum</span>
+                    <span class="teacher-subject">Mata Pelajaran</span>
+                    <span class="teacher-name">Nama Guru, Gelar</span>
                 </div>
             </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru4.jpg') }}')">
+            <div class="teacher-panel" style="background-color: #0F2F6B; --panel-color: #1E63D6;">
                 <div class="teacher-overlay"></div>
                 <div class="teacher-info">
-                    <span class="teacher-subject">Kimia</span>
-                    <span class="teacher-name">Ibu Nur Aisyah, M.Sc</span>
+                    <span class="teacher-subject">Mata Pelajaran</span>
+                    <span class="teacher-name">Nama Guru, Gelar</span>
                 </div>
             </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru5.jpg') }}')">
+            <div class="teacher-panel" style="background-color: #1E63D6; --panel-color: #1E63D6;">
                 <div class="teacher-overlay"></div>
                 <div class="teacher-info">
-                    <span class="teacher-subject">Biologi</span>
-                    <span class="teacher-name">Bpk. Hendra Gunawan, M.Pd</span>
+                    <span class="teacher-subject">Mata Pelajaran</span>
+                    <span class="teacher-name">Nama Guru, Gelar</span>
                 </div>
             </div>
-             <div class="teacher-panel" style="background-image: url('{{ asset('images/guru3.jpg') }}')">
+            <div class="teacher-panel" style="background-color: #1F8A4C; --panel-color: #1F8A4C;">
                 <div class="teacher-overlay"></div>
                 <div class="teacher-info">
-                    <span class="teacher-subject">Bahasa Inggris</span>
-                    <span class="teacher-name">Bpk. Reza Pratama, M.Hum</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru4.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Kimia</span>
-                    <span class="teacher-name">Ibu Nur Aisyah, M.Sc</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru5.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Biologi</span>
-                    <span class="teacher-name">Bpk. Hendra Gunawan, M.Pd</span>
-                </div>
-            </div>
-             <div class="teacher-panel" style="background-image: url('{{ asset('images/guru3.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Bahasa Inggris</span>
-                    <span class="teacher-name">Bpk. Reza Pratama, M.Hum</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru4.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Kimia</span>
-                    <span class="teacher-name">Ibu Nur Aisyah, M.Sc</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru5.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Biologi</span>
-                    <span class="teacher-name">Bpk. Hendra Gunawan, M.Pd</span>
-                </div>
-            </div>
-             <div class="teacher-panel" style="background-image: url('{{ asset('images/guru3.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Bahasa Inggris</span>
-                    <span class="teacher-name">Bpk. Reza Pratama, M.Hum</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru4.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Kimia</span>
-                    <span class="teacher-name">Ibu Nur Aisyah, M.Sc</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru5.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Biologi</span>
-                    <span class="teacher-name">Bpk. Hendra Gunawan, M.Pd</span>
-                </div>
-            </div>
-             <div class="teacher-panel" style="background-image: url('{{ asset('images/guru3.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Bahasa Inggris</span>
-                    <span class="teacher-name">Bpk. Reza Pratama, M.Hum</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru4.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Kimia</span>
-                    <span class="teacher-name">Ibu Nur Aisyah, M.Sc</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru5.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Biologi</span>
-                    <span class="teacher-name">Bpk. Hendra Gunawan, M.Pd</span>
-                </div>
-            </div>
-             <div class="teacher-panel" style="background-image: url('{{ asset('images/guru3.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Bahasa Inggris</span>
-                    <span class="teacher-name">Bpk. Reza Pratama, M.Hum</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru4.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Kimia</span>
-                    <span class="teacher-name">Ibu Nur Aisyah, M.Sc</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru5.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Biologi</span>
-                    <span class="teacher-name">Bpk. Hendra Gunawan, M.Pd</span>
-                </div>
-            </div>
-             <div class="teacher-panel" style="background-image: url('{{ asset('images/guru3.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Bahasa Inggris</span>
-                    <span class="teacher-name">Bpk. Reza Pratama, M.Hum</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru4.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Kimia</span>
-                    <span class="teacher-name">Ibu Nur Aisyah, M.Sc</span>
-                </div>
-            </div>
-            <div class="teacher-panel" style="background-image: url('{{ asset('images/guru5.jpg') }}')">
-                <div class="teacher-overlay"></div>
-                <div class="teacher-info">
-                    <span class="teacher-subject">Biologi</span>
-                    <span class="teacher-name">Bpk. Hendra Gunawan, M.Pd</span>
+                    <span class="teacher-subject">Mata Pelajaran</span>
+                    <span class="teacher-name">Nama Guru, Gelar</span>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const card = document.querySelector('.teacher-card');
-    const panels = Array.from(card.querySelectorAll('.teacher-panel'));
 
-    function buildRows() {
-        card.innerHTML = '';
-        const containerWidth = card.offsetWidth;
-        const panelWidth = 60;
-        const gap = 8;
-        const countPerRow = Math.floor((containerWidth + gap) / (panelWidth + gap));
-
-        for (let i = 0; i < panels.length; i += countPerRow) {
-            const row = document.createElement('div');
-            row.className = 'teacher-row';
-            const rowPanels = panels.slice(i, i + countPerRow);
-            rowPanels.forEach(p => row.appendChild(p));
-            card.appendChild(row);
-        }
-    }
-
-    buildRows();
-    window.addEventListener('resize', buildRows);
-});
-</script>
-
-<!-- Program Unggulan -->
-<section id="program" class="py-16 sm:py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Kurikulum</span>
-            <h2 class="section-title mx-auto max-w-2xl">Program Unggulan Kami</h2>
-            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
-                Kami menawarkan berbagai program pendidikan yang dirancang untuk mengembangkan potensi siswa
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <!-- Card 1 -->
-            <div class="card">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-blue-900 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Program Akademik</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Program pembelajaran intensif dengan metode yang inovatif untuk meningkatkan prestasi akademik siswa di semua mata pelajaran.
-                </p>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="card">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-cyan-700 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Program IPA</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Fokus pada pengembangan kemampuan sains dan matematika dengan pendekatan praktik dan eksperimen langsung di laboratorium.
-                </p>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="card">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-700 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 010 18M12 3a14.5 14.5 0 000 18" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Program IPS</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Pengembangan pemahaman tentang ilmu sosial, sejarah, dan budaya dengan perspektif global untuk mencetak pemimpin masa depan.
-                </p>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="card">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-amber-600 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3.75h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m6.334-12.138a48.996 48.996 0 014.166 2.372" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Program Bahasa</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Pelatihan intensif dalam berbagai bahasa asing untuk meningkatkan kompetensi komunikasi internasional siswa.
-                </p>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="card">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-rose-700 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Program IT</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Pengembangan keterampilan teknologi informasi untuk mempersiapkan siswa menghadapi era digital dan industri 4.0.
-                </p>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="card">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-purple-700 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Program Seni &amp; Budaya</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Pengembangan kreativitas dan apresiasi seni melalui berbagai kegiatan seni pertunjukan dan seni rupa.
-                </p>
-            </div>
+        <div class="text-center mt-12">
+            <a href="{{ url('/guru') }}" class="inline-block bg-[#FFC20E] text-[#0F2F6B] px-8 py-3 rounded-lg font-bold hover:bg-yellow-300 transition-all duration-300">
+                Lihat Semua Guru
+            </a>
         </div>
     </div>
 </section>
 
-<!-- Fasilitas -->
+
+{{-- =============================================
+     FASILITAS - BRD M1-F06
+     ============================================= --}}
 <section id="fasilitas" class="py-16 sm:py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Sarana Prasarana</span>
+
+        <div class="text-center mb-12">
+            <span class="inline-block text-[#FFC20E] font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Sarana Prasarana</span>
             <h2 class="section-title mx-auto max-w-2xl">Fasilitas &amp; Sarana</h2>
             <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
                 Dilengkapi dengan fasilitas modern untuk mendukung proses pembelajaran yang optimal
@@ -464,116 +475,61 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <!-- Fasilitas 1 -->
-            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-blue-900 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
-                    </svg>
-                </div>
-                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Ruang Kelas Modern</h3>
-                <p class="text-xs sm:text-sm text-gray-600">Dilengkapi dengan AC, proyektor, dan teknologi pembelajaran terkini</p>
-            </div>
 
-            <!-- Fasilitas 2 -->
-            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-cyan-700 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5m4.75-11.396c.251.023.501.05.75.082m0 0a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082" />
-                    </svg>
-                </div>
-                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Laboratorium Lengkap</h3>
-                <p class="text-xs sm:text-sm text-gray-600">Lab Fisika, Kimia, Biologi, dan Komputer yang berstandar internasional</p>
-            </div>
+            @php
+            $fasilitas = [
+                ['label' => 'Ruang Kelas Modern', 'desc' => 'Dilengkapi AC, proyektor, dan teknologi terkini', 'bg' => 'bg-[#0F2F6B]'],
+                ['label' => 'Laboratorium Lengkap', 'desc' => 'Lab berstandar internasional', 'bg' => 'bg-[#1E63D6]'],
+                ['label' => 'Perpustakaan Digital', 'desc' => 'Koleksi buku fisik dan digital', 'bg' => 'bg-[#1F8A4C]'],
+                ['label' => 'Lapangan Olahraga', 'desc' => 'Standar kompetisi nasional', 'bg' => 'bg-[#1E63D6]'],
+                ['label' => 'Aula Serbaguna', 'desc' => 'Ruang serbaguna modern', 'bg' => 'bg-[#0F2F6B]'],
+                ['label' => 'Kantin & Koperasi', 'desc' => 'Menu sehat dan berkualitas', 'bg' => 'bg-[#1F8A4C]'],
+                ['label' => 'Ruang Kesehatan', 'desc' => 'Penanganan darurat tersedia', 'bg' => 'bg-[#1E63D6]'],
+                ['label' => 'WiFi & Internet', 'desc' => 'Koneksi gratis di seluruh area', 'bg' => 'bg-[#0F2F6B]'],
+            ];
+            @endphp
 
-            <!-- Fasilitas 3 -->
-            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-emerald-700 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                    </svg>
+            @foreach ($fasilitas as $item)
+            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 group">
+                <div class="w-12 h-12 mx-auto mb-3 rounded-lg {{ $item['bg'] }} flex items-center justify-center group-hover:scale-110 transition-transform">
+                    {{-- Kosongkan: ganti dengan ikon SVG sesuai fasilitas --}}
+                    <div class="w-6 h-6 rounded bg-[#FFC20E]/40 border border-dashed border-[#FFC20E]/60"></div>
                 </div>
-                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Perpustakaan Digital</h3>
-                <p class="text-xs sm:text-sm text-gray-600">Koleksi buku fisik dan digital dengan sistem manajemen modern</p>
+                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base group-hover:text-[#1E63D6] transition-colors">{{ $item['label'] }}</h3>
+                <p class="text-xs sm:text-sm text-gray-500">{{ $item['desc'] }}</p>
             </div>
+            @endforeach
 
-            <!-- Fasilitas 4 -->
-            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-amber-600 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a15 15 0 000 18m0-18a15 15 0 010 18M3.6 9h16.8M3.6 15h16.8" />
-                    </svg>
-                </div>
-                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Lapangan Olahraga</h3>
-                <p class="text-xs sm:text-sm text-gray-600">Lapangan basket, voli, dan futsal dengan kondisi standar kompetisi</p>
-            </div>
+        </div>
 
-            <!-- Fasilitas 5 -->
-            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-rose-700 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 9.75L6.75 12 9 14.25m6-4.5L17.25 12 15 14.25m-3-6l-1.5 7.5" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5h15a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5h-15A1.5 1.5 0 003 6v12a1.5 1.5 0 001.5 1.5z" />
-                    </svg>
-                </div>
-                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Aula &amp; Studio</h3>
-                <p class="text-xs sm:text-sm text-gray-600">Aula serbaguna, studio musik, dan ruang seni untuk berbagai kegiatan</p>
-            </div>
-
-            <!-- Fasilitas 6 -->
-            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-purple-700 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5M3 6.75h18M3 6.75a1.5 1.5 0 011.5-1.5h15A1.5 1.5 0 0121 6.75m-18 0v10.5A1.5 1.5 0 004.5 18.75h15a1.5 1.5 0 001.5-1.5V6.75" />
-                    </svg>
-                </div>
-                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Kantin &amp; Koperasi</h3>
-                <p class="text-xs sm:text-sm text-gray-600">Kantin dengan menu sehat dan koperasi untuk kebutuhan siswa</p>
-            </div>
-
-            <!-- Fasilitas 7 -->
-            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-red-600 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Ruang Kesehatan</h3>
-                <p class="text-xs sm:text-sm text-gray-600">Ruang UKS dengan peralatan kesehatan untuk penanganan darurat</p>
-            </div>
-
-            <!-- Fasilitas 8 -->
-            <div class="bg-white rounded-xl p-5 sm:p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-lg bg-indigo-700 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856a9.75 9.75 0 0113.788 0M1.924 8.674a14.25 14.25 0 0120.152 0M12 18.75h.008v.008H12v-.008z" />
-                    </svg>
-                </div>
-                <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">WiFi &amp; Internet</h3>
-                <p class="text-xs sm:text-sm text-gray-600">Koneksi WiFi gratis di seluruh area sekolah untuk pembelajaran digital</p>
-            </div>
+        <div class="text-center mt-12">
+            <a href="{{ url('/fasilitas') }}" class="btn-secondary">Lihat Semua Fasilitas</a>
         </div>
     </div>
 </section>
 
-<!-- Lokasi -->
+
+{{-- =============================================
+     LOKASI & KONTAK - BRD M1-F06
+     ============================================= --}}
 <section id="lokasi" class="py-16 sm:py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Kunjungi Kami</span>
-            <h2 class="section-title mx-auto max-w-2xl">Lokasi Sekolah</h2>
+
+        <div class="text-center mb-12">
+            <span class="inline-block text-[#FFC20E] font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Kunjungi Kami</span>
+            <h2 class="section-title mx-auto max-w-2xl">Lokasi &amp; Kontak</h2>
             <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
                 Temukan kami di lokasi yang strategis dan mudah dijangkau
             </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10 items-stretch">
-            <!-- Peta -->
-            <div class="lg:col-span-3 rounded-2xl overflow-hidden shadow-lg border border-gray-100 min-h-[300px] sm:min-h-[380px] lg:min-h-full">
+
+            {{-- Peta --}}
+            <div class="lg:col-span-3 rounded-2xl overflow-hidden shadow-lg border border-gray-100 min-h-[300px] sm:min-h-[380px]">
                 <iframe
                     src="https://www.google.com/maps?q=SMA+Negeri+1+Medan&output=embed"
-                    class="w-full h-full min-h-[300px] sm:min-h-[380px] lg:min-h-full"
+                    class="w-full h-full min-h-[300px] sm:min-h-[380px]"
                     style="border:0;"
                     allowfullscreen=""
                     loading="lazy"
@@ -582,73 +538,123 @@ document.addEventListener('DOMContentLoaded', function () {
                 </iframe>
             </div>
 
-            <!-- Info Kontak -->
+            {{-- Info Kontak --}}
             <div class="lg:col-span-2 flex flex-col gap-4">
-                <div class="bg-gray-50 border border-gray-100 rounded-xl p-5 sm:p-6 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-11 h-11 rounded-lg bg-blue-900 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-1">Alamat</h4>
-                        <p class="text-sm text-gray-600 leading-relaxed">Jl. Teladan No. 17, Kecamatan Medan Kota, Kota Medan, Sumatera Utara, Indonesia</p>
-                    </div>
-                </div>
+                @php
+                $kontak = [
+                    ['label' => 'Alamat', 'val' => 'Jl. Teladan No. 17, Medan Kota, Kota Medan, Sumatera Utara', 'bg' => 'bg-[#0F2F6B]'],
+                    ['label' => 'Telepon', 'val' => '(061) 123-4567', 'bg' => 'bg-[#1E63D6]'],
+                    ['label' => 'Email', 'val' => 'info@sman1medan.sch.id', 'bg' => 'bg-[#1F8A4C]'],
+                    ['label' => 'Jam Operasional', 'val' => 'Senin - Jumat, 07.00 - 16.00 WIB', 'bg' => 'bg-[#0F2F6B]'],
+                ];
+                @endphp
 
-                <div class="bg-gray-50 border border-gray-100 rounded-xl p-5 sm:p-6 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-11 h-11 rounded-lg bg-cyan-700 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h1.5a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                        </svg>
+                @foreach ($kontak as $k)
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:border-[#1E63D6]/30 hover:shadow-lg transition-all duration-300 group">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-lg {{ $k['bg'] }} flex items-center justify-center group-hover:bg-[#FFC20E] transition-colors">
+                        {{-- Kosongkan: isi dengan ikon SVG sesuai kontak --}}
+                        <div class="w-4 h-4 rounded bg-[#FFC20E]/40 border border-dashed border-[#FFC20E]/60 group-hover:bg-[#0F2F6B]/30 transition-colors"></div>
                     </div>
                     <div>
-                        <h4 class="font-semibold text-gray-900 mb-1">Telepon</h4>
-                        <p class="text-sm text-gray-600">(061) 123-4567</p>
+                        <h4 class="font-semibold text-gray-900 mb-1 text-sm group-hover:text-[#1E63D6] transition-colors">{{ $k['label'] }}</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">{{ $k['val'] }}</p>
                     </div>
                 </div>
-
-                <div class="bg-gray-50 border border-gray-100 rounded-xl p-5 sm:p-6 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-11 h-11 rounded-lg bg-emerald-700 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-1">Email</h4>
-                        <p class="text-sm text-gray-600">info@sman1medan.sch.id</p>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 border border-gray-100 rounded-xl p-5 sm:p-6 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-11 h-11 rounded-lg bg-amber-600 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-1">Jam Operasional</h4>
-                        <p class="text-sm text-gray-600">Senin - Jumat, 07.00 - 16.00 WIB</p>
-                    </div>
-                </div>
+                @endforeach
             </div>
+
         </div>
     </div>
 </section>
 
-<!-- CTA Section -->
-<section class="py-16 sm:py-20 bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-[0.06]" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+{{-- =============================================
+     CTA PPDB - BRD M1-F01, M2
+     ============================================= --}}
+<section class="py-16 sm:py-20 bg-[#0F2F6B] relative overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 28px 28px;"></div>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white relative z-10">
+        <span class="inline-block bg-[#FFC20E]/20 border border-[#FFC20E]/30 text-[#FFC20E] text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide mb-4">
+            PPDB / SPMB
+        </span>
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Siap Bergabung Bersama Kami?</h2>
         <p class="text-base sm:text-lg md:text-xl mb-8 text-blue-100">
             Daftarkan dirimu sekarang dan jadilah bagian dari keluarga besar SMA Negeri 1 Medan
         </p>
-        <a href="/daftar" class="inline-block bg-amber-400 text-blue-950 px-10 py-4 rounded-lg font-bold hover:bg-amber-300 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/30">
-            Daftar Sekarang
-        </a>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ url('/daftar') }}"
+               class="inline-block bg-[#FFC20E] text-[#0F2F6B] px-10 py-4 rounded-lg font-bold hover:bg-yellow-300 transition-all duration-300 hover:shadow-xl">
+                Daftar Sekarang
+            </a>
+            <a href="{{ url('/daftar') }}#cek-status"
+               class="inline-block border-2 border-white/30 text-white px-10 py-4 rounded-lg font-bold hover:bg-white/10 hover:border-white transition-all duration-300">
+                Cek Status Pendaftaran
+            </a>
+        </div>
     </div>
 </section>
+
+
+{{-- =============================================
+     JAVASCRIPT
+     ============================================= --}}
+<script>
+// --- Carousel ---
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const totalSlides = slides.length;
+
+function showSlide(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === n);
+    });
+}
+function nextSlide() { currentSlide = (currentSlide + 1) % totalSlides; showSlide(currentSlide); }
+function prevSlide() { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; showSlide(currentSlide); }
+function goToSlide(n) { currentSlide = n; showSlide(n); }
+
+setInterval(nextSlide, 5000);
+
+// --- Teacher Accordion Rows ---
+document.addEventListener('DOMContentLoaded', function () {
+    const card = document.getElementById('teacherCard');
+    if (!card) return;
+
+    const originalPanels = Array.from(card.querySelectorAll('.teacher-panel'));
+
+    function buildRows() {
+        card.innerHTML = '';
+        const containerWidth = card.offsetWidth;
+        const panelMinWidth = 60;
+        const gap = 8;
+        const countPerRow = Math.max(1, Math.floor((containerWidth + gap) / (panelMinWidth + gap)));
+
+        for (let i = 0; i < originalPanels.length; i += countPerRow) {
+            const row = document.createElement('div');
+            row.className = 'teacher-row';
+            originalPanels.slice(i, i + countPerRow).forEach(p => row.appendChild(p));
+            card.appendChild(row);
+        }
+
+        card.querySelectorAll('.teacher-panel').forEach(function (panel) {
+            panel.addEventListener('click', function () {
+                const isActive = this.classList.contains('active');
+                card.querySelectorAll('.teacher-panel').forEach(p => p.classList.remove('active'));
+                if (!isActive) this.classList.add('active');
+            });
+        });
+    }
+
+    buildRows();
+
+    let resizeTimer;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(buildRows, 150);
+    });
+});
+</script>
+
 @endsection

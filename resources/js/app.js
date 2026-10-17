@@ -1,4 +1,3 @@
-// Mobile Menu Toggle
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile menu
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -7,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileMenuBtn && navMenu) {
         mobileMenuBtn.addEventListener('click', function() {
             navMenu.classList.toggle('hidden');
-            // Toggle icon
             const icon = mobileMenuBtn.querySelector('svg');
             if (icon) {
                 icon.classList.toggle('rotate-45');
@@ -21,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
             if (href !== '#') {
-                // Close mobile menu jika terbuka
                 if (navMenu && !navMenu.classList.contains('hidden')) {
                     navMenu.classList.add('hidden');
                 }
@@ -49,6 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 alert('Mohon isi semua field yang wajib diisi!');
             }
+        });
+    });
+
+    // Teacher panel — touch/mobile fix
+    const panels = document.querySelectorAll('.teacher-panel');
+    panels.forEach(function(panel) {
+        panel.addEventListener('click', function() {
+            const isActive = this.classList.contains('active');
+            panels.forEach(function(p) { p.classList.remove('active'); });
+            if (!isActive) this.classList.add('active');
         });
     });
 });

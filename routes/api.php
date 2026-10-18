@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\SpmbController;
 use App\Http\Controllers\Api\AbsensiController;
+use App\Http\Controllers\Api\SpmbController;
 use App\Http\Controllers\Api\TugasController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |----------------------------------------------------------------atal
@@ -16,14 +14,13 @@ use App\Http\Controllers\Api\TugasController;
 Route::post('/spmb/daftar', [SpmbController::class, 'daftar']);
 Route::get('/spmb/status/{nomor}', [SpmbController::class, 'cekStatus']);
 
-
 /*
 |--------------------------------------------------------------------------
 | Rute Terproteksi (Memerlukan Autentikasi / Login via Sanctum)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->group(function () {
-    
+
     // Modul SPMB (Hanya Admin yang boleh verifikasi/ubah status)
     Route::put('/spmb/status/{id}', [SpmbController::class, 'updateStatus']);
 

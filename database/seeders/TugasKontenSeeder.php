@@ -31,7 +31,7 @@ class TugasKontenSeeder extends Seeder
         $penulis = User::where('role', 'admin')->value('id');
 
         $data = [
-            ['Pendaftaran Peserta Didik Baru Tahun Ajaran 2027/2028 Dibuka', 'Pendaftaran daring dibuka dan dapat diselesaikan dalam beberapa menit melalui ponsel.', 'Panitia PPDB membuka pendaftaran daring untuk tahun ajaran 2027/2028. Calon siswa mengisi formulir tiga langkah, menerima nomor pendaftaran, dan dapat memeriksa status kapan saja tanpa login.' . "\n\n" . 'Berkas asli tetap dibawa saat daftar ulang bagi peserta yang dinyatakan lulus.', 2, 'terbit'],
+            ['Pendaftaran Peserta Didik Baru Tahun Ajaran 2027/2028 Dibuka', 'Pendaftaran daring dibuka dan dapat diselesaikan dalam beberapa menit melalui ponsel.', 'Panitia PPDB membuka pendaftaran daring untuk tahun ajaran 2027/2028. Calon siswa mengisi formulir tiga langkah, menerima nomor pendaftaran, dan dapat memeriksa status kapan saja tanpa login.'."\n\n".'Berkas asli tetap dibawa saat daftar ulang bagi peserta yang dinyatakan lulus.', 2, 'terbit'],
             ['Tim Cerdas Cermat Sekolah Meraih Juara Pertama Tingkat Kota', 'Tiga siswa kelas XI mewakili sekolah dan membawa pulang piala juara pertama.', 'Tim cerdas cermat yang terdiri dari tiga siswa kelas XI berhasil mengalahkan tim dari dua belas sekolah lain. Pembina menyampaikan bahwa latihan rutin setiap pekan menjadi kunci keberhasilan tim.', 5, 'terbit'],
             ['Jadwal Penilaian Tengah Semester Ganjil Telah Diumumkan', 'Siswa diminta memeriksa jadwal dan menyiapkan perlengkapan ujian sejak dini.', 'Penilaian tengah semester ganjil dilaksanakan selama tiga hari. Siswa diharapkan hadir lima belas menit sebelum ujian dimulai dan membawa perlengkapan tulis masing-masing.', 7, 'terbit'],
             ['Kegiatan Jumat Bersih Libatkan Seluruh Kelas', 'Setiap kelas mendapat area tanggung jawab untuk dibersihkan bersama wali kelas.', 'Kegiatan Jumat bersih diadakan rutin untuk menumbuhkan kepedulian terhadap lingkungan. Kelas dengan area terbersih akan mendapat penghargaan pada akhir bulan.', 10, 'terbit'],
@@ -105,6 +105,7 @@ class TugasKontenSeeder extends Seeder
 
         if (! $guru || $kelasIds->isEmpty()) {
             $this->command?->warn('Data tugas dilewati: seed dulu akun guru dan kelas (seeder Anggota 1/2).');
+
             return;
         }
 

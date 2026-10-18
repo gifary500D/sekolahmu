@@ -16,7 +16,7 @@ class AgendaResource extends JsonResource
             'lokasi' => $this->lokasi,
             'mulai' => $this->mulai?->toIso8601String(),
             'selesai' => $this->selesai?->toIso8601String(),
-            'url_ics' => url('/api/v1/agenda/' . $this->id . '/ics'),
+            'url_ics' => url('/api/v1/agenda/'.$this->id.'/ics'),
         ];
     }
 }

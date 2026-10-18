@@ -54,26 +54,26 @@ class AgendaController extends Controller
             'CALSCALE:GREGORIAN',
             'METHOD:PUBLISH',
             'BEGIN:VEVENT',
-            'UID:agenda-' . $agenda->id . '@sekolahku.digital',
-            'DTSTAMP:' . $fmt(now()),
-            'DTSTART:' . $fmt($agenda->mulai),
-            'DTEND:' . $fmt($akhir),
-            'SUMMARY:' . $this->escape($agenda->judul),
+            'UID:agenda-'.$agenda->id.'@sekolahku.digital',
+            'DTSTAMP:'.$fmt(now()),
+            'DTSTART:'.$fmt($agenda->mulai),
+            'DTEND:'.$fmt($akhir),
+            'SUMMARY:'.$this->escape($agenda->judul),
         ];
         if ($agenda->deskripsi) {
-            $baris[] = 'DESCRIPTION:' . $this->escape($agenda->deskripsi);
+            $baris[] = 'DESCRIPTION:'.$this->escape($agenda->deskripsi);
         }
         if ($agenda->lokasi) {
-            $baris[] = 'LOCATION:' . $this->escape($agenda->lokasi);
+            $baris[] = 'LOCATION:'.$this->escape($agenda->lokasi);
         }
         $baris[] = 'END:VEVENT';
         $baris[] = 'END:VCALENDAR';
 
-        $isi = implode("\r\n", array_map([$this, 'lipat'], $baris)) . "\r\n";
+        $isi = implode("\r\n", array_map([$this, 'lipat'], $baris))."\r\n";
 
         return response($isi, 200, [
             'Content-Type' => 'text/calendar; charset=utf-8',
-            'Content-Disposition' => 'attachment; filename="agenda-' . $agenda->id . '.ics"',
+            'Content-Disposition' => 'attachment; filename="agenda-'.$agenda->id.'.ics"',
         ]);
     }
 
@@ -133,10 +133,10 @@ class AgendaController extends Controller
         $hasil = '';
         while (strlen($baris) > 73) {
             $potong = mb_strcut($baris, 0, 73, 'UTF-8');
-            $hasil .= $potong . "\r\n ";
+            $hasil .= $potong."\r\n ";
             $baris = substr($baris, strlen($potong));
         }
 
-        return $hasil . $baris;
+        return $hasil.$baris;
     }
 }

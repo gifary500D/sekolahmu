@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Tugas;
+use Illuminate\Http\Request;
 
 class TugasController extends Controller
 {
@@ -12,25 +12,25 @@ class TugasController extends Controller
     public function buatTugas(Request $request)
     {
         $request->validate([
-            'judul_tugas'   => 'required|string|max:255',
-            'deskripsi'     => 'required|string',
-            'kelas'         => 'required|string|max:50',
+            'judul_tugas' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'kelas' => 'required|string|max:50',
             'tenggat_waktu' => 'required|date',
-            'prioritas'     => 'nullable|in:Rendah,Normal,Tinggi',
+            'prioritas' => 'nullable|in:Rendah,Normal,Tinggi',
         ]);
 
         $tugas = Tugas::create([
-            'judul_tugas'   => $request->judul_tugas,
-            'deskripsi'     => $request->deskripsi,
-            'kelas'         => $request->kelas,
+            'judul_tugas' => $request->judul_tugas,
+            'deskripsi' => $request->deskripsi,
+            'kelas' => $request->kelas,
             'tenggat_waktu' => $request->tenggat_waktu,
-            'prioritas'     => $request->prioritas ?? 'Normal',
+            'prioritas' => $request->prioritas ?? 'Normal',
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Tugas berhasil dibuat dan dibagikan ke kelas.',
-            'data'    => $tugas
+            'data' => $tugas,
         ], 201);
     }
 
@@ -38,20 +38,20 @@ class TugasController extends Controller
     public function daftarTugas($kelas)
     {
         $tugasList = Tugas::where('kelas', 'LIKE', "%{$kelas}%")
-                          ->orderBy('tenggat_waktu', 'ASC')
-                          ->get();
+            ->orderBy('tenggat_waktu', 'ASC')
+            ->get();
 
         if ($tugasList->isEmpty()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tidak ada tugas aktif untuk kelas tersebut.'
+                'message' => 'Tidak ada tugas aktif untuk kelas tersebut.',
             ], 404);
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Daftar tugas berhasil dimuat.',
-            'data'    => $tugasList
+            'data' => $tugasList,
         ], 200);
     }
 
@@ -60,10 +60,10 @@ class TugasController extends Controller
     {
         $tugas = Tugas::find($id);
 
-        if (!$tugas) {
+        if (! $tugas) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tugas tidak ditemukan.'
+                'message' => 'Tugas tidak ditemukan.',
             ], 404);
         }
 
@@ -71,7 +71,7 @@ class TugasController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Tugas berhasil dihapus.'
+            'message' => 'Tugas berhasil dihapus.',
         ], 200);
     }
 }

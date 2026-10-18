@@ -1,0 +1,153 @@
+@extends('layouts.app')
+
+@section('title', 'Daftar Tugas Siswa')
+
+@section('content')
+<div class="min-h-screen bg-slate-100 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header Banner -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <span class="inline-block px-3 py-1 rounded-md bg-blue-50 text-blue-800 text-xs font-semibold uppercase tracking-wider mb-2">
+                    Portal Tugas Akademik
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Daftar Penugasan &amp; Nilai</h1>
+                <p class="text-slate-600 text-sm mt-1">Unggah berkas tugas dan lihat nilai serta catatan evaluasi dari guru di SMA Pemda Bahorok.</p>
+            </div>
+            <div>
+                <a href="/dashboard" class="inline-flex items-center px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-sm font-semibold transition-colors">
+                    Kembali ke Dashboard
+                </a>
+            </div>
+        </div>
+
+        @if(session('success'))
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 p-4 mb-6 rounded-r-lg text-sm shadow-sm">
+                <p class="font-semibold">Berhasil</p>
+                <p>{{ session('success') }}</p>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 mb-6 rounded-r-lg text-sm shadow-sm">
+                <p class="font-semibold mb-1">Gagal Mengumpulkan Tugas</p>
+                <ul class="list-disc list-inside">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <!-- Task List Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-slate-900">Semua Tugas &amp; Penilaian</h2>
+                <span class="text-xs text-slate-500">Total: {{ count($tugasList) }} Tugas</span>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-xs tracking-wider">
+                            <th class="py-3 px-6">Mata Pelajaran / Judul</th>
+                            <th class="py-3 px-6">Sisa Waktu (Tenggat)</th>
+                            <th class="py-3 px-6">Status &amp; Nilai</th>
+                            <th class="py-3 px-6 text-right">Aksi &amp; Berkas</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                        @forelse($tugasList as $tugas)
+                            @php
+                                $sub = $submitted[$tugas->id] ?? null;
+                                $status = $sub ? $sub->status : 'belum';
+                                
+                                $tenggat = \Carbon\Carbon::parse($tugas->tenggat);
+                                $diffHours = now()->diffInHours($tenggat, false);
+                                if ($diffHours < 0) {
+                                    $timeLabel = 'Tenggat terlewat';
+                                    $badgeColor = 'bg-red-100 text-red-800';
+                                } elseif ($diffHours < 24) {
+                                    $timeLabel = $diffHours . ' jam lagi';
+                                    $badgeColor = 'bg-amber-100 text-amber-800';
+                                } else {
+                                    $days = ceil($diffHours / 24);
+                                    $timeLabel = $days . ' hari lagi';
+                                    $badgeColor = 'bg-blue-100 text-blue-800';
+                                }
+                            @endphp
+                            <tr class="hover:bg-slate-50/80 transition-colors align-top">
+                                <td class="py-4 px-6">
+                                    <strong class="text-slate-900 block text-base mb-0.5">{{ $tugas->judul }}</strong>
+                                    <span class="text-xs text-blue-700 font-medium block mb-1">{{ $tugas->mata_pelajaran ?? 'Umum' }}</span>
+                                    <span class="text-xs text-slate-500">{{ Str::limit($tugas->deskripsi, 60) }}</span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span class="inline-block px-2.5 py-1 rounded {{ $badgeColor }} text-xs font-semibold mb-1">{{ $timeLabel }}</span>
+                                    <span class="font-mono text-[11px] text-slate-500 block">{{ $tugas->tenggat }}</span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    @if($status === 'selesai')
+                                        <span class="px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 text-xs font-semibold inline-block mb-2">Selesai</span>
+                                        @if($sub && $sub->nilai !== null)
+                                            <div class="text-xs space-y-1">
+                                                <p class="font-bold text-slate-900">Nilai: <span class="text-blue-700 text-sm font-mono">{{ $sub->nilai }}</span> / 100</p>
+                                                @if($sub->catatan)
+                                                    <p class="text-slate-600 italic bg-slate-50 p-2 rounded border border-slate-200">Catatan: "{{ $sub->catatan }}"</p>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <span class="text-xs text-amber-600 block italic">Menunggu penilaian guru</span>
+                                        @endif
+                                    @else
+                                        <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-xs font-semibold">Belum Dikerjakan</span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-6 text-right">
+                                    @if($status === 'belum')
+                                        <form action="{{ route('siswa.tugas.submit', $tugas->id) }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2">
+                                            @csrf
+                                            <input 
+                                                type="file" 
+                                                name="berkas" 
+                                                required 
+                                                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                                class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer max-w-[200px]"
+                                            >
+                                            <button type="submit" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm whitespace-nowrap">
+                                                Kirim
+                                            </button>
+                                        </form>
+                                    @else
+                                        <div class="flex flex-col items-end gap-1.5">
+                                            <span class="text-xs font-semibold text-emerald-600">Tugas Dikirim</span>
+                                            <div class="flex items-center gap-2">
+                                                @if($sub && $sub->file_path)
+                                                    <a href="{{ asset('storage/' . $sub->file_path) }}" target="_blank" class="text-xs text-blue-600 hover:underline inline-flex items-center gap-1">
+                                                        Lihat File
+                                                    </a>
+                                                @endif
+                                                <form action="{{ route('siswa.tugas.cancel', $tugas->id) }}" method="POST" onsubmit="return confirm('Batalkan pengumpulan tugas ini?');" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-xs text-red-600 hover:underline font-medium">Batalkan</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="py-8 text-center text-slate-500">Belum ada tugas yang tersedia saat ini.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+@endsection

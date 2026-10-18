@@ -21,7 +21,7 @@ class BeritaController extends Controller
 
         $q = Berita::terbit()->with('penulis:id,name')->orderByDesc('diterbitkan_pada');
         if ($cari = $request->query('cari')) {
-            $q->where('judul', 'like', '%' . addcslashes($cari, '%_\\') . '%');
+            $q->where('judul', 'like', '%'.addcslashes($cari, '%_\\').'%');
         }
 
         return BeritaResource::collection($q->paginate($request->integer('per_page', 9)));

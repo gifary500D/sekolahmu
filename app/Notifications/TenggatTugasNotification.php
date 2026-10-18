@@ -7,9 +7,7 @@ use Illuminate\Notifications\Notification;
 
 class TenggatTugasNotification extends Notification
 {
-    public function __construct(public Tugas $tugas)
-    {
-    }
+    public function __construct(public Tugas $tugas) {}
 
     /**
      * Saluran bawaan: database. Untuk WhatsApp gateway atau email (opsional, dikerjakan Anggota 1),

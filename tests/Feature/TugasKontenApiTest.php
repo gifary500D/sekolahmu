@@ -39,7 +39,7 @@ class TugasKontenApiTest extends TestCase
     {
         $agenda = Agenda::create(['judul' => 'Rapat; uji, koma', 'mulai' => now()->addDay()]);
 
-        $res = $this->get('/api/v1/agenda/' . $agenda->id . '/ics')->assertOk();
+        $res = $this->get('/api/v1/agenda/'.$agenda->id.'/ics')->assertOk();
         $this->assertStringContainsString('text/calendar', $res->headers->get('Content-Type'));
         $this->assertStringContainsString('SUMMARY:Rapat\\; uji\\, koma', $res->getContent());
     }

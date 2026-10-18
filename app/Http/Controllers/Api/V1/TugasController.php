@@ -156,6 +156,7 @@ class TugasController extends Controller
 
         $daftar = $siswa->map(function ($s) use ($status) {
             $baris = $status->get($s->id);
+
             return [
                 'siswa_id' => $s->id,
                 'nama' => $s->name,

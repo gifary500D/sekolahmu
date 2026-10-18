@@ -4,78 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title') - SMA Negeri 1 Medan</title>
+    <title>@yield('title') - SMA Pemda Bahorok</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Vite CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50">
+<body class="bg-slate-50 font-['Poppins',sans-serif] text-slate-800 antialiased selection:bg-blue-600 selection:text-white">
     <!-- Navbar -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="bg-white/95 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
- <!-- Logo -->
-<div class="flex items-center">
-    <a href="/" class="flex items-center group">
-        <!-- Logo Button -->
-        <button class="relative w-10 h-10 outline-none border-none bg-transparent cursor-pointer flex-shrink-0">
-            <!-- Ball belakang -->
-            <div class="absolute inset-0 z-10 transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-[52px] group-hover:scale-[0.97] group-hover:rotate-[180deg]">
-                <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-700 to-cyan-600 shadow-[inset_-8px_-8px_16px_rgba(0,0,0,0.4),inset_6px_6px_14px_rgba(255,255,255,0.15),0_12px_20px_rgba(30,64,175,0.5)] border border-white/10 overflow-hidden">
-                    <div class="absolute top-[8%] left-[10%] w-[65%] h-[35%] rounded-[50%] bg-[linear-gradient(135deg,rgba(255,255,255,0.35)_0%,transparent_100%)] -rotate-[25deg] blur-[1px]"></div>
-                    <div class="absolute bottom-[8%] right-[10%] w-[55%] h-[25%] rounded-[50%] bg-[linear-gradient(315deg,rgba(255,255,255,0.15)_0%,transparent_100%)] -rotate-[25deg] blur-[1px]"></div>
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center group gap-3">
+                        <div class="w-12 h-12 flex items-center justify-center bg-transparent group-hover:scale-105 transition-transform">
+                            <img src="{{ asset('images/logo-skansa.png') }}" alt="Logo SMA/SMK Pemda Bahorok" class="w-11 h-11 object-contain drop-shadow-sm">
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-700 block">Yayasan Pendidikan</span>
+                            <h1 class="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">SMA Pemda Bahorok</h1>
+                        </div>
+                    </a>
                 </div>
-            </div>
-            <!-- Ball depan (glass + foto) -->
-            <div class="absolute inset-0 z-20 rounded-full">
-                <div class="absolute inset-0 overflow-hidden rounded-full border border-white/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_4px_15px_rgba(30,64,175,0.3)] transition-shadow duration-500 group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.5),0_10px_30px_rgba(30,64,175,0.4)]">
-                    <!-- Foto logo -->
-                    <img src="{{ asset('images/logo-skansa.png') }}" alt="Logo SMAN 1 Medan" class="w-full h-full object-cover">
-                    <!-- Glass overlay -->
-                    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.01))]"></div>
-                    <div class="absolute top-[4px] left-[6px] w-[60%] h-[22%] rounded-full bg-[linear-gradient(to_bottom,rgba(255,255,255,0.45),transparent)] blur-[2px]"></div>
-                    <!-- Shimmer -->
-                    <div class="absolute -inset-[50%] bg-[linear-gradient(130deg,transparent_40%,rgba(255,255,255,0.4)_50%,transparent_60%)] -translate-x-[150%] rotate-[25deg] transition-transform duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-[150%]"></div>
-                </div>
-            </div>
-        </button>
 
-        <!-- Teks — geser kanan saat hover biar tidak ketutup ball belakang -->
-        <div class="hidden sm:block ml-3 transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-3">
-            <h1 class="text-lg font-bold text-gray-900 leading-tight">SMA Negeri 1</h1>
-            <p class="text-xs text-gray-500">Medan</p>
-        </div>
-    </a>
-</div>
                 <!-- Menu Desktop -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Beranda</a>
-                    <a href="#tentang" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Tentang</a>
-                    <a href="#program" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Program</a>
-                    <a href="#fasilitas" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Fasilitas</a>
-                    <a href="/daftar" class="btn-primary">Daftar Sekarang</a>
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="/" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Beranda</a>
+                    <a href="/#tentang" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Tentang</a>
+                    <a href="/#program" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Program</a>
+                    <a href="/#fasilitas" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Fasilitas</a>
+                    
+                    <div class="h-6 w-px bg-slate-200 mx-2"></div>
+
+                    @auth
+                        <a href="/dashboard" class="px-4 py-2 bg-blue-50 text-blue-800 font-semibold rounded-lg text-sm hover:bg-blue-100 transition-colors flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                            Dashboard
+                        </a>
+                        <form action="{{ route('logout') }}" method="GET" class="inline">
+                            @csrf
+                            <button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 transition-colors shadow-sm">Keluar</button>
+                        </form>
+                    @else
+                        <a href="/login" class="px-4 py-2 text-slate-700 hover:text-blue-700 font-semibold text-sm transition-colors">Masuk</a>
+                        <a href="/daftar" class="px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg text-sm shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/35 transition-all">Daftar SPMB</a>
+                    @endauth
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
-                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                <button id="mobile-menu-btn" aria-label="Toggle menu" class="md:hidden p-2.5 rounded-xl text-slate-700 hover:bg-slate-100 focus:outline-none transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
             </div>
 
             <!-- Menu Mobile -->
-            <div id="nav-menu" class="hidden md:hidden pb-4 border-t border-gray-200">
-                <a href="/" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition-colors">Beranda</a>
-                <a href="#tentang" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition-colors">Tentang</a>
-                <a href="#program" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition-colors">Program</a>
-                <a href="#fasilitas" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium transition-colors">Fasilitas</a>
-                <a href="/daftar" class="block mx-4 mt-4 py-2 px-4 btn-primary text-center">Daftar Sekarang</a>
+            <div id="nav-menu" class="hidden md:hidden pb-6 pt-3 border-t border-slate-100 space-y-2">
+                <a href="/" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Beranda</a>
+                <a href="/#tentang" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Tentang</a>
+                <a href="/#program" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Program</a>
+                <a href="/#fasilitas" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Fasilitas</a>
+                
+                <div class="pt-2 border-t border-slate-100 space-y-2">
+                    @auth
+                        <a href="/dashboard" class="block px-4 py-2.5 bg-blue-50 text-blue-800 font-semibold rounded-lg text-sm">Dashboard</a>
+                        <a href="{{ route('logout') }}" class="block px-4 py-2.5 text-red-600 font-semibold hover:bg-red-50 rounded-lg text-sm">Keluar</a>
+                    @else
+                        <a href="/login" class="block px-4 py-2.5 text-slate-700 hover:bg-slate-100 rounded-lg font-medium text-sm">Masuk Sistem</a>
+                        <div class="pt-1">
+                            <a href="/daftar" class="block w-full py-3 bg-blue-700 text-white font-bold rounded-xl text-center text-sm shadow-md shadow-blue-500/20">Daftar SPMB Sekarang</a>
+                        </div>
+                    @endauth
+                </div>
             </div>
         </div>
     </nav>
@@ -86,67 +92,88 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <!-- Tentang -->
-                <div>
-                    <h3 class="text-white font-bold text-lg mb-4">SMA Negeri 1 Medan</h3>
-                    <p class="text-sm leading-relaxed">Sekolah terdepan dalam mengembangkan karakter dan akademik siswa yang berkualitas.</p>
-                </div>
+    <footer class="bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-slate-300 mt-20 relative overflow-hidden pt-12">
+        <!-- SVG Wave Divider -->
+        <div class="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
+            <svg class="relative block w-full h-12 sm:h-16 text-slate-50" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0 C150,90 350,-40 500,60 C650,160 900,10 1200,40 L1200,0 L0,0 Z" fill="currentColor"></path>
+            </svg>
+        </div>
 
-                <!-- Navigasi -->
-                <div>
-                    <h4 class="text-white font-bold mb-4">Navigasi</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="/" class="hover:text-white transition-colors">Beranda</a></li>
-                        <li><a href="#tentang" class="hover:text-white transition-colors">Tentang Kami</a></li>
-                        <li><a href="#program" class="hover:text-white transition-colors">Program</a></li>
-                        <li><a href="#fasilitas" class="hover:text-white transition-colors">Fasilitas</a></li>
-                    </ul>
-                </div>
+        <!-- Subtle background glowing accents -->
+        <div class="absolute top-20 -left-40 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
-                <!-- Kontak -->
-                <div>
-                    <h4 class="text-white font-bold mb-4">Kontak</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li class="flex items-start">
-                            <span class="mr-2">📧</span>
-                            <span>info@sman1medan.sch.id</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="mr-2">📞</span>
-                            <span>+62 61-1234-5678</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="mr-2">📍</span>
-                            <span>Jl. Gajah Mada No. 123, Medan</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Media Sosial -->
-                <div>
-                    <h4 class="text-white font-bold mb-4">Media Sosial</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
-                            <span class="text-white text-sm">f</span>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors">
-                            <span class="text-white text-sm">𝕏</span>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
-                            <span class="text-white text-sm">📷</span>
-                        </a>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-14 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 mb-12">
+                
+                <!-- Col 1: Brand & Bio -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <img src="{{ asset('images/logo-skansa.png') }}" alt="Logo SMA Pemda Bahorok" class="w-12 h-12 object-contain">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-blue-400 block">Yayasan Pendidikan</span>
+                            <h3 class="text-xl font-extrabold text-white">SMA Pemda Bahorok</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Pusat pendidikan menengah unggulan di Kabupaten Langkat yang berkomitmen mencetak generasi cerdas, berkarakter mulia, dan siap menghadapi masa depan.
+                    </p>
+                    <div class="pt-1 flex items-center gap-3">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-900/50 border border-blue-700/50 text-blue-300 text-xs font-semibold">
+                            Terakreditasi A
+                        </span>
                     </div>
                 </div>
+
+                <!-- Col 2: Navigasi Utama -->
+                <div>
+                    <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        Navigasi Utama
+                    </h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="/" class="text-slate-400 hover:text-white transition-colors">Beranda</a></li>
+                        <li><a href="/#tentang" class="text-slate-400 hover:text-white transition-colors">Tentang Kami</a></li>
+                        <li><a href="/#program" class="text-slate-400 hover:text-white transition-colors">Program Keahlian</a></li>
+                        <li><a href="/#fasilitas" class="text-slate-400 hover:text-white transition-colors">Fasilitas Sekolah</a></li>
+                        <li><a href="/daftar" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">Pendaftaran SPMB</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Kontak & Alamat -->
+                <div>
+                    <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        Kontak &amp; Alamat
+                    </h4>
+                    <ul class="space-y-3.5 text-sm text-slate-400">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            <span class="break-all">sma.pemda@gmail.com</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span>JL. Veteran Bahorok, Kec. Bohorok, Kab. Langkat, Prov. Sumatera Utara</span>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
 
-            <!-- Copyright -->
-            <div class="border-t border-gray-800 pt-8 text-center text-sm">
-                <p>&copy; 2024 SMA Negeri 1 Medan. Semua hak dilindungi.</p>
+            <!-- Copyright & Bottom Bar -->
+            <div class="border-t border-blue-900/50 pt-6 text-center text-xs text-slate-400">
+                <p>&copy; 2026 SMA Pemda Bahorok. Seluruh hak cipta dilindungi undang-undang.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
+            const menu = document.getElementById('nav-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

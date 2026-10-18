@@ -34,8 +34,9 @@ class Berita extends Model
         $slug = $dasar;
         $i = 2;
         while (static::where('slug', $slug)->exists()) {
-            $slug = $dasar . '-' . $i++;
+            $slug = $dasar.'-'.$i++;
         }
+
         return $slug;
     }
 }

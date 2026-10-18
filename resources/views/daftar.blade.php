@@ -8,7 +8,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
             <h1 class="text-3xl md:text-4xl font-bold mb-2">Pendaftaran Siswa Baru</h1>
-            <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA Negeri 1 Medan</p>
+            <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA Pemda Bahorok</p>
         </div>
     </div>
 </section>
@@ -19,6 +19,31 @@
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             <!-- Form Container -->
             <div class="p-6 sm:p-8 md:p-10">
+                @if(session('success'))
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded-r-lg shadow-sm">
+                        <p class="font-bold">Berhasil!</p>
+                        <p>{{ session('success') }}</p>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded-r-lg shadow-sm">
+                        <p class="font-bold">Kesalahan!</p>
+                        <p>{{ session('error') }}</p>
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 mb-8 rounded-r-lg shadow-sm">
+                        <p class="font-bold mb-2">Mohon perbaiki kesalahan berikut:</p>
+                        <ul class="list-disc list-inside text-sm">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <!-- Info Box -->
                 <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-8 rounded-r-lg">
                     <h3 class="font-semibold text-blue-900 mb-2">ℹ️ Informasi Penting</h3>
@@ -42,15 +67,32 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Nama Lengkap -->
                             <div class="md:col-span-2">
-                                <label for="nama" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <label for="nama_lengkap" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Nama Lengkap <span class="text-red-500">*</span>
                                 </label>
                                 <input 
                                     type="text" 
-                                    id="nama" 
-                                    name="nama" 
+                                    id="nama_lengkap" 
+                                    name="nama_lengkap" 
                                     required
                                     placeholder="Masukkan nama lengkap sesuai akta kelahiran"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                >
+                            </div>
+
+                            <!-- NIK -->
+                            <div>
+                                <label for="nik" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    NIK (Nomor Induk Kependudukan) <span class="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="nik" 
+                                    name="nik" 
+                                    required
+                                    placeholder="16 digit NIK"
+                                    maxlength="16"
+                                    pattern="[0-9]{16}"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                             </div>
@@ -203,7 +245,7 @@
                                     id="kota" 
                                     name="kota" 
                                     required
-                                    placeholder="Medan"
+                                    placeholder="Kabupaten Langkat"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                             </div>
@@ -363,7 +405,7 @@
                             </div>
 
                             <!-- Pilihan Program -->
-                            <div class="md:col-span-2">
+                            <div>
                                 <label for="program" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Pilihan Program <span class="text-red-500">*</span>
                                 </label>
@@ -377,6 +419,25 @@
                                     <option value="ipa">Program IPA (Sains)</option>
                                     <option value="ips">Program IPS (Sosial)</option>
                                     <option value="bahasa">Program Bahasa</option>
+                                </select>
+                            </div>
+
+                            <!-- Jalur Pendaftaran -->
+                            <div>
+                                <label for="jalur_pendaftaran" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Jalur Pendaftaran <span class="text-red-500">*</span>
+                                </label>
+                                <select 
+                                    id="jalur_pendaftaran" 
+                                    name="jalur_pendaftaran" 
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                >
+                                    <option value="">-- Pilih Jalur --</option>
+                                    <option value="Zonasi">Zonasi</option>
+                                    <option value="Afirmasi">Afirmasi</option>
+                                    <option value="Prestasi">Prestasi</option>
+                                    <option value="Perpindahan Tugas">Perpindahan Tugas Orang Tua/Wali</option>
                                 </select>
                             </div>
                         </div>
@@ -411,7 +472,7 @@
                                     class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
                                 >
                                 <span class="ml-3 text-gray-700">
-                                    Saya setuju dengan tata tertib dan peraturan yang berlaku di SMA Negeri 1 Medan
+                                    Saya setuju dengan tata tertib dan peraturan yang berlaku di SMA Pemda Bahorok
                                 </span>
                             </label>
 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Absensi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class AbsensiController extends Controller
@@ -13,21 +13,21 @@ class AbsensiController extends Controller
     public function simpanAbsensi(Request $request)
     {
         $request->validate([
-            'kelas'          => 'required|string|max:50',
-            'tanggal'        => 'required|date',
+            'kelas' => 'required|string|max:50',
+            'tanggal' => 'required|date',
             'data_kehadiran' => 'required|array', // Contoh format: [{"nama": "Budi", "status": "Hadir"}, ...]
         ]);
 
         $absensi = Absensi::create([
-            'kelas'          => $request->kelas,
-            'tanggal'        => $request->tanggal,
+            'kelas' => $request->kelas,
+            'tanggal' => $request->tanggal,
             'data_kehadiran' => $request->data_kehadiran,
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Absensi kelas berhasil disimpan.',
-            'data'    => $absensi
+            'data' => $absensi,
         ], 201);
     }
 
@@ -39,14 +39,14 @@ class AbsensiController extends Controller
         if ($dataAbsensi->isEmpty()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Belum ada data absensi untuk kelas tersebut.'
+                'message' => 'Belum ada data absensi untuk kelas tersebut.',
             ], 404);
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Data rekap absensi ditemukan.',
-            'data'    => $dataAbsensi
+            'data' => $dataAbsensi,
         ], 200);
     }
 
@@ -59,19 +59,19 @@ class AbsensiController extends Controller
             return response()->json(['message' => 'Data tidak ditemukan untuk diekspor'], 404);
         }
 
-        $filename = "rekap-absensi-" . str_replace(' ', '-', strtolower($kelas)) . "-" . date('Y-m-d') . ".csv";
+        $filename = 'rekap-absensi-'.str_replace(' ', '-', strtolower($kelas)).'-'.date('Y-m-d').'.csv';
 
         $headers = [
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=$filename",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ];
 
-        $callback = function() use ($dataAbsensi) {
+        $callback = function () use ($dataAbsensi) {
             $file = fopen('php://output', 'w');
-            
+
             // Header kolom CSV yang bersih dan terstruktur
             fputcsv($file, ['No', 'Kelas', 'Tanggal', 'Nama Siswa', 'Status Kehadiran']);
 
@@ -87,7 +87,7 @@ class AbsensiController extends Controller
                             $absen->kelas,
                             $absen->tanggal,
                             $siswa['nama'] ?? '-',
-                            $siswa['status'] ?? '-'
+                            $siswa['status'] ?? '-',
                         ]);
                     }
                 }

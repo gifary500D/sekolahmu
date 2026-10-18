@@ -14,6 +14,7 @@ class BeritaResource extends JsonResource
     public function denganKonten(): static
     {
         $this->denganKonten = true;
+
         return $this;
     }
 

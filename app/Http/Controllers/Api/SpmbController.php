@@ -46,7 +46,7 @@ class SpmbController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Validasi gagal',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
@@ -57,8 +57,8 @@ class SpmbController extends Controller
             $tahunDaftar = date('Y');
             $lastSpmb = Spmb::orderBy('id', 'desc')->first();
             $nextId = $lastSpmb ? $lastSpmb->id + 1 : 1;
-            $data['nomor_pendaftaran'] = 'SPMB-' . $tahunDaftar . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
-            
+            $data['nomor_pendaftaran'] = 'SPMB-'.$tahunDaftar.'-'.str_pad($nextId, 4, '0', STR_PAD_LEFT);
+
             // 3. Status awal
             $data['status'] = 'Menunggu Verifikasi';
 
@@ -72,15 +72,15 @@ class SpmbController extends Controller
                 'data' => [
                     'nomor_pendaftaran' => $spmb->nomor_pendaftaran,
                     'nama_lengkap' => $spmb->nama_lengkap,
-                    'status' => $spmb->status
-                ]
+                    'status' => $spmb->status,
+                ],
             ], 201);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan pada server',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

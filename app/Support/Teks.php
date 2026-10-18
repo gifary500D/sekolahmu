@@ -12,6 +12,7 @@ class Teks
                 $data[$k] = trim(strip_tags($data[$k]));
             }
         }
+
         return $data;
     }
 }

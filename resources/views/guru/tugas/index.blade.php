@@ -13,7 +13,7 @@
                     Panel Guru &amp; Pengajar
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Kelola Tugas &amp; Penugasan</h1>
-                <p class="text-slate-600 text-sm mt-1">Buat tugas baru, pantau pengumpulan siswa, dan berikan penilaian di SMA Pemda Bahorok.</p>
+                <p class="text-slate-600 text-sm mt-1">Buat tugas baru, pantau pengumpulan siswa, atau hapus tugas yang telah berakhir.</p>
             </div>
             <div class="flex items-center gap-3">
                 <a href="{{ route('guru.tugas.create') }}" class="px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-sm font-bold shadow-sm transition-all">
@@ -52,6 +52,9 @@
                     </thead>
                     <tbody class="divide-y divide-slate-200 text-slate-700">
                         @forelse($tugasList as $tugas)
+                            @php
+                                $isExpired = now()->greaterThan(\Carbon\Carbon::parse($tugas->tenggat));
+                            @endphp
                             <tr class="hover:bg-slate-50/80 transition-colors">
                                 <td class="py-4 px-6">
                                     <strong class="text-slate-900 block text-base mb-0.5">{{ $tugas->judul }}</strong>
@@ -63,11 +66,23 @@
                                         {{ ucfirst($tugas->prioritas) }}
                                     </span>
                                 </td>
-                                <td class="py-4 px-6 font-mono text-xs text-red-600 font-semibold">{{ $tugas->tenggat }}</td>
-                                <td class="py-4 px-6 text-right">
-                                    <a href="{{ route('guru.tugas.submissions', $tugas->id) }}" class="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg text-xs font-semibold transition-colors">
-                                        Periksa Pengumpulan
+                                <td class="py-4 px-6 font-mono text-xs {{ $isExpired ? 'text-red-600 font-bold' : 'text-slate-700 font-semibold' }}">
+                                    {{ $tugas->tenggat }}
+                                    @if($isExpired)
+                                        <span class="block text-[10px] text-red-500 font-sans font-bold">(Tenggat Terlewat)</span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-6 text-right space-x-2">
+                                    <a href="{{ route('guru.tugas.submissions', $tugas->id) }}" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg text-xs font-semibold transition-colors inline-block">
+                                        Periksa
                                     </a>
+                                    <form action="{{ route('guru.tugas.delete', $tugas->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus tugas ini?')" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-xs font-semibold transition-colors">
+                                            Hapus
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty

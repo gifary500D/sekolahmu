@@ -18,8 +18,10 @@ class SiswaController extends Controller
     {
         $user = auth()->user();
         
-        // Ambil daftar tugas diurutkan berdasarkan tenggat
-        $tugasList = Tugas::orderBy('tenggat', 'asc')->get();
+        // Ambil daftar tugas khusus untuk kelas siswa tersebut atau tugas umum (kelas_id null)
+        $tugasList = Tugas::where(function($q) use ($user) {
+            $q->where('kelas_id', $user->kelas_id)->orWhereNull('kelas_id');
+        })->orderBy('tenggat', 'asc')->get();
         
         // Ambil status pengerjaan tugas oleh siswa ini
         $submitted = TugasSiswa::where('siswa_id', $user->id)->get()->keyBy('tugas_id');
@@ -43,6 +45,10 @@ class SiswaController extends Controller
         ]);
 
         $tugas = Tugas::findOrFail($id);
+
+        if (now()->greaterThan(\Carbon\Carbon::parse($tugas->tenggat))) {
+            return redirect()->back()->with('error', 'Maaf, tenggat waktu pengumpulan tugas ini telah terlewat. Anda tidak dapat mengunggah berkas.');
+        }
 
         $filePath = null;
         if ($request->hasFile('berkas')) {
@@ -89,12 +95,33 @@ class SiswaController extends Controller
      */
     public function absensi()
     {
-        $user = auth()->user();
+        $user = auth()->user()->load('kelas');
+        $className = $user->kelas?->nama;
         
-        // Ambil data absensi kelas siswa
-        $absensiList = Absensi::orderBy('tanggal', 'desc')->get();
+        // Ambil data absensi khusus kelas siswa tersebut
+        $absensiList = $className ? Absensi::where('kelas', $className)->orderBy('tanggal', 'desc')->get() : collect();
 
-        return view('siswa.absensi', compact('absensiList'));
+        return view('siswa.absensi', compact('absensiList', 'user'));
+    }
+
+    /**
+     * Tampilkan transkrip rekapitulasi nilai tugas siswa
+     */
+    public function transkripNilai()
+    {
+        $user = auth()->user();
+        $submissions = TugasSiswa::with('tugas')->where('siswa_id', $user->id)->orderBy('updated_at', 'desc')->get();
+        return view('siswa.nilai', compact('submissions'));
+    }
+
+    /**
+     * Tampilkan jadwal pelajaran (roster) kelas siswa
+     */
+    public function roster()
+    {
+        $user = auth()->user()->load('kelas');
+        $rosters = $user->kelas_id ? \App\Models\Roster::with('guru')->where('kelas_id', $user->kelas_id)->orderBy('hari')->orderBy('jam_mulai')->get() : collect();
+        return view('siswa.roster', compact('rosters', 'user'));
     }
 
     /**

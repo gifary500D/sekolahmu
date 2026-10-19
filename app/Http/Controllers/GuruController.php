@@ -218,10 +218,19 @@ class GuruController extends Controller
         </tr></thead><tbody>';
 
         $no = 1;
+        $absensiRecords = $absensiRecords->all();
+        
+        // Ambil semua ID siswa yang ada di data kehadiran untuk batch loading
+        $allSiswaIds = [];
+        foreach ($absensiRecords as $rec) {
+            $allSiswaIds = array_merge($allSiswaIds, array_keys($rec->data_kehadiran ?? []));
+        }
+        $siswaCache = User::whereIn('id', array_unique($allSiswaIds))->get()->keyBy('id');
+
         foreach ($absensiRecords as $rec) {
             $dataKehadiran = $rec->data_kehadiran ?? [];
             foreach ($dataKehadiran as $siswaId => $status) {
-                $siswa = User::find($siswaId);
+                $siswa = $siswaCache->get($siswaId);
                 $siswaName = $siswa ? $siswa->name : 'Siswa ID #' . $siswaId;
                 
                 $html .= '<tr>';
@@ -302,5 +311,17 @@ class GuruController extends Controller
         $html .= '</body></html>';
 
         return response($html, 200, $headers);
+    }
+
+    public function tugasDelete($id)
+    {
+        $user = auth()->user();
+        $tugas = Tugas::where('id', $id)->where('guru_id', $user->id)->firstOrFail();
+        $judul = $tugas->judul;
+        $tugas->delete();
+
+        AuditLog::record('DELETE_TUGAS', 'Guru menghapus penugasan: ' . $judul);
+
+        return redirect()->route('guru.tugas.index')->with('success', 'Penugasan berhasil dihapus.');
     }
 }

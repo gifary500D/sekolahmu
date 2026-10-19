@@ -8,6 +8,7 @@ use App\Models\Kelas;
 use App\Models\Tugas;
 use App\Models\Absensi;
 use App\Models\Roster;
+use App\Models\Berita;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -40,7 +41,7 @@ class AdminController extends Controller
      */
     public function spmbIndex()
     {
-        $applicants = Spmb::orderBy('created_at', 'desc')->get();
+        $applicants = Spmb::orderBy('created_at', 'desc')->paginate(15);
         return view('admin.spmb.index', compact('applicants'));
     }
 
@@ -141,7 +142,7 @@ class AdminController extends Controller
      */
     public function usersIndex()
     {
-        $users = User::with('kelas')->orderBy('created_at', 'desc')->get();
+        $users = User::with('kelas')->orderBy('created_at', 'desc')->paginate(20);
         $kelasList = Kelas::all();
         return view('admin.users.index', compact('users', 'kelasList'));
     }
@@ -160,19 +161,52 @@ class AdminController extends Controller
             'nisn' => 'nullable|string|unique:users,nisn',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'nisn' => $request->nisn,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'kelas_id' => $request->kelas_id,
-            'password_changed' => true,
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'nisn' => $request->nisn,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+                'kelas_id' => $request->kelas_id,
+                'password_changed' => true,
+            ]);
+
+            AuditLog::record('CREATE_USER', 'Menambahkan pengguna baru: ' . $user->name . ' (' . $user->role . ').');
+
+            return redirect()->route('admin.users.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
+        });
+    }
+
+    /**
+     * Perbarui data pengguna (termasuk penempatan kelas siswa)
+     */
+    public function userUpdate(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:admin,guru,siswa',
+            'kelas_id' => 'nullable|exists:kelas,id',
+            'nisn' => 'nullable|string|unique:users,nisn,' . $user->id,
         ]);
 
-        AuditLog::record('CREATE_USER', 'Menambahkan pengguna baru: ' . $user->name . ' (' . $user->role . ').');
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $user) {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'nisn' => $request->nisn,
+                'role' => $request->role,
+                'kelas_id' => $request->kelas_id,
+                'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
+            ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
+            AuditLog::record('UPDATE_USER', 'Memperbarui data pengguna: ' . $user->name);
+
+            return redirect()->route('admin.users.index')->with('success', 'Data pengguna berhasil diperbarui.');
+        });
     }
 
     /**
@@ -198,7 +232,7 @@ class AdminController extends Controller
      */
     public function siswaIndex()
     {
-        $siswaList = User::with('kelas')->where('role', 'siswa')->orderBy('created_at', 'desc')->get();
+        $siswaList = User::with('kelas')->where('role', 'siswa')->orderBy('created_at', 'desc')->paginate(20);
         $kelasList = Kelas::all();
         return view('admin.siswa.index', compact('siswaList', 'kelasList'));
     }
@@ -208,7 +242,7 @@ class AdminController extends Controller
      */
     public function guruIndex()
     {
-        $guruList = User::whereIn('role', ['guru', 'admin'])->orderBy('created_at', 'desc')->get();
+        $guruList = User::whereIn('role', ['guru', 'admin'])->orderBy('created_at', 'desc')->paginate(20);
         return view('admin.guru.index', compact('guruList'));
     }
 
@@ -252,5 +286,106 @@ class AdminController extends Controller
         AuditLog::record('DELETE_ROSTER', 'Menghapus jadwal pelajaran ' . $subject);
 
         return redirect()->route('admin.roster.index')->with('success', 'Jadwal pelajaran berhasil dihapus.');
+    }
+
+    /**
+     * CRUD Master Kelas
+     */
+    public function kelasIndex()
+    {
+        $kelasList = Kelas::with('waliKelas')->withCount('siswa')->get();
+        $guruList = User::where('role', 'guru')->get();
+        return view('admin.kelas.index', compact('kelasList', 'guruList'));
+    }
+
+    public function kelasStore(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:kelas,nama',
+            'tingkat' => 'required|in:10,11,12',
+            'program' => 'required|in:ipa,ips,bahasa',
+            'wali_kelas_id' => 'nullable|exists:users,id',
+        ]);
+
+        $kelas = Kelas::create($request->all());
+        AuditLog::record('CREATE_KELAS', 'Menambahkan kelas baru: ' . $kelas->nama);
+
+        return redirect()->route('admin.kelas.index')->with('success', 'Kelas baru berhasil ditambahkan.');
+    }
+
+    public function kelasUpdate(Request $request, $id)
+    {
+        $kelas = Kelas::findOrFail($id);
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:kelas,nama,' . $kelas->id,
+            'tingkat' => 'required|in:10,11,12',
+            'program' => 'required|in:ipa,ips,bahasa',
+            'wali_kelas_id' => 'nullable|exists:users,id',
+        ]);
+
+        $kelas->update($request->all());
+        AuditLog::record('UPDATE_KELAS', 'Memperbarui kelas: ' . $kelas->nama);
+
+        return redirect()->route('admin.kelas.index')->with('success', 'Data kelas berhasil diperbarui.');
+    }
+
+    public function kelasDelete($id)
+    {
+        $kelas = Kelas::findOrFail($id);
+        $nama = $kelas->nama;
+        $kelas->delete();
+
+        AuditLog::record('DELETE_KELAS', 'Menghapus kelas: ' . $nama);
+
+        return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil dihapus.');
+    }
+
+    /**
+     * CMS Konten Portal (Berita)
+     */
+    public function cmsIndex()
+    {
+        $beritaList = Berita::latest()->get();
+        return view('admin.cms.index', compact('beritaList'));
+    }
+
+    public function cmsBeritaStore(Request $request)
+    {
+        $request->validate([
+            'judul' => 'required|string|max:150',
+            'konten' => 'required|string',
+            'status' => 'required|in:terbit,arsip',
+            'gambar' => 'nullable|image|max:2048',
+        ]);
+
+        $gambarPath = null;
+        if ($request->hasFile('gambar')) {
+            $gambarPath = $request->file('gambar')->store('berita', 'public');
+        }
+
+        $berita = Berita::create([
+            'judul' => $request->judul,
+            'slug' => Berita::slugUnik($request->judul),
+            'ringkasan' => \Illuminate\Support\Str::limit(strip_tags($request->konten), 200),
+            'konten' => $request->konten,
+            'status' => $request->status === 'arsip' ? 'draf' : 'terbit',
+            'gambar_path' => $gambarPath,
+            'diterbitkan_pada' => now(),
+            'penulis_id' => auth()->id(),
+        ]);
+
+        AuditLog::record('CREATE_BERITA', 'Mempublikasikan berita portal: ' . $berita->judul);
+
+        return redirect()->route('admin.cms.index')->with('success', 'Berita berhasil dipublikasikan.');
+    }
+
+    public function cmsBeritaDelete($id)
+    {
+        $berita = Berita::findOrFail($id);
+        $berita->delete();
+
+        AuditLog::record('DELETE_BERITA', 'Menghapus berita portal.');
+
+        return redirect()->route('admin.cms.index')->with('success', 'Berita berhasil dihapus.');
     }
 }

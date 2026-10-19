@@ -37,6 +37,9 @@
                     <a href="/" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Beranda</a>
                     <a href="/#tentang" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Tentang</a>
                     <a href="/#program" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Program</a>
+                    <a href="{{ route('berita.index') }}" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Berita</a>
+                    <a href="{{ route('agenda.index') }}" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Agenda</a>
+                    <a href="{{ route('galeri.index') }}" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Galeri</a>
                     <a href="/#fasilitas" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50/60 font-medium text-sm rounded-lg transition-all">Fasilitas</a>
                     
                     <div class="h-6 w-px bg-slate-200 mx-2"></div>
@@ -69,6 +72,9 @@
                 <a href="/" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Beranda</a>
                 <a href="/#tentang" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Tentang</a>
                 <a href="/#program" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Program</a>
+                <a href="{{ route('berita.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Berita</a>
+                <a href="{{ route('agenda.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Agenda</a>
+                <a href="{{ route('galeri.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Galeri</a>
                 <a href="/#fasilitas" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium text-sm transition-colors">Fasilitas</a>
                 
                 <div class="pt-2 border-t border-slate-100 space-y-2">

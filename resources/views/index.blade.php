@@ -450,6 +450,178 @@
     </div>
 </section>
 
+{{-- <!-- Berita & Pengumuman -->
+<section id="berita" class="py-16 sm:py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 sm:mb-16">
+            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Informasi Terbaru</span>
+            <h2 class="section-title mx-auto max-w-2xl">Berita &amp; Pengumuman Sekolah</h2>
+            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
+                Ikuti perkembangan, artikel, dan informasi resmi seputar kegiatan akademik SMA Pemda Bahorok
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @forelse($berita ?? [] as $item)
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex flex-col">
+                    <img 
+                        src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000&auto=format&fit=crop' }}" 
+                        alt="{{ $item->judul }}" 
+                        class="w-full h-48 object-cover"
+                    >
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider block mb-2">{{ $item->created_at->format('d M Y') }}</span>
+                            <h3 class="font-bold text-slate-900 text-lg mb-2">{{ $item->judul }}</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed line-clamp-3">{{ $item->konten }}</p>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <!-- Fallback Unsplash Mock Berita jika database kosong -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1000&auto=format&fit=crop" alt="Berita 1" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider block mb-2">18 Oktober 2026</span>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">Upacara Peringatan Hari Sumpah Pemuda</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">Siswa-siswi SMA Pemda Bahorok mengikuti upacara dengan khidmat mengenakan pakaian adat Nusantara.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1000&auto=format&fit=crop" alt="Berita 2" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider block mb-2">15 Oktober 2026</span>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">Pelatihan Literasi Digital &amp; Coding Dasar</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">Laboratorium komputer sekolah mengadakan pelatihan dasar pemrograman web untuk siswa kelas XI.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=1000&auto=format&fit=crop" alt="Berita 3" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider block mb-2">10 Oktober 2026</span>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">Juara Umum Olimpiade Sains Kabupaten</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">Tim Olimpiade Biologi dan Matematika berhasil membawa pulang piala juara umum tingkat kabupaten.</p>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<!-- Agenda Kegiatan -->
+<section id="agenda" class="py-16 sm:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 sm:mb-16">
+            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Kalender Akademik</span>
+            <h2 class="section-title mx-auto max-w-2xl">Agenda Kegiatan Sekolah</h2>
+            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
+                Catat tanggal penting dan jadwal kegiatan ekstrakurikuler serta ujian mendatang
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @forelse($agenda ?? [] as $ag)
+                <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-lg text-xs font-bold inline-block mb-3">
+                            {{ \Carbon\Carbon::parse($ag->tanggal)->format('d M Y') }}
+                        </span>
+                        <h3 class="font-bold text-slate-900 text-base mb-2">{{ $ag->judul }}</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">{{ $ag->deskripsi ?? 'Kegiatan resmi sekolah.' }}</p>
+                    </div>
+                </div>
+            @empty
+                <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs font-bold inline-block mb-3">25 Okt 2026</span>
+                    <h3 class="font-bold text-slate-900 text-base mb-2">Ujian Tengah Semester (UTS)</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Pelaksanaan UTS Genap seluruh tingkat kelas X, XI, dan XII.</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold inline-block mb-3">02 Nov 2026</span>
+                    <h3 class="font-bold text-slate-900 text-base mb-2">Pekan Olahraga Antar Kelas (Classmeeting)</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Pertandingan persahabatan futsal, basket, dan bulu tangkis.</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-lg text-xs font-bold inline-block mb-3">15 Nov 2026</span>
+                    <h3 class="font-bold text-slate-900 text-base mb-2">Pameran Karya Seni Siswa</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Pameran seni rupa dan prakarya hasil praktik siswa seni budaya.</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+                    <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-lg text-xs font-bold inline-block mb-3">30 Nov 2026</span>
+                    <h3 class="font-bold text-slate-900 text-base mb-2">Rapat Pleno Orang Tua Siswa</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Sosialisasi program semester dan laporan perkembangan akademik.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<!-- Galeri Foto -->
+<section id="galeri" class="py-16 sm:py-20 bg-slate-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 sm:mb-16">
+            <span class="inline-block text-amber-400 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Dokumentasi</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">Galeri Foto Kegiatan Sekolah</h2>
+            <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
+                Momen kebersamaan, fasilitas, dan aktivitas belajar mengajar di lingkungan SMA Pemda Bahorok
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($galeri ?? [] as $foto)
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
+                    <img 
+                        src="{{ $foto->gambar ? asset('storage/' . $foto->gambar) : 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1000&auto=format&fit=crop' }}" 
+                        alt="Galeri Sekolah" 
+                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
+                        <p class="font-bold text-sm text-white">{{ $foto->judul ?? 'Aktivitas Sekolah' }}</p>
+                    </div>
+                </div>
+            @empty
+                <!-- Fallback Unsplash Mock Galeri -->
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1000&auto=format&fit=crop" alt="Lab Komputer" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
+                        <p class="font-bold text-sm text-white">Praktikum Komputer Modern</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
+                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop" alt="Perpustakaan" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
+                        <p class="font-bold text-sm text-white">Suasana Perpustakaan &amp; Ruang Baca</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
+                    <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1000&auto=format&fit=crop" alt="Laboratorium Sains" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
+                        <p class="font-bold text-sm text-white">Praktikum Kimia &amp; Biologi</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1000&auto=format&fit=crop" alt="Kegiatan Olahraga" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
+                        <p class="font-bold text-sm text-white">Lapangan Olahraga &amp; Ekstrakurikuler</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1000&auto=format&fit=crop" alt="Upacara Bendera" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
+                        <p class="font-bold text-sm text-white">Upacara Bendera Hari Senin</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
+                    <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=1000&auto=format&fit=crop" alt="Diskusi Kelompok" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
+                        <p class="font-bold text-sm text-white">Diskusi Kelompok &amp; Kolaborasi Siswa</p>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section> --}}
+
 <!-- Lokasi -->
 <section id="lokasi" class="py-16 sm:py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

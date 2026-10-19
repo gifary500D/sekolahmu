@@ -36,7 +36,7 @@
         </div>
 
         <!-- Metric Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
             <!-- Tugas Aktif -->
             <a href="{{ route('siswa.tugas') }}" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-blue-500 transition-all block group">
                 <div class="flex items-center justify-between">
@@ -71,21 +71,56 @@
                 </div>
             </a>
 
-            <!-- Kelas -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <!-- Jadwal Pelajaran -->
+            <a href="{{ route('siswa.roster') }}" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-blue-500 transition-all block group">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Kelas / Rombel</p>
-                        <h3 class="text-3xl font-bold text-slate-900 mt-2">{{ auth()->user()->kelas->nama ?? 'Belum ada kelas' }}</h3>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Jadwal Pelajaran</p>
+                        <h3 class="text-3xl font-bold text-slate-900 mt-2">Roster Kelas</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    <div class="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center group-hover:bg-indigo-700 group-hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
                 </div>
-                <div class="mt-4 text-xs text-slate-600 font-medium">
-                    <span>Terdaftar di SMA Pemda Bahorok</span>
+                <div class="mt-4 text-xs text-indigo-600 font-semibold flex items-center justify-between">
+                    <span>Lihat Jadwal Harian</span>
+                    <span>&rarr;</span>
                 </div>
-            </div>
+            </a>
+
+            <!-- Transkrip Nilai -->
+            <a href="{{ route('siswa.nilai') }}" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-blue-500 transition-all block group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Transkrip Nilai</p>
+                        <h3 class="text-3xl font-bold text-slate-900 mt-2">Nilai &amp; Rapor</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center group-hover:bg-purple-700 group-hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-purple-600 font-semibold flex items-center justify-between">
+                    <span>Lihat Nilai &amp; Catatan Guru</span>
+                    <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- Profil Akun -->
+            <a href="{{ route('profile.form') }}" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-blue-500 transition-all block group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pengaturan Akun</p>
+                        <h3 class="text-3xl font-bold text-slate-900 mt-2">Profil &amp; Sandi</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-cyan-50 text-cyan-700 flex items-center justify-center group-hover:bg-cyan-700 group-hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756.24 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-cyan-600 font-semibold flex items-center justify-between">
+                    <span>Ubah Profil &amp; Kata Sandi</span>
+                    <span>&rarr;</span>
+                </div>
+            </a>
         </div>
 
         <!-- Main Workspace -->

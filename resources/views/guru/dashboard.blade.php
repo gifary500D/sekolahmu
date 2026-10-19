@@ -149,27 +149,24 @@
                 </div>
             </div>
 
-            <!-- Right Col: Schedule & Info -->
+            <!-- Right Col: Recent Tasks / Quick Links -->
             <div class="space-y-6">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4">Tugas Terbaru yang Dibuat</h2>
-                    <div class="space-y-3 text-xs">
-                        @forelse($tugasList->take(3) as $tugas)
-                            <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                                <span class="text-blue-600 font-bold block mb-1">Tenggat: {{ $tugas->tenggat }}</span>
-                                <strong class="text-slate-900 text-sm block">{{ $tugas->judul }}</strong>
-                                <span class="text-slate-500">{{ $tugas->mata_pelajaran }}</span>
+                    <h2 class="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100 flex justify-between items-center">
+                        <span>Tugas Aktif Anda</span>
+                        <a href="{{ route('guru.tugas.index') }}" class="text-xs text-blue-600 font-semibold hover:underline">Semua</a>
+                    </h2>
+                    <div class="space-y-4">
+                        @forelse($tugasList ?? [] as $tugas)
+                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-slate-900 text-xs mb-1">{{ $tugas->judul }}</h4>
+                                <p class="text-[11px] text-slate-500 mb-2">Tenggat: {{ \Carbon\Carbon::parse($tugas->tenggat)->format('d M Y') }}</p>
+                                <a href="{{ route('guru.tugas.submissions', $tugas->id) }}" class="text-xs font-semibold text-blue-600 hover:underline">Periksa Pengumpulan &rarr;</a>
                             </div>
                         @empty
-                            <p class="text-slate-500 italic">Belum ada tugas yang dibuat.</p>
+                            <p class="text-xs text-slate-500">Belum ada tugas yang dibuat.</p>
                         @endforelse
                     </div>
-                </div>
-
-                <div class="bg-slate-900 text-slate-200 rounded-xl p-6 shadow-sm">
-                    <h3 class="font-bold text-white mb-2 text-sm">Pusat Bantuan Akademik</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed mb-4">Butuh bantuan teknis penjadwalan atau rekap nilai? Hubungi bagian kurikulum sekolah.</p>
-                    <a href="mailto:kurikulum@smapemdabahorok.sch.id" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors">Hubungi Kurikulum</a>
                 </div>
             </div>
         </div>

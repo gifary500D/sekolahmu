@@ -106,19 +106,23 @@
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     @if($status === 'belum')
-                                        <form action="{{ route('siswa.tugas.submit', $tugas->id) }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2">
-                                            @csrf
-                                            <input 
-                                                type="file" 
-                                                name="berkas" 
-                                                required 
-                                                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                                                class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer max-w-[200px]"
-                                            >
-                                            <button type="submit" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm whitespace-nowrap">
-                                                Kirim
-                                            </button>
-                                        </form>
+                                        @if($diffHours < 0)
+                                            <span class="px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-semibold inline-block">Waktu Habis (Ditutup)</span>
+                                        @else
+                                            <form action="{{ route('siswa.tugas.submit', $tugas->id) }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2">
+                                                @csrf
+                                                <input 
+                                                    type="file" 
+                                                    name="berkas" 
+                                                    required 
+                                                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                                    class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer max-w-[200px]"
+                                                >
+                                                <button type="submit" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm whitespace-nowrap">
+                                                    Kirim
+                                                </button>
+                                            </form>
+                                        @endif
                                     @else
                                         <div class="flex flex-col items-end gap-1.5">
                                             <span class="text-xs font-semibold text-emerald-600">Tugas Dikirim</span>

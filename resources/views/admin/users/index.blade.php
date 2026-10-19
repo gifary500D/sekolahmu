@@ -136,8 +136,22 @@
                                     </td>
                                     <td class="py-4 px-6 text-xs text-slate-600">
                                         @if($user->isSiswa())
-                                            Kelas: {{ $user->kelas->nama ?? '-' }}<br>
-                                            NISN: {{ $user->nisn ?? '-' }}
+                                            <span class="font-semibold text-slate-900 block mb-1">Kelas Saat Ini: {{ $user->kelas->nama ?? 'Belum ada kelas' }}</span>
+                                            <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="flex items-center gap-2 mt-1">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="name" value="{{ $user->name }}">
+                                                <input type="hidden" name="email" value="{{ $user->email }}">
+                                                <input type="hidden" name="role" value="{{ $user->role }}">
+                                                <input type="hidden" name="nisn" value="{{ $user->nisn }}">
+                                                <select name="kelas_id" onchange="this.form.submit()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white font-medium focus:ring-2 focus:ring-blue-600 text-slate-800">
+                                                    <option value="">-- Pilih / Ubah Kelas --</option>
+                                                    @foreach($kelasList as $kelas)
+                                                        <option value="{{ $kelas->id }}" {{ $user->kelas_id == $kelas->id ? 'selected' : '' }}>{{ $kelas->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                            <span class="text-[11px] text-slate-500 block mt-1">NISN: {{ $user->nisn ?? '-' }}</span>
                                         @else
                                             -
                                         @endif

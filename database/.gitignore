@@ -1,1 +1,10 @@
-*.sqlite*
+/vendor
+/node_modules
+.env
+.env.backup
+/storage/*.key
+/public/hot
+/public/storage
+/.phpunit.result.cache
+/database/*.sqlite
+/database/*.sqlite-journal

@@ -29,6 +29,29 @@
                     </ul>
                 </div>
 
+                @if (session('success'))
+                    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 shadow-sm flex items-start space-x-3">
+                        <span class="text-2xl">✔</span>
+                        <div>
+                            <h3 class="font-bold text-lg">Pendaftaran Berhasil!</h3>
+                            <p class="text-sm mt-1">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="mb-6 p-4 bg-rose-50 border border-rose-300 rounded-xl text-rose-800 shadow-sm">
+                        <h3 class="font-bold text-base flex items-center">
+                            <span class="mr-2">⚠</span> Terdapat kesalahan pada input formulir:
+                        </h3>
+                        <ul class="list-disc list-inside mt-2 text-sm space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <!-- Form -->
                 <form id="registrationForm" method="POST" action="/proses-pendaftaran" class="space-y-8">
                     @csrf
@@ -42,13 +65,14 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Nama Lengkap -->
                             <div class="md:col-span-2">
-                                <label for="nama" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <label for="nama_lengkap" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Nama Lengkap <span class="text-red-500">*</span>
                                 </label>
                                 <input 
                                     type="text" 
-                                    id="nama" 
-                                    name="nama" 
+                                    id="nama_lengkap" 
+                                    name="nama_lengkap" 
+                                    value="{{ old('nama_lengkap', old('nama')) }}"
                                     required
                                     placeholder="Masukkan nama lengkap sesuai akta kelahiran"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
@@ -104,13 +128,14 @@
                             <!-- NISN -->
                             <div>
                                 <label for="nisn" class="block text-sm font-semibold text-gray-700 mb-2">
-                                    NISN <span class="text-red-500">*</span>
+                                    NISN (10 Digit) <span class="text-red-500">*</span>
                                 </label>
                                 <input 
                                     type="text" 
                                     id="nisn" 
                                     name="nisn" 
-                                    required
+                                    value="{{ old('nisn') }}"
+                                    required 
                                     placeholder="10 digit NISN"
                                     maxlength="10"
                                     pattern="[0-9]{10}"
@@ -118,8 +143,26 @@
                                 >
                             </div>
 
-                            <!-- Agama -->
+                            <!-- NIK -->
                             <div>
+                                <label for="nik" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    NIK (16 Digit) <span class="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="nik" 
+                                    name="nik" 
+                                    value="{{ old('nik') }}"
+                                    required 
+                                    placeholder="16 digit NIK sesuai KK"
+                                    maxlength="16"
+                                    pattern="[0-9]{16}"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                >
+                            </div>
+
+                            <!-- Agama -->
+                            <div class="md:col-span-2">
                                 <label for="agama" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Agama <span class="text-red-500">*</span>
                                 </label>
@@ -130,12 +173,12 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                                     <option value="">-- Pilih Agama --</option>
-                                    <option value="islam">Islam</option>
-                                    <option value="kristen">Kristen Protestan</option>
-                                    <option value="katolik">Kristen Katolik</option>
-                                    <option value="hindu">Hindu</option>
-                                    <option value="buddha">Buddha</option>
-                                    <option value="konghucu">Konghucu</option>
+                                    <option value="islam" {{ old('agama') == 'islam' ? 'selected' : '' }}>Islam</option>
+                                    <option value="kristen" {{ old('agama') == 'kristen' ? 'selected' : '' }}>Kristen Protestan</option>
+                                    <option value="katolik" {{ old('agama') == 'katolik' ? 'selected' : '' }}>Kristen Katolik</option>
+                                    <option value="hindu" {{ old('agama') == 'hindu' ? 'selected' : '' }}>Hindu</option>
+                                    <option value="buddha" {{ old('agama') == 'buddha' ? 'selected' : '' }}>Buddha</option>
+                                    <option value="konghucu" {{ old('agama') == 'konghucu' ? 'selected' : '' }}>Konghucu</option>
                                 </select>
                             </div>
                         </div>
@@ -356,8 +399,9 @@
                                     name="tahun_lulus" 
                                     required
                                     min="2020"
-                                    max="2024"
-                                    placeholder="2024"
+                                    max="{{ date('Y') }}"
+                                    placeholder="{{ date('Y') }}"
+                                    value="{{ old('tahun_lulus') }}"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                             </div>
@@ -374,9 +418,28 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                                     <option value="">-- Pilih Program --</option>
-                                    <option value="ipa">Program IPA (Sains)</option>
-                                    <option value="ips">Program IPS (Sosial)</option>
-                                    <option value="bahasa">Program Bahasa</option>
+                                    <option value="ipa" {{ old('program') == 'ipa' ? 'selected' : '' }}>Program IPA (Sains)</option>
+                                    <option value="ips" {{ old('program') == 'ips' ? 'selected' : '' }}>Program IPS (Sosial)</option>
+                                    <option value="bahasa" {{ old('program') == 'bahasa' ? 'selected' : '' }}>Program Bahasa</option>
+                                </select>
+                            </div>
+
+                            <!-- Jalur Pendaftaran -->
+                            <div class="md:col-span-2">
+                                <label for="jalur_pendaftaran" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Jalur Pendaftaran <span class="text-red-500">*</span>
+                                </label>
+                                <select 
+                                    id="jalur_pendaftaran" 
+                                    name="jalur_pendaftaran" 
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                >
+                                    <option value="">-- Pilih Jalur Pendaftaran --</option>
+                                    <option value="Zonasi" {{ old('jalur_pendaftaran') == 'Zonasi' ? 'selected' : '' }}>Zonasi</option>
+                                    <option value="Afirmasi" {{ old('jalur_pendaftaran') == 'Afirmasi' ? 'selected' : '' }}>Afirmasi</option>
+                                    <option value="Prestasi" {{ old('jalur_pendaftaran') == 'Prestasi' ? 'selected' : '' }}>Prestasi</option>
+                                    <option value="Perpindahan Tugas" {{ old('jalur_pendaftaran') == 'Perpindahan Tugas' ? 'selected' : '' }}>Perpindahan Tugas</option>
                                 </select>
                             </div>
                         </div>

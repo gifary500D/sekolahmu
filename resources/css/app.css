@@ -1,0 +1,126 @@
+/* Tailwind CSS Imports */
+@import "tailwindcss";
+
+/* Custom Styles */
+@layer components {
+    /* Tombol Primary */
+    .btn-primary {
+        @apply px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold transition-all duration-300 hover:bg-blue-700 active:scale-95;
+    }
+
+    /* Tombol Secondary */
+    .btn-secondary {
+        @apply px-6 py-3 bg-cyan-500 text-white rounded-lg font-semibold transition-all duration-300 hover:bg-cyan-600 active:scale-95;
+    }
+
+    /* Tombol Outline */
+    .btn-outline {
+        @apply px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-600 hover:text-white active:scale-95;
+    }
+
+    /* Card */
+    .card {
+        @apply bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
+    }
+
+    /* Section Title */
+    .section-title {
+        @apply text-3xl md:text-4xl font-bold text-gray-900 mb-4;
+    }
+
+    /* Smooth scroll */
+    html {
+        scroll-behavior: smooth;
+    }
+
+
+    .teacher-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.teacher-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    height: 254px;
+}
+
+.teacher-panel {
+    flex: 0 0 60px;
+    height: 254px;
+    background-color: #48cbff;
+    background-size: cover;
+    background-position: center top;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 1px solid #0EA5E9;
+    overflow: hidden;
+    transition: flex-basis 0.5s ease, box-shadow 0.3s;
+}
+
+.teacher-panel:hover {
+    flex-basis: 200px;
+    box-shadow: 0 8px 30px rgba(30, 64, 175, 0.4);
+}
+
+.teacher-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #ea8e24 0%, #af1e1e88 20%, transparent 100%);
+}
+
+.teacher-info {
+    position: relative;
+    z-index: 1;
+    padding: 0.75rem;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.teacher-subject {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #93c5fd;
+    margin-bottom: 3px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: all 0.4s 0.1s;
+}
+
+.teacher-name {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: all 0.4s 0.15s;
+}
+
+.teacher-panel:hover .teacher-subject,
+.teacher-panel:hover .teacher-name {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .teacher-row { height: 220px; }
+    .teacher-panel { flex: 0 0 50px; height: 220px; }
+    .teacher-panel:hover { flex-basis: 160px; }
+}
+
+@media (max-width: 480px) {
+    .teacher-row { height: 180px; }
+    .teacher-panel { flex: 0 0 40px; height: 180px; }
+    .teacher-panel:hover { flex-basis: 130px; }
+}
+}

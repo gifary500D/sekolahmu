@@ -68,7 +68,15 @@ class TugasController extends Controller
             'prioritas' => ['required', 'in:rendah,sedang,tinggi'],
         ]);
         $data = Teks::bersih($data, ['judul', 'deskripsi', 'mata_pelajaran']);
-        $data['guru_id'] = $request->user()->id;
+        $user = $request->user();
+
+        if ($user->role === 'guru' && ! $user->canManageKelas($data['kelas_id'])) {
+            return response()->json([
+                'message' => 'Guru tidak memiliki hak membuat tugas untuk kelas ini.',
+            ], 403);
+        }
+
+        $data['guru_id'] = $user->id;
 
         $tugas = Tugas::create($data)->load(['kelas:id,nama', 'guru:id,name']);
 
@@ -100,6 +108,13 @@ class TugasController extends Controller
             'prioritas' => ['sometimes', 'required', 'in:rendah,sedang,tinggi'],
         ]);
         $data = Teks::bersih($data, ['judul', 'deskripsi', 'mata_pelajaran']);
+
+        $user = $request->user();
+        if (isset($data['kelas_id']) && $user->role === 'guru' && ! $user->canManageKelas($data['kelas_id'])) {
+            return response()->json([
+                'message' => 'Guru tidak memiliki hak memindahkan tugas ke kelas ini.',
+            ], 403);
+        }
 
         $tugas->fill($data);
         $tenggatBerubah = $tugas->isDirty('tenggat');

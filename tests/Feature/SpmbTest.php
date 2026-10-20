@@ -155,7 +155,7 @@ test('cek status mengembalikan data pendaftar berdasarkan nomor pendaftaran', fu
     $response->assertStatus(200)
              ->assertJsonPath('success', true)
              ->assertJsonPath('data.nomor_pendaftaran', 'SPMB-2026-0001')
-             ->assertJsonPath('data.nama_lengkap', 'Budi Santoso')
+             ->assertJsonPath('data.nama_lengkap', 'B*** S******')
              ->assertJsonPath('data.status', 'Diverifikasi')
              ->assertJsonStructure([
                  'data' => ['nomor_pendaftaran', 'nama_lengkap', 'asal_sekolah', 'program', 'jalur_pendaftaran', 'status', 'tanggal_daftar']

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Absensi;
+use App\Models\Kelas;
+use App\Support\Teks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -17,6 +19,14 @@ class AbsensiController extends Controller
             'tanggal' => 'required|date',
             'data_kehadiran' => 'required|array', // Contoh format: [{"nama": "Budi", "status": "Hadir"}, ...]
         ]);
+
+        $user = $request->user();
+        if ($user && $user->isGuru() && ! $user->canManageKelas($request->kelas)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki hak mengelola absensi kelas ini.',
+            ], 403);
+        }
 
         $absensi = Absensi::create([
             'kelas' => $request->kelas,
@@ -32,15 +42,68 @@ class AbsensiController extends Controller
     }
 
     // 2. Melihat rekap absensi berdasarkan kelas
-    public function rekapAbsensi($kelas)
+    public function rekapAbsensi(Request $request, $kelas)
     {
-        $dataAbsensi = Absensi::where('kelas', 'LIKE', "%{$kelas}%")->orderBy('tanggal', 'DESC')->get();
+        $user = $request->user();
+
+        // Validasi otorisasi peran
+        if ($user) {
+            if ($user->isSiswa()) {
+                $userKelasNama = $user->kelas?->nama;
+                if ($userKelasNama !== $kelas && (string) $user->kelas_id !== (string) $kelas) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Anda tidak berhak melihat absensi kelas lain.',
+                    ], 403);
+                }
+            } elseif ($user->isGuru() && ! $user->canManageKelas($kelas)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki hak mengakses rekap absensi kelas ini.',
+                ], 403);
+            }
+        }
+
+        $escaped = Teks::escapeLike((string) $kelas);
+        $dataAbsensi = Absensi::where('kelas', 'LIKE', "%{$escaped}%")->orderBy('tanggal', 'DESC')->get();
 
         if ($dataAbsensi->isEmpty()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Belum ada data absensi untuk kelas tersebut.',
             ], 404);
+        }
+
+        // Jika peran adalah siswa, filter data_kehadiran agar siswa HANYA melihat datanya sendiri
+        if ($user && $user->isSiswa()) {
+            $dataAbsensi = $dataAbsensi->map(function ($item) use ($user) {
+                $kehadiranList = $item->data_kehadiran;
+                $filteredKehadiran = [];
+
+                if (is_array($kehadiranList)) {
+                    if (array_is_list($kehadiranList)) {
+                        // Format list: [['nama' => '...', 'status' => '...'], ...]
+                        foreach ($kehadiranList as $row) {
+                            if (is_array($row)) {
+                                $matchId = isset($row['siswa_id']) && (int) $row['siswa_id'] === (int) $user->id;
+                                $matchName = isset($row['nama']) && strtolower(trim((string) $row['nama'])) === strtolower(trim((string) $user->name));
+                                if ($matchId || $matchName) {
+                                    $filteredKehadiran[] = $row;
+                                }
+                            }
+                        }
+                    } else {
+                        // Format asosiatif: [siswa_id => 'Hadir'|'Sakit'|...]
+                        if (isset($kehadiranList[$user->id])) {
+                            $filteredKehadiran[$user->id] = $kehadiranList[$user->id];
+                        }
+                    }
+                }
+
+                $clone = clone $item;
+                $clone->data_kehadiran = $filteredKehadiran;
+                return $clone;
+            });
         }
 
         return response()->json([
@@ -50,10 +113,29 @@ class AbsensiController extends Controller
         ], 200);
     }
 
-    // 3. Ekspor Data Absensi ke Format CSV yang Rapi per Siswa
-    public function exportCsv($kelas)
+    // 3. Ekspor Data Absensi ke Format CSV yang Rapi per Siswa (Terproteksi dari Formula Injection)
+    public function exportCsv(Request $request, $kelas)
     {
-        $dataAbsensi = Absensi::where('kelas', 'LIKE', "%{$kelas}%")->get();
+        $user = $request->user();
+
+        if ($user) {
+            if ($user->isSiswa()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Siswa tidak memiliki izin untuk mengekspor absensi.',
+                ], 403);
+            }
+
+            if ($user->isGuru() && ! $user->canManageKelas($kelas)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki hak mengekspor absensi kelas ini.',
+                ], 403);
+            }
+        }
+
+        $escaped = Teks::escapeLike((string) $kelas);
+        $dataAbsensi = Absensi::where('kelas', 'LIKE', "%{$escaped}%")->get();
 
         if ($dataAbsensi->isEmpty()) {
             return response()->json(['message' => 'Data tidak ditemukan untuk diekspor'], 404);
@@ -77,17 +159,20 @@ class AbsensiController extends Controller
 
             $no = 1;
             foreach ($dataAbsensi as $absen) {
-                // $absen->data_kehadiran sudah otomatis jadi array berkat $casts di Model
                 $kehadiranList = $absen->data_kehadiran;
 
                 if (is_array($kehadiranList)) {
-                    foreach ($kehadiranList as $siswa) {
+                    foreach ($kehadiranList as $key => $siswa) {
+                        $nama = is_array($siswa) ? ($siswa['nama'] ?? '-') : ('Siswa ID #' . $key);
+                        $status = is_array($siswa) ? ($siswa['status'] ?? '-') : (string) $siswa;
+
+                        // Mitigasi Formula Injection (CSV Injection)
                         fputcsv($file, [
                             $no++,
-                            $absen->kelas,
-                            $absen->tanggal,
-                            $siswa['nama'] ?? '-',
-                            $siswa['status'] ?? '-',
+                            Teks::amankanFormulaCsv($absen->kelas),
+                            Teks::amankanFormulaCsv($absen->tanggal),
+                            Teks::amankanFormulaCsv($nama),
+                            Teks::amankanFormulaCsv($status),
                         ]);
                     }
                 }
@@ -98,3 +183,4 @@ class AbsensiController extends Controller
         return Response::stream($callback, 200, $headers);
     }
 }
+

@@ -8,6 +8,7 @@ use App\Models\Absensi;
 use App\Models\Kelas;
 use App\Models\User;
 use App\Models\AuditLog;
+use App\Support\Teks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -43,7 +44,8 @@ class GuruController extends Controller
      */
     public function tugasCreate()
     {
-        $kelasList = Kelas::all();
+        $user = auth()->user();
+        $kelasList = $user->managedKelas();
         return view('guru.tugas.create', compact('kelasList'));
     }
 
@@ -62,6 +64,10 @@ class GuruController extends Controller
             'prioritas' => 'required|in:rendah,sedang,tinggi',
             'deskripsi' => 'nullable|string',
         ]);
+
+        if (! $user->canManageKelas($request->kelas_id)) {
+            abort(403, 'Anda tidak memiliki hak membuat tugas untuk kelas ini.');
+        }
 
         $tugas = Tugas::create([
             'judul' => $request->judul,
@@ -83,7 +89,12 @@ class GuruController extends Controller
      */
     public function tugasSubmissions($id)
     {
+        $user = auth()->user();
         $tugas = Tugas::with('kelas')->findOrFail($id);
+
+        if ($user->isGuru() && (int) $tugas->guru_id !== (int) $user->id) {
+            abort(403, 'Anda tidak berhak melihat pengumpulan tugas guru lain.');
+        }
         
         // Ambil siswa di kelas terkait dan pengumpulannya
         $kelasId = $tugas->kelas_id;
@@ -99,12 +110,19 @@ class GuruController extends Controller
      */
     public function beriNilai(Request $request, $submissionId)
     {
+        $user = auth()->user();
+
         $request->validate([
             'nilai' => 'required|numeric|min:0|max:100',
             'catatan' => 'nullable|string|max:500',
         ]);
 
         $submission = TugasSiswa::with(['tugas', 'siswa'])->findOrFail($submissionId);
+
+        if ($user->isGuru() && (int) $submission->tugas?->guru_id !== (int) $user->id) {
+            abort(403, 'Anda tidak berhak memberi nilai pada tugas guru lain.');
+        }
+
         $submission->update([
             'nilai' => $request->nilai,
             'catatan' => $request->catatan,
@@ -121,7 +139,12 @@ class GuruController extends Controller
      */
     public function downloadBerkas($submissionId)
     {
-        $submission = TugasSiswa::findOrFail($submissionId);
+        $user = auth()->user();
+        $submission = TugasSiswa::with('tugas')->findOrFail($submissionId);
+
+        if ($user->isGuru() && (int) $submission->tugas?->guru_id !== (int) $user->id) {
+            abort(403, 'Anda tidak berhak mengunduh berkas pengumpulan tugas guru lain.');
+        }
 
         if (! $submission->file_path || ! Storage::disk('public')->exists($submission->file_path)) {
             return redirect()->back()->with('error', 'Berkas lampiran tidak ditemukan di server.');
@@ -135,13 +158,18 @@ class GuruController extends Controller
      */
     public function absensiIndex(Request $request)
     {
-        $kelasList = Kelas::all();
+        $user = auth()->user();
+        $kelasList = $user->managedKelas();
         $selectedKelasId = $request->input('kelas_id', $kelasList->first()?->id);
         
-        $selectedKelas = Kelas::find($selectedKelasId);
+        if ($selectedKelasId && ! $user->canManageKelas($selectedKelasId)) {
+            abort(403, 'Anda tidak berhak mengakses kelas ini.');
+        }
+
+        $selectedKelas = $selectedKelasId ? Kelas::find($selectedKelasId) : null;
         $siswaList = $selectedKelas ? User::where('role', 'siswa')->where('kelas_id', $selectedKelas->id)->get() : collect();
 
-        $absensiList = Absensi::orderBy('tanggal', 'desc')->get();
+        $absensiList = Absensi::whereIn('kelas', $kelasList->pluck('nama'))->orderBy('tanggal', 'desc')->get();
 
         return view('guru.absensi', compact('absensiList', 'kelasList', 'selectedKelas', 'siswaList', 'selectedKelasId'));
     }
@@ -151,11 +179,17 @@ class GuruController extends Controller
      */
     public function absensiStore(Request $request)
     {
+        $user = auth()->user();
+
         $request->validate([
             'kelas' => 'required|string',
             'tanggal' => 'required|date',
             'status_kehadiran' => 'required|array',
         ]);
+
+        if (! $user->canManageKelas($request->kelas)) {
+            abort(403, 'Anda tidak memiliki hak mengelola absensi kelas ini.');
+        }
 
         Absensi::updateOrCreate(
             [
@@ -177,11 +211,23 @@ class GuruController extends Controller
      */
     public function exportAbsensi(Request $request)
     {
+        $user = auth()->user();
         $kelasName = $request->input('kelas', 'Semua Kelas');
+
+        if ($request->filled('kelas') && ! $user->canManageKelas($kelasName)) {
+            abort(403, 'Anda tidak berhak mengekspor absensi kelas ini.');
+        }
+
         AuditLog::record('EXPORT_ABSENSI', 'Guru mengekspor rekapitulasi absensi kelas: ' . $kelasName);
+
+        $managedKelasNames = $user->managedKelas()->pluck('nama')->all();
 
         $absensiRecords = Absensi::when($request->filled('kelas'), function($q) use ($request) {
             $q->where('kelas', $request->kelas);
+        }, function($q) use ($managedKelasNames, $user) {
+            if ($user->isGuru()) {
+                $q->whereIn('kelas', $managedKelasNames);
+            }
         })->orderBy('tanggal', 'desc')->get();
 
         $filename = 'rekap-absensi-' . \Illuminate\Support\Str::slug($kelasName) . '-' . date('Y-m-d') . '.xls';
@@ -235,10 +281,10 @@ class GuruController extends Controller
                 
                 $html .= '<tr>';
                 $html .= '<td class="center">' . $no++ . '</td>';
-                $html .= '<td class="center">' . htmlspecialchars($rec->tanggal) . '</td>';
-                $html .= '<td class="center">' . htmlspecialchars($rec->kelas) . '</td>';
-                $html .= '<td>' . htmlspecialchars($siswaName) . '</td>';
-                $html .= '<td class="center"><b>' . htmlspecialchars($status) . '</b></td>';
+                $html .= '<td class="center">' . htmlspecialchars(Teks::amankanFormulaCsv($rec->tanggal)) . '</td>';
+                $html .= '<td class="center">' . htmlspecialchars(Teks::amankanFormulaCsv($rec->kelas)) . '</td>';
+                $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($siswaName)) . '</td>';
+                $html .= '<td class="center"><b>' . htmlspecialchars(Teks::amankanFormulaCsv($status)) . '</b></td>';
                 $html .= '</tr>';
             }
         }
@@ -255,7 +301,13 @@ class GuruController extends Controller
      */
     public function exportTugas($id)
     {
+        $user = auth()->user();
         $tugas = Tugas::with('kelas')->findOrFail($id);
+
+        if ($user->isGuru() && (int) $tugas->guru_id !== (int) $user->id) {
+            abort(403, 'Anda tidak berhak mengekspor rekap tugas guru lain.');
+        }
+
         AuditLog::record('EXPORT_TUGAS', 'Guru mengekspor nilai tugas: ' . $tugas->judul . ' (' . $tugas->mata_pelajaran . ')');
 
         $submissions = TugasSiswa::with('siswa')->where('tugas_id', $id)->get();
@@ -297,11 +349,11 @@ class GuruController extends Controller
         foreach ($submissions as $index => $sub) {
             $html .= '<tr>';
             $html .= '<td class="center">' . ($index + 1) . '</td>';
-            $html .= '<td>' . htmlspecialchars($sub->siswa?->name ?? '-') . '</td>';
-            $html .= '<td class="center">\'' . htmlspecialchars($sub->siswa?->nisn ?? '-') . '</td>';
+            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($sub->siswa?->name ?? '-')) . '</td>';
+            $html .= '<td class="center">\'' . htmlspecialchars(Teks::amankanFormulaCsv($sub->siswa?->nisn ?? '-')) . '</td>';
             $html .= '<td class="center">' . ($sub->status === 'selesai' ? 'Sudah Dikumpulkan' : 'Belum') . '</td>';
             $html .= '<td class="center"><b>' . ($sub->nilai !== null ? number_format($sub->nilai, 1) : '-') . '</b></td>';
-            $html .= '<td>' . htmlspecialchars($sub->catatan ?? '-') . '</td>';
+            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($sub->catatan ?? '-')) . '</td>';
             $html .= '<td class="center">' . ($sub->diselesaikan_pada ? $sub->diselesaikan_pada->format('d/m/Y H:i') : '-') . '</td>';
             $html .= '</tr>';
         }

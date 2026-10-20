@@ -25,14 +25,14 @@ Route::get('/halo', function () {
     return 'Halo Suclyn, siap ngoding Laravel 12!';
 });
 
-// Autentikasi Web
+// Autentikasi Web (dengan pembatasan laju percobaan login)
 Route::get('/login', [PageController::class, 'login'])->name('login');
-Route::post('/proses-login', [PageController::class, 'prosesLogin'])->name('login.post');
+Route::post('/proses-login', [PageController::class, 'prosesLogin'])->name('login.post')->middleware('throttle:5,1');
 Route::get('/logout', [PageController::class, 'logout'])->name('logout');
 
-// Form Pendaftaran SPMB Publik
+// Form Pendaftaran SPMB Publik (dengan proteksi anti-spam submission)
 Route::get('/daftar', [PageController::class, 'daftar'])->name('daftar');
-Route::post('/proses-pendaftaran', [PageController::class, 'prosesPendaftaran'])->name('proses-pendaftaran');
+Route::post('/proses-pendaftaran', [PageController::class, 'prosesPendaftaran'])->name('proses-pendaftaran')->middleware('throttle:10,1');
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
         // SPMB
         Route::get('/spmb', [AdminController::class, 'spmbIndex'])->name('spmb.index');
         Route::get('/spmb/export', [AdminController::class, 'spmbExport'])->name('spmb.export');
+        Route::get('/spmb/{id}/berkas/{jenis}', [AdminController::class, 'spmbDownloadBerkas'])->name('spmb.berkas');
         Route::post('/spmb/{id}/status', [AdminController::class, 'spmbUpdateStatus'])->name('spmb.status');
 
         // Civitas Akademika

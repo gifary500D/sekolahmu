@@ -46,6 +46,10 @@ class SiswaController extends Controller
 
         $tugas = Tugas::findOrFail($id);
 
+        if ($tugas->kelas_id && (int) $tugas->kelas_id !== (int) $user->kelas_id) {
+            abort(403, 'Anda tidak berhak mengumpulkan tugas untuk kelas lain.');
+        }
+
         if (now()->greaterThan(\Carbon\Carbon::parse($tugas->tenggat))) {
             return redirect()->back()->with('error', 'Maaf, tenggat waktu pengumpulan tugas ini telah terlewat. Anda tidak dapat mengunggah berkas.');
         }

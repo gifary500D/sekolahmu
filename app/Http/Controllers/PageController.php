@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Spmb;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
@@ -136,21 +139,30 @@ class PageController extends Controller
                 ->withInput();
         }
 
+        $uploadedFiles = [];
+
         try {
-            $spmb = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $validator) {
+            $result = DB::transaction(function () use ($request, $validator, &$uploadedFiles) {
                 $data = $validator->validated();
                 
-                // Remove boolean fields that are not in database
+                // Hapus field persetujuan formulir yang bukan kolom database
                 unset($data['confirm_data'], $data['agree_terms'], $data['agree_privacy']);
 
+                // Simpan berkas di private storage ('local')
                 if ($request->hasFile('berkas_ijazah_skl')) {
-                    $data['berkas_ijazah_skl'] = $request->file('berkas_ijazah_skl')->store('spmb/ijazah', 'public');
+                    $path = $request->file('berkas_ijazah_skl')->store('spmb/ijazah', 'local');
+                    $uploadedFiles[] = $path;
+                    $data['berkas_ijazah_skl'] = $path;
                 }
                 if ($request->hasFile('berkas_kk')) {
-                    $data['berkas_kk'] = $request->file('berkas_kk')->store('spmb/kk', 'public');
+                    $path = $request->file('berkas_kk')->store('spmb/kk', 'local');
+                    $uploadedFiles[] = $path;
+                    $data['berkas_kk'] = $path;
                 }
                 if ($request->hasFile('berkas_rapor')) {
-                    $data['berkas_rapor'] = $request->file('berkas_rapor')->store('spmb/rapor', 'public');
+                    $path = $request->file('berkas_rapor')->store('spmb/rapor', 'local');
+                    $uploadedFiles[] = $path;
+                    $data['berkas_rapor'] = $path;
                 }
 
                 // Generate Nomor Pendaftaran unik & terurut
@@ -160,25 +172,35 @@ class PageController extends Controller
                 // Simpan data SPMB
                 $spmbRecord = Spmb::create($data);
 
-                // Buat akun User otomatis untuk siswa (agar bisa login dengan NISN dan password default 'password')
+                // Buat akun User otomatis dengan kata sandi acak sementara yang unik
+                $tempPassword = 'Sp-' . Str::random(8) . '!';
                 User::create([
                     'name' => $data['nama_lengkap'],
                     'email' => $data['email'],
                     'nisn' => $data['nisn'],
-                    'password' => Hash::make('password'),
+                    'password' => Hash::make($tempPassword),
                     'role' => 'siswa',
+                    'password_changed' => false,
                 ]);
 
-                return $spmbRecord;
+                return [
+                    'spmb' => $spmbRecord,
+                    'temp_password' => $tempPassword,
+                ];
             });
 
             return redirect()->route('daftar')
-                ->with('success', 'Pendaftaran Berhasil! Nomor Pendaftaran Anda: ' . $spmb->nomor_pendaftaran . '. Anda sekarang dapat login menggunakan NISN Anda dan password default: password')
-                ->with('nomor_pendaftaran', $spmb->nomor_pendaftaran);
+                ->with('success', 'Pendaftaran Berhasil! Nomor Pendaftaran Anda: ' . $result['spmb']->nomor_pendaftaran . '. Kata sandi sementara akun Anda: ' . $result['temp_password'] . '. Harap segera masuk dan ubah kata sandi Anda.')
+                ->with('nomor_pendaftaran', $result['spmb']->nomor_pendaftaran);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            // Rollback fisik seluruh berkas upload jika transaksi gagal
+            foreach ($uploadedFiles as $path) {
+                Storage::disk('local')->delete($path);
+            }
+
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->with('error', 'Terjadi kesalahan saat memproses pendaftaran: ' . $e->getMessage())
                 ->withInput();
         }
     }

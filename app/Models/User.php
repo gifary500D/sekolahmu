@@ -68,4 +68,63 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tugas::class, 'guru_id');
     }
+
+    /**
+     * Ambil koleksi kelas yang dikelola atau menjadi tanggung jawab pengguna.
+     */
+    public function managedKelas(): \Illuminate\Support\Collection
+    {
+        if ($this->isAdmin()) {
+            return Kelas::all();
+        }
+
+        if ($this->isGuru()) {
+            $wali = Kelas::where('wali_kelas_id', $this->id)->get();
+            $dariRoster = Kelas::whereHas('rosters', fn ($q) => $q->where('guru_id', $this->id))->get();
+            return $wali->merge($dariRoster)->unique('id')->values();
+        }
+
+        if ($this->isSiswa() && $this->kelas_id) {
+            return Kelas::where('id', $this->kelas_id)->get();
+        }
+
+        return collect();
+    }
+
+    /**
+     * Periksa apakah pengguna memiliki hak otorisasi untuk mengelola kelas tertentu.
+     */
+    public function canManageKelas(mixed $kelas): bool
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        if (! $this->isGuru()) {
+            return false;
+        }
+
+        if ($kelas instanceof Kelas) {
+            $kelasModel = $kelas;
+        } elseif (is_numeric($kelas)) {
+            $kelasModel = Kelas::find($kelas);
+        } elseif (is_string($kelas) && $kelas !== '') {
+            $kelasModel = Kelas::where('nama', $kelas)->first();
+        } else {
+            return false;
+        }
+
+        if (! $kelasModel) {
+            return false;
+        }
+
+        if ($kelasModel->wali_kelas_id && (int) $kelasModel->wali_kelas_id === (int) $this->id) {
+            return true;
+        }
+
+        return Roster::where('kelas_id', $kelasModel->id)
+            ->where('guru_id', $this->id)
+            ->exists();
+    }
 }
+

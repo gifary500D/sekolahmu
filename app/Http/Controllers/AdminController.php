@@ -10,8 +10,10 @@ use App\Models\Absensi;
 use App\Models\Roster;
 use App\Models\Berita;
 use App\Models\AuditLog;
+use App\Support\Teks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -95,15 +97,15 @@ class AdminController extends Controller
         foreach ($applicants as $index => $app) {
             $html .= '<tr>';
             $html .= '<td class="center">' . ($index + 1) . '</td>';
-            $html .= '<td>' . htmlspecialchars($app->nomor_pendaftaran) . '</td>';
-            $html .= '<td>' . htmlspecialchars($app->nama_lengkap) . '</td>';
-            $html .= '<td class="center">\'' . htmlspecialchars($app->nisn) . '</td>';
-            $html .= '<td class="center">\'' . htmlspecialchars($app->nik) . '</td>';
-            $html .= '<td>' . htmlspecialchars($app->asal_sekolah) . '</td>';
-            $html .= '<td class="center">' . htmlspecialchars($app->jalur_pendaftaran) . '</td>';
-            $html .= '<td class="center">' . strtoupper(htmlspecialchars($app->program)) . '</td>';
+            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($app->nomor_pendaftaran)) . '</td>';
+            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($app->nama_lengkap)) . '</td>';
+            $html .= '<td class="center">\'' . htmlspecialchars(Teks::amankanFormulaCsv($app->nisn)) . '</td>';
+            $html .= '<td class="center">\'' . htmlspecialchars(Teks::amankanFormulaCsv($app->nik)) . '</td>';
+            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($app->asal_sekolah)) . '</td>';
+            $html .= '<td class="center">' . htmlspecialchars(Teks::amankanFormulaCsv($app->jalur_pendaftaran)) . '</td>';
+            $html .= '<td class="center">' . strtoupper(htmlspecialchars(Teks::amankanFormulaCsv($app->program))) . '</td>';
             $html .= '<td class="center">' . number_format($app->nilai_rata, 2) . '</td>';
-            $html .= '<td class="center"><b>' . htmlspecialchars($app->status) . '</b></td>';
+            $html .= '<td class="center"><b>' . htmlspecialchars(Teks::amankanFormulaCsv($app->status)) . '</b></td>';
             $html .= '<td class="center">' . $app->created_at->format('d/m/Y H:i') . '</td>';
             $html .= '</tr>';
         }
@@ -113,6 +115,41 @@ class AdminController extends Controller
         $html .= '</body></html>';
         
         return response($html, 200, $headers);
+    }
+
+    /**
+     * Unduh berkas fisik SPMB dari storage privat ('local')
+     */
+    public function spmbDownloadBerkas($id, $jenis)
+    {
+        $applicant = Spmb::findOrFail($id);
+
+        $allowed = [
+            'ijazah' => 'berkas_ijazah_skl',
+            'kk'     => 'berkas_kk',
+            'rapor'  => 'berkas_rapor',
+        ];
+
+        if (! isset($allowed[$jenis])) {
+            abort(404, 'Jenis berkas tidak valid.');
+        }
+
+        $field = $allowed[$jenis];
+        $path = $applicant->{$field};
+
+        if (! $path) {
+            abort(404, 'Berkas belum diunggah oleh pendaftar.');
+        }
+
+        if (Storage::disk('local')->exists($path)) {
+            return Storage::disk('local')->download($path);
+        }
+
+        if (Storage::disk('public')->exists($path)) {
+            return Storage::disk('public')->download($path);
+        }
+
+        abort(404, 'File berkas fisik tidak ditemukan di server.');
     }
 
     /**

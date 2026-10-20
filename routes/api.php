@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 // Modul SPMB (Calon siswa mendaftar & cek status)
-Route::post('/spmb/daftar', [SpmbController::class, 'daftar']);
-Route::get('/spmb/status/{nomor}', [SpmbController::class, 'cekStatus']);
+Route::post('/spmb/daftar', [SpmbController::class, 'daftar'])->middleware('throttle:10,1');
+Route::get('/spmb/status/{nomor}', [SpmbController::class, 'cekStatus'])->middleware('throttle:30,1');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Modul Absensi (Guru/Admin yang menyimpan dan merekap)
     Route::post('/absensi/simpan', [AbsensiController::class, 'simpanAbsensi'])->middleware('role:guru,admin');
     Route::get('/absensi/rekap/{kelas}', [AbsensiController::class, 'rekapAbsensi']);
-    Route::get('/absensi/export/{kelas}', [AbsensiController::class, 'exportCsv']);
+    Route::get('/absensi/export/{kelas}', [AbsensiController::class, 'exportCsv'])->middleware('role:guru,admin');
 
     // Modul Manajemen Tugas (Guru/Admin yang membuat/menghapus tugas)
     Route::post('/tugas/buat', [TugasController::class, 'buatTugas'])->middleware('role:guru,admin');

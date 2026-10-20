@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
 use App\Models\Tugas;
+use App\Support\Teks;
 use Illuminate\Http\Request;
 
 class TugasController extends Controller
@@ -14,6 +15,14 @@ class TugasController extends Controller
      */
     public function buatTugas(Request $request)
     {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
+
         $request->validate([
             'judul' => 'nullable|string|max:255',
             'judul_tugas' => 'nullable|string|max:255',
@@ -39,11 +48,27 @@ class TugasController extends Controller
         // Cari atau validasi kelas_id
         $kelasId = $request->input('kelas_id');
         if (! $kelasId && $request->filled('kelas')) {
-            $kelasObj = Kelas::where('nama', 'LIKE', "%{$request->kelas}%")->first();
+            $escaped = Teks::escapeLike((string) $request->kelas);
+            $kelasObj = Kelas::where('nama', $request->kelas)->orWhere('nama', 'LIKE', "%{$escaped}%")->first();
             $kelasId = $kelasObj?->id;
         }
+
         if (! $kelasId) {
+            if ($request->filled('kelas_id') || $request->filled('kelas')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kelas tidak ditemukan.',
+                ], 422);
+            }
             $kelasId = Kelas::first()?->id ?? 1;
+        }
+
+        // Cegah manipulasi kelas_id lintas kelas oleh guru
+        if ($user->isGuru() && ! $user->canManageKelas($kelasId)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Guru tidak memiliki hak membuat tugas untuk kelas ini.',
+            ], 403);
         }
 
         // Normalisasi nilai prioritas
@@ -54,8 +79,8 @@ class TugasController extends Controller
             default => 'sedang',
         };
 
-        $user = $request->user();
-        $guruId = $user?->id ?? 1;
+        // Kunci guru_id ke user yang login (cegah manipulasi guru_id)
+        $guruId = $user->id;
 
         $tugas = Tugas::create([
             'judul' => $judul,
@@ -77,9 +102,30 @@ class TugasController extends Controller
     /**
      * Siswa atau Guru melihat daftar tugas berdasarkan kelas
      */
-    public function daftarTugas($kelas)
+    public function daftarTugas(Request $request, $kelas)
     {
-        $kelasId = is_numeric($kelas) ? (int) $kelas : Kelas::where('nama', 'LIKE', "%{$kelas}%")->value('id');
+        $user = $request->user();
+
+        // Otorisasi role: siswa hanya boleh akses kelasnya sendiri
+        if ($user) {
+            if ($user->isSiswa()) {
+                $userKelasNama = $user->kelas?->nama;
+                if ($userKelasNama !== $kelas && (string) $user->kelas_id !== (string) $kelas) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Siswa tidak memiliki akses melihat tugas kelas lain.',
+                    ], 403);
+                }
+            } elseif ($user->isGuru() && ! $user->canManageKelas($kelas)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Guru tidak memiliki hak melihat tugas kelas ini.',
+                ], 403);
+            }
+        }
+
+        $escaped = Teks::escapeLike((string) $kelas);
+        $kelasId = is_numeric($kelas) ? (int) $kelas : Kelas::where('nama', 'LIKE', "%{$escaped}%")->value('id');
 
         $query = Tugas::query()->with(['kelas:id,nama', 'guru:id,name']);
 
@@ -88,8 +134,8 @@ class TugasController extends Controller
                 $q->where('kelas_id', $kelasId)->orWhereNull('kelas_id');
             });
         } else {
-            $query->whereHas('kelas', function ($q) use ($kelas) {
-                $q->where('nama', 'LIKE', "%{$kelas}%");
+            $query->whereHas('kelas', function ($q) use ($escaped) {
+                $q->where('nama', 'LIKE', "%{$escaped}%");
             });
         }
 
@@ -114,6 +160,14 @@ class TugasController extends Controller
      */
     public function hapusTugas(Request $request, $id)
     {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
+
         $tugas = Tugas::find($id);
 
         if (! $tugas) {
@@ -123,8 +177,7 @@ class TugasController extends Controller
             ], 404);
         }
 
-        $user = $request->user();
-        if ($user && ! $user->isAdmin() && $user->id !== $tugas->guru_id) {
+        if (! $user->isAdmin() && (int) $user->id !== (int) $tugas->guru_id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki hak untuk menghapus tugas ini.',
@@ -139,3 +192,4 @@ class TugasController extends Controller
         ], 200);
     }
 }
+

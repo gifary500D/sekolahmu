@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Spmb;
+use App\Support\Teks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class SpmbController extends Controller
@@ -59,19 +61,27 @@ class SpmbController extends Controller
             ], 422);
         }
 
+        $uploadedFiles = [];
+
         try {
-            return DB::transaction(function () use ($request, $validator) {
+            return DB::transaction(function () use ($request, $validator, &$uploadedFiles) {
                 $data = $validator->validated();
 
-                // Simpan berkas lampiran jika diunggah
+                // Simpan berkas lampiran di private storage ('local') demi perlindungan privasi data siswa
                 if ($request->hasFile('berkas_ijazah_skl')) {
-                    $data['berkas_ijazah_skl'] = $request->file('berkas_ijazah_skl')->store('spmb/ijazah', 'public');
+                    $path = $request->file('berkas_ijazah_skl')->store('spmb/ijazah', 'local');
+                    $uploadedFiles[] = $path;
+                    $data['berkas_ijazah_skl'] = $path;
                 }
                 if ($request->hasFile('berkas_kk')) {
-                    $data['berkas_kk'] = $request->file('berkas_kk')->store('spmb/kk', 'public');
+                    $path = $request->file('berkas_kk')->store('spmb/kk', 'local');
+                    $uploadedFiles[] = $path;
+                    $data['berkas_kk'] = $path;
                 }
                 if ($request->hasFile('berkas_rapor')) {
-                    $data['berkas_rapor'] = $request->file('berkas_rapor')->store('spmb/rapor', 'public');
+                    $path = $request->file('berkas_rapor')->store('spmb/rapor', 'local');
+                    $uploadedFiles[] = $path;
+                    $data['berkas_rapor'] = $path;
                 }
 
                 // Generate nomor pendaftaran unik & terurut
@@ -92,7 +102,12 @@ class SpmbController extends Controller
                     ]
                 ], 201);
             });
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            // Rollback fisik seluruh berkas yang sempat diunggah saat transaksi gagal
+            foreach ($uploadedFiles as $path) {
+                Storage::disk('local')->delete($path);
+            }
+
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan pada server saat memproses pendaftaran',
@@ -103,8 +118,9 @@ class SpmbController extends Controller
 
     /**
      * Endpoint untuk memeriksa status pendaftaran tanpa login (GET /api/spmb/status/{nomor})
+     * Mencegah kebocoran PII melalui masking nama dan penyembunyian identitas sensitif.
      */
-    public function cekStatus($nomor)
+    public function cekStatus(Request $request, $nomor)
     {
         $nomorBersih = strtoupper(trim((string) $nomor));
 
@@ -117,12 +133,15 @@ class SpmbController extends Controller
             ], 404);
         }
 
+        $user = $request->user('sanctum') ?? auth()->user();
+        $namaTampil = ($user && $user->isAdmin()) ? $pendaftar->nama_lengkap : Teks::maskNama($pendaftar->nama_lengkap);
+
         return response()->json([
             'success' => true,
             'message' => 'Detail status pendaftaran ditemukan',
             'data'    => [
                 'nomor_pendaftaran' => $pendaftar->nomor_pendaftaran,
-                'nama_lengkap'      => $pendaftar->nama_lengkap,
+                'nama_lengkap'      => $namaTampil,
                 'asal_sekolah'      => $pendaftar->asal_sekolah,
                 'program'           => $pendaftar->program,
                 'jalur_pendaftaran' => $pendaftar->jalur_pendaftaran,

@@ -46,7 +46,7 @@ test('guru dapat mengakses rute manajemen guru', function () {
 
 test('api tugas dapat membuat tugas dengan skema database yang valid', function () {
     $guru = User::factory()->create(['role' => 'guru']);
-    $kelas = Kelas::create(['nama' => 'X-IPA-1', 'tingkat' => '10', 'program' => 'ipa']);
+    $kelas = Kelas::create(['nama' => 'X-IPA-1', 'tingkat' => '10', 'program' => 'ipa', 'wali_kelas_id' => $guru->id]);
 
     $response = $this->actingAs($guru, 'sanctum')->postJson('/api/tugas/buat', [
         'judul_tugas' => 'Tugas Fisika Dasar',
@@ -70,7 +70,7 @@ test('api tugas dapat membuat tugas dengan skema database yang valid', function 
 
 test('api tugas daftarTugas dapat memuat tugas per kelas', function () {
     $guru = User::factory()->create(['role' => 'guru']);
-    $kelas = Kelas::create(['nama' => 'X-IPA-1', 'tingkat' => '10', 'program' => 'ipa']);
+    $kelas = Kelas::create(['nama' => 'X-IPA-1', 'tingkat' => '10', 'program' => 'ipa', 'wali_kelas_id' => $guru->id]);
 
     Tugas::create([
         'judul' => 'Tugas Kimia',
@@ -89,7 +89,7 @@ test('api tugas daftarTugas dapat memuat tugas per kelas', function () {
 
 test('relasi statusSiswa pada model Tugas berfungsi dengan baik', function () {
     $guru = User::factory()->create(['role' => 'guru']);
-    $kelas = Kelas::create(['nama' => 'X-IPA-1', 'tingkat' => '10', 'program' => 'ipa']);
+    $kelas = Kelas::create(['nama' => 'X-IPA-1', 'tingkat' => '10', 'program' => 'ipa', 'wali_kelas_id' => $guru->id]);
     $tugas = Tugas::create([
         'judul' => 'Tugas Biologi',
         'deskripsi' => 'Observasi tanaman',

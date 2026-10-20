@@ -22,6 +22,15 @@ class User extends Authenticatable
         'password_changed',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'password_changed' => 'boolean',
+        ];
+    }
+
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'kelas_id');

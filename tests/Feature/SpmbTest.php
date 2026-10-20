@@ -158,10 +158,14 @@ test('cek status mengembalikan data pendaftar berdasarkan nomor pendaftaran', fu
              ->assertJsonPath('data.nama_lengkap', 'B*** S******')
              ->assertJsonPath('data.status', 'Diverifikasi')
              ->assertJsonStructure([
-                 'data' => ['nomor_pendaftaran', 'nama_lengkap', 'asal_sekolah', 'program', 'jalur_pendaftaran', 'status', 'tanggal_daftar']
+                 'data' => ['nomor_pendaftaran', 'nama_lengkap', 'status']
              ]);
 
-    // Pastikan data sensitif tidak bocor
+    // Pastikan data minimal dan data sensitif tidak bocor
+    $response->assertJsonMissingPath('data.asal_sekolah');
+    $response->assertJsonMissingPath('data.program');
+    $response->assertJsonMissingPath('data.jalur_pendaftaran');
+    $response->assertJsonMissingPath('data.tanggal_daftar');
     $response->assertJsonMissingPath('data.nisn');
     $response->assertJsonMissingPath('data.nik');
 });

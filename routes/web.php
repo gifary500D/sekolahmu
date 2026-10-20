@@ -28,7 +28,7 @@ Route::get('/halo', function () {
 // Autentikasi Web (dengan pembatasan laju percobaan login)
 Route::get('/login', [PageController::class, 'login'])->name('login');
 Route::post('/proses-login', [PageController::class, 'prosesLogin'])->name('login.post')->middleware('throttle:5,1');
-Route::get('/logout', [PageController::class, 'logout'])->name('logout');
+Route::post('/logout', [PageController::class, 'logout'])->name('logout');
 
 // Form Pendaftaran SPMB Publik (dengan proteksi anti-spam submission)
 Route::get('/daftar', [PageController::class, 'daftar'])->name('daftar');
@@ -153,11 +153,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard/ubah-password', [SiswaController::class, 'formUbahPassword'])->name('siswa.password.form');
         Route::post('/dashboard/ubah-password', [SiswaController::class, 'simpanUbahPassword'])->name('siswa.password.update');
 
-        Route::get('/dashboard/tugas', [SiswaController::class, 'tugas'])->name('siswa.tugas');
-        Route::post('/dashboard/tugas/{id}/kumpulkan', [SiswaController::class, 'kumpulkanTugas'])->name('siswa.tugas.submit');
-        Route::delete('/dashboard/tugas/{id}/batalkan', [SiswaController::class, 'batalkanTugas'])->name('siswa.tugas.cancel');
-        Route::get('/dashboard/absensi', [SiswaController::class, 'absensi'])->name('siswa.absensi');
-        Route::get('/dashboard/jadwal', [SiswaController::class, 'roster'])->name('siswa.roster');
-        Route::get('/dashboard/nilai', [SiswaController::class, 'transkripNilai'])->name('siswa.nilai');
+        Route::middleware(['password.changed'])->group(function () {
+            Route::get('/dashboard/tugas', [SiswaController::class, 'tugas'])->name('siswa.tugas');
+            Route::get('/dashboard/tugas/berkas/{id}/unduh', [SiswaController::class, 'downloadBerkas'])->name('siswa.tugas.download');
+            Route::post('/dashboard/tugas/{id}/kumpulkan', [SiswaController::class, 'kumpulkanTugas'])->name('siswa.tugas.submit');
+            Route::delete('/dashboard/tugas/{id}/batalkan', [SiswaController::class, 'batalkanTugas'])->name('siswa.tugas.cancel');
+            Route::get('/dashboard/absensi', [SiswaController::class, 'absensi'])->name('siswa.absensi');
+            Route::get('/dashboard/jadwal', [SiswaController::class, 'roster'])->name('siswa.roster');
+            Route::get('/dashboard/nilai', [SiswaController::class, 'transkripNilai'])->name('siswa.nilai');
+        });
     });
 });

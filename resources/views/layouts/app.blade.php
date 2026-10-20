@@ -49,7 +49,7 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
                             Dashboard
                         </a>
-                        <form action="{{ route('logout') }}" method="GET" class="inline">
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 transition-colors shadow-sm">Keluar</button>
                         </form>
@@ -80,7 +80,10 @@
                 <div class="pt-2 border-t border-slate-100 space-y-2">
                     @auth
                         <a href="/dashboard" class="block px-4 py-2.5 bg-blue-50 text-blue-800 font-semibold rounded-lg text-sm">Dashboard</a>
-                        <a href="{{ route('logout') }}" class="block px-4 py-2.5 text-red-600 font-semibold hover:bg-red-50 rounded-lg text-sm">Keluar</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full text-left block px-4 py-2.5 text-red-600 font-semibold hover:bg-red-50 rounded-lg text-sm">Keluar</button>
+                        </form>
                     @else
                         <a href="/login" class="block px-4 py-2.5 text-slate-700 hover:bg-slate-100 rounded-lg font-medium text-sm">Masuk Sistem</a>
                         <div class="pt-1">

@@ -8,6 +8,7 @@ use App\Support\Teks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -108,10 +109,11 @@ class SpmbController extends Controller
                 Storage::disk('local')->delete($path);
             }
 
+            Log::error($e);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan pada server saat memproses pendaftaran',
-                'error'   => $e->getMessage()
+                'message' => 'Terjadi kesalahan pada server saat memproses pendaftaran.',
             ], 500);
         }
     }
@@ -124,6 +126,19 @@ class SpmbController extends Controller
     {
         $nomorBersih = strtoupper(trim((string) $nomor));
 
+        $validator = Validator::make(
+            ['nomor' => $nomorBersih],
+            ['nomor' => ['required', 'string', 'regex:/^SPMB-\d{4}-\d{4,}$/']]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Format nomor pendaftaran tidak valid.',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
         $pendaftar = Spmb::where('nomor_pendaftaran', $nomorBersih)->first();
 
         if (!$pendaftar) {
@@ -131,6 +146,20 @@ class SpmbController extends Controller
                 'success' => false,
                 'message' => 'Nomor pendaftaran tidak ditemukan. Periksa kembali nomor Anda.'
             ], 404);
+        }
+
+        if ($request->filled('nisn') && $request->input('nisn') !== $pendaftar->nisn) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data verifikasi tidak sesuai.',
+            ], 403);
+        }
+
+        if ($request->filled('tanggal_lahir') && $request->input('tanggal_lahir') !== (string) $pendaftar->tanggal_lahir) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data verifikasi tidak sesuai.',
+            ], 403);
         }
 
         $user = $request->user('sanctum') ?? auth()->user();
@@ -142,11 +171,7 @@ class SpmbController extends Controller
             'data'    => [
                 'nomor_pendaftaran' => $pendaftar->nomor_pendaftaran,
                 'nama_lengkap'      => $namaTampil,
-                'asal_sekolah'      => $pendaftar->asal_sekolah,
-                'program'           => $pendaftar->program,
-                'jalur_pendaftaran' => $pendaftar->jalur_pendaftaran,
                 'status'            => $pendaftar->status,
-                'tanggal_daftar'    => $pendaftar->created_at?->format('Y-m-d H:i:s'),
             ]
         ], 200);
     }

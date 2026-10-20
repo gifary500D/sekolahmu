@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -199,8 +200,10 @@ class PageController extends Controller
                 Storage::disk('local')->delete($path);
             }
 
+            Log::error($e);
+
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan saat memproses pendaftaran: ' . $e->getMessage())
+                ->with('error', 'Terjadi kesalahan pada server saat memproses pendaftaran. Silakan coba beberapa saat lagi.')
                 ->withInput();
         }
     }

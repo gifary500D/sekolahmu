@@ -128,7 +128,7 @@
                                             <span class="text-xs font-semibold text-emerald-600">Tugas Dikirim</span>
                                             <div class="flex items-center gap-2">
                                                 @if($sub && $sub->file_path)
-                                                    <a href="{{ asset('storage/' . $sub->file_path) }}" target="_blank" class="text-xs text-blue-600 hover:underline inline-flex items-center gap-1">
+                                                    <a href="{{ route('siswa.tugas.download', $sub->id) }}" class="text-xs text-blue-600 hover:underline inline-flex items-center gap-1">
                                                         Lihat File
                                                     </a>
                                                 @endif

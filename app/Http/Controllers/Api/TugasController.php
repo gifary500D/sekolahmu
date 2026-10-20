@@ -54,13 +54,18 @@ class TugasController extends Controller
         }
 
         if (! $kelasId) {
-            if ($request->filled('kelas_id') || $request->filled('kelas')) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Kelas tidak ditemukan.',
-                ], 422);
-            }
-            $kelasId = Kelas::first()?->id ?? 1;
+            return response()->json([
+                'success' => false,
+                'message' => 'Kelas tidak ditemukan.',
+            ], 404);
+        }
+
+        $kelasModel = Kelas::find($kelasId);
+        if (! $kelasModel) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kelas tidak ditemukan.',
+            ], 404);
         }
 
         // Cegah manipulasi kelas_id lintas kelas oleh guru

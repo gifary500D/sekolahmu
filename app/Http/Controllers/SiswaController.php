@@ -58,7 +58,7 @@ class SiswaController extends Controller
         if ($request->hasFile('berkas')) {
             $file = $request->file('berkas');
             $filename = time() . '_' . $user->id . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $file->getClientOriginalName());
-            $filePath = $file->storeAs('tugas_terkumpul', $filename, 'public');
+            $filePath = $file->storeAs('private/tugas', $filename, 'local');
         }
 
         TugasSiswa::updateOrCreate(
@@ -85,13 +85,33 @@ class SiswaController extends Controller
         
         $submission = TugasSiswa::where('tugas_id', $id)->where('siswa_id', $user->id)->first();
         if ($submission) {
-            if ($submission->file_path && Storage::disk('public')->exists($submission->file_path)) {
-                Storage::disk('public')->delete($submission->file_path);
+            if ($submission->file_path && Storage::disk('local')->exists($submission->file_path)) {
+                Storage::disk('local')->delete($submission->file_path);
             }
             $submission->delete();
         }
 
         return redirect()->route('siswa.tugas')->with('success', 'Pengumpulan tugas berhasil dibatalkan. Anda dapat mengunggah ulang.');
+    }
+
+    /**
+     * Unduh berkas tugas siswa milik sendiri secara aman
+     */
+    public function downloadBerkas($submissionId)
+    {
+        $user = auth()->user();
+        $submission = TugasSiswa::with('tugas')->findOrFail($submissionId);
+
+        // Siswa hanya boleh mengunduh berkas tugasnya sendiri
+        if ((int) $submission->siswa_id !== (int) $user->id) {
+            abort(403, 'Anda tidak berhak mengunduh berkas tugas siswa lain.');
+        }
+
+        if (! $submission->file_path || ! Storage::disk('local')->exists($submission->file_path)) {
+            return redirect()->back()->with('error', 'Berkas lampiran tidak ditemukan di server.');
+        }
+
+        return Storage::disk('local')->download($submission->file_path);
     }
 
     /**

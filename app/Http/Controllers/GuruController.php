@@ -142,15 +142,19 @@ class GuruController extends Controller
         $user = auth()->user();
         $submission = TugasSiswa::with('tugas')->findOrFail($submissionId);
 
+        if ($user->isSiswa()) {
+            abort(403, 'Akses ditolak: Siswa tidak diizinkan mengakses rute unduh guru.');
+        }
+
         if ($user->isGuru() && (int) $submission->tugas?->guru_id !== (int) $user->id) {
             abort(403, 'Anda tidak berhak mengunduh berkas pengumpulan tugas guru lain.');
         }
 
-        if (! $submission->file_path || ! Storage::disk('public')->exists($submission->file_path)) {
+        if (! $submission->file_path || ! Storage::disk('local')->exists($submission->file_path)) {
             return redirect()->back()->with('error', 'Berkas lampiran tidak ditemukan di server.');
         }
 
-        return Storage::disk('public')->download($submission->file_path);
+        return Storage::disk('local')->download($submission->file_path);
     }
 
     /**

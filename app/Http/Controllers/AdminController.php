@@ -145,10 +145,6 @@ class AdminController extends Controller
             return Storage::disk('local')->download($path);
         }
 
-        if (Storage::disk('public')->exists($path)) {
-            return Storage::disk('public')->download($path);
-        }
-
         abort(404, 'File berkas fisik tidak ditemukan di server.');
     }
 

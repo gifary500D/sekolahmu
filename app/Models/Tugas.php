@@ -23,12 +23,24 @@ class Tugas extends Model
         'prioritas',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'tenggat' => 'datetime',
+        ];
+    }
+
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 
     public function pengumpulan()
+    {
+        return $this->hasMany(TugasSiswa::class, 'tugas_id');
+    }
+
+    public function statusSiswa()
     {
         return $this->hasMany(TugasSiswa::class, 'tugas_id');
     }

@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\TugasController;
 use Illuminate\Support\Facades\Route;
 
 /*
-|----------------------------------------------------------------atal
+|--------------------------------------------------------------------------
 | Rute Publik (Bisa diakses tanpa login)
 |--------------------------------------------------------------------------
 */
@@ -22,16 +22,16 @@ Route::get('/spmb/status/{nomor}', [SpmbController::class, 'cekStatus']);
 Route::middleware('auth:sanctum')->group(function () {
 
     // Modul SPMB (Hanya Admin yang boleh verifikasi/ubah status)
-    Route::put('/spmb/status/{id}', [SpmbController::class, 'updateStatus']);
+    Route::put('/spmb/status/{id}', [SpmbController::class, 'updateStatus'])->middleware('role:admin');
 
     // Modul Absensi (Guru/Admin yang menyimpan dan merekap)
-    Route::post('/absensi/simpan', [AbsensiController::class, 'simpanAbsensi']);
+    Route::post('/absensi/simpan', [AbsensiController::class, 'simpanAbsensi'])->middleware('role:guru,admin');
     Route::get('/absensi/rekap/{kelas}', [AbsensiController::class, 'rekapAbsensi']);
     Route::get('/absensi/export/{kelas}', [AbsensiController::class, 'exportCsv']);
 
-    // Modul Manajemen Tugas (Guru yang membuat/menghapus tugas)
-    Route::post('/tugas/buat', [TugasController::class, 'buatTugas']);
+    // Modul Manajemen Tugas (Guru/Admin yang membuat/menghapus tugas)
+    Route::post('/tugas/buat', [TugasController::class, 'buatTugas'])->middleware('role:guru,admin');
     Route::get('/tugas/kelas/{kelas}', [TugasController::class, 'daftarTugas']);
-    Route::delete('/tugas/{id}', [TugasController::class, 'hapusTugas']);
+    Route::delete('/tugas/{id}', [TugasController::class, 'hapusTugas'])->middleware('role:guru,admin');
 
 });

@@ -92,7 +92,12 @@ class PageController extends Controller
      */
     public function prosesPendaftaran(Request $request)
     {
-        $tahunSekarang = date('Y');
+        // Mendukung payload jika frontend mengirim 'nama' bukan 'nama_lengkap'
+        if (!$request->has('nama_lengkap') && $request->has('nama')) {
+            $request->merge(['nama_lengkap' => $request->nama]);
+        }
+
+        $tahunSekarang = (int) date('Y');
         
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required|string|max:255',
@@ -117,6 +122,9 @@ class PageController extends Controller
             'tahun_lulus' => "required|numeric|min:2020|max:{$tahunSekarang}",
             'program' => 'required|in:ipa,ips,bahasa',
             'jalur_pendaftaran' => 'required|in:Zonasi,Afirmasi,Prestasi,Perpindahan Tugas',
+            'berkas_ijazah_skl' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'berkas_kk'         => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'berkas_rapor'      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'confirm_data' => 'accepted',
             'agree_terms' => 'accepted',
             'agree_privacy' => 'accepted',
@@ -129,32 +137,44 @@ class PageController extends Controller
         }
 
         try {
-            $data = $validator->validated();
-            
-            // Remove boolean fields that are not in database
-            unset($data['confirm_data'], $data['agree_terms'], $data['agree_privacy']);
+            $spmb = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $validator) {
+                $data = $validator->validated();
+                
+                // Remove boolean fields that are not in database
+                unset($data['confirm_data'], $data['agree_terms'], $data['agree_privacy']);
 
-            // Generate Nomor Pendaftaran
-            $tahunDaftar = date('Y');
-            $lastSpmb = Spmb::orderBy('id', 'desc')->first();
-            $nextId = $lastSpmb ? $lastSpmb->id + 1 : 1;
-            $data['nomor_pendaftaran'] = 'SPMB-'.$tahunDaftar.'-'.str_pad($nextId, 4, '0', STR_PAD_LEFT);
+                if ($request->hasFile('berkas_ijazah_skl')) {
+                    $data['berkas_ijazah_skl'] = $request->file('berkas_ijazah_skl')->store('spmb/ijazah', 'public');
+                }
+                if ($request->hasFile('berkas_kk')) {
+                    $data['berkas_kk'] = $request->file('berkas_kk')->store('spmb/kk', 'public');
+                }
+                if ($request->hasFile('berkas_rapor')) {
+                    $data['berkas_rapor'] = $request->file('berkas_rapor')->store('spmb/rapor', 'public');
+                }
 
-            $data['status'] = 'Menunggu Verifikasi';
+                // Generate Nomor Pendaftaran unik & terurut
+                $data['nomor_pendaftaran'] = Spmb::generateNomorPendaftaran();
+                $data['status'] = 'Menunggu Verifikasi';
 
-            // Simpan data SPMB
-            $spmb = Spmb::create($data);
+                // Simpan data SPMB
+                $spmbRecord = Spmb::create($data);
 
-            // Buat akun User otomatis untuk siswa (agar bisa login dengan NISN dan password default 'password')
-            User::create([
-                'name' => $data['nama_lengkap'],
-                'email' => $data['email'],
-                'nisn' => $data['nisn'],
-                'password' => Hash::make('password'),
-                'role' => 'siswa',
-            ]);
+                // Buat akun User otomatis untuk siswa (agar bisa login dengan NISN dan password default 'password')
+                User::create([
+                    'name' => $data['nama_lengkap'],
+                    'email' => $data['email'],
+                    'nisn' => $data['nisn'],
+                    'password' => Hash::make('password'),
+                    'role' => 'siswa',
+                ]);
 
-            return redirect()->back()->with('success', 'Pendaftaran Berhasil! Nomor Pendaftaran Anda: ' . $spmb->nomor_pendaftaran . '. Anda sekarang dapat login menggunakan NISN Anda dan password default: password');
+                return $spmbRecord;
+            });
+
+            return redirect()->route('daftar')
+                ->with('success', 'Pendaftaran Berhasil! Nomor Pendaftaran Anda: ' . $spmb->nomor_pendaftaran . '. Anda sekarang dapat login menggunakan NISN Anda dan password default: password')
+                ->with('nomor_pendaftaran', $spmb->nomor_pendaftaran);
 
         } catch (\Exception $e) {
             return redirect()->back()
@@ -222,5 +242,29 @@ class PageController extends Controller
         $user = auth()->user();
         $notifications = \DB::table('notifications')->where('notifiable_id', $user->id)->orderBy('created_at', 'desc')->paginate(15);
         return view('layouts.notifications', compact('notifications'));
+    }
+
+    /**
+     * Tampilkan halaman Profil / Tentang Sekolah
+     */
+    public function about()
+    {
+        return view('pages.about');
+    }
+
+    /**
+     * Tampilkan halaman Fasilitas Sekolah
+     */
+    public function facilities()
+    {
+        return view('pages.facilities');
+    }
+
+    /**
+     * Tampilkan halaman Dewan Guru / Tenaga Pendidik
+     */
+    public function teachers()
+    {
+        return view('pages.teachers');
     }
 }

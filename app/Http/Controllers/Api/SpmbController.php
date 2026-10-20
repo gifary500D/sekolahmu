@@ -5,83 +5,185 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Spmb;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class SpmbController extends Controller
 {
     /**
-     * Endpoint untuk menerima pendaftaran SPMB via API (POST /api/spmb/daftar)
+     * Endpoint untuk menerima pendaftaran SPMB baru (POST /api/spmb/daftar)
      */
     public function daftar(Request $request)
     {
-        // 1. Validasi input dari payload frontend (Dinamis untuk tahun mendatang)
-        $tahunSekarang = date('Y');
+        // Mendukung payload jika frontend mengirim 'nama' bukan 'nama_lengkap'
+        if (!$request->has('nama_lengkap') && $request->has('nama')) {
+            $request->merge(['nama_lengkap' => $request->nama]);
+        }
+
+        $tahunSekarang = (int) date('Y');
+
         $validator = Validator::make($request->all(), [
-            'nama_lengkap' => 'required|string|max:255',
-            'gender' => 'required|in:laki-laki,perempuan',
-            'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'nisn' => 'required|digits:10|unique:spmb,nisn',
-            'nik' => 'required|digits:16|unique:spmb,nik',
-            'agama' => 'required|string|max:50',
-            'email' => 'required|email|max:255',
-            'telepon' => 'required|string|max:20',
-            'alamat' => 'required|string',
-            'kota' => 'required|string|max:100',
-            'provinsi' => 'required|string|max:100',
-            'nama_ayah' => 'required|string|max:255',
-            'pekerjaan_ayah' => 'required|string|max:255',
-            'nama_ibu' => 'required|string|max:255',
-            'pekerjaan_ibu' => 'required|string|max:255',
-            'telepon_ortu' => 'required|string|max:20',
-            'asal_sekolah' => 'required|string|max:255',
-            'nilai_rata' => 'required|numeric|min:0|max:100',
-            'tahun_lulus' => "required|numeric|min:2020|max:{$tahunSekarang}", // Dinamis otomatis
-            'program' => 'required|in:ipa,ips,bahasa',
+            'nama_lengkap'      => 'required|string|max:255',
+            'gender'            => 'required|in:laki-laki,perempuan',
+            'tempat_lahir'      => 'required|string|max:255',
+            'tanggal_lahir'     => 'required|date',
+            'nisn'              => 'required|digits:10|unique:spmb,nisn',
+            'nik'               => 'required|digits:16|unique:spmb,nik',
+            'agama'             => 'required|string|max:50',
+            'email'             => 'required|email|max:255',
+            'telepon'           => 'required|string|max:20',
+            'alamat'            => 'required|string',
+            'kota'              => 'required|string|max:100',
+            'provinsi'          => 'required|string|max:100',
+            'nama_ayah'         => 'required|string|max:255',
+            'pekerjaan_ayah'    => 'required|string|max:255',
+            'nama_ibu'          => 'required|string|max:255',
+            'pekerjaan_ibu'     => 'required|string|max:255',
+            'telepon_ortu'      => 'required|string|max:20',
+            'asal_sekolah'      => 'required|string|max:255',
+            'nilai_rata'        => 'required|numeric|min:0|max:100',
+            'tahun_lulus'       => "required|numeric|min:2020|max:{$tahunSekarang}",
+            'program'           => 'required|in:ipa,ips,bahasa',
             'jalur_pendaftaran' => 'required|in:Zonasi,Afirmasi,Prestasi,Perpindahan Tugas',
+            'berkas_ijazah_skl' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'berkas_kk'         => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'berkas_rapor'      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        // Jika validasi gagal, kembalikan respons JSON error (status 422)
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validasi gagal',
-                'errors' => $validator->errors(),
+                'errors'  => $validator->errors()
             ], 422);
         }
 
         try {
-            $data = $validator->validated();
+            return DB::transaction(function () use ($request, $validator) {
+                $data = $validator->validated();
 
-            // 2. Generate Nomor Pendaftaran Unik (Dinamis berdasarkan tahun saat daftar)
-            $tahunDaftar = date('Y');
-            $lastSpmb = Spmb::orderBy('id', 'desc')->first();
-            $nextId = $lastSpmb ? $lastSpmb->id + 1 : 1;
-            $data['nomor_pendaftaran'] = 'SPMB-'.$tahunDaftar.'-'.str_pad($nextId, 4, '0', STR_PAD_LEFT);
+                // Simpan berkas lampiran jika diunggah
+                if ($request->hasFile('berkas_ijazah_skl')) {
+                    $data['berkas_ijazah_skl'] = $request->file('berkas_ijazah_skl')->store('spmb/ijazah', 'public');
+                }
+                if ($request->hasFile('berkas_kk')) {
+                    $data['berkas_kk'] = $request->file('berkas_kk')->store('spmb/kk', 'public');
+                }
+                if ($request->hasFile('berkas_rapor')) {
+                    $data['berkas_rapor'] = $request->file('berkas_rapor')->store('spmb/rapor', 'public');
+                }
 
-            // 3. Status awal
-            $data['status'] = 'Menunggu Verifikasi';
+                // Generate nomor pendaftaran unik & terurut
+                $data['nomor_pendaftaran'] = Spmb::generateNomorPendaftaran();
+                $data['status'] = 'Menunggu Verifikasi';
 
-            // 4. Simpan ke database
-            $spmb = Spmb::create($data);
+                $spmb = Spmb::create($data);
 
-            // 5. Kembalikan respons sukses berformat JSON ke Frontend
-            return response()->json([
-                'success' => true,
-                'message' => 'Pendaftaran berhasil disimpan!',
-                'data' => [
-                    'nomor_pendaftaran' => $spmb->nomor_pendaftaran,
-                    'nama_lengkap' => $spmb->nama_lengkap,
-                    'status' => $spmb->status,
-                ],
-            ], 201);
-
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pendaftaran berhasil disimpan!',
+                    'data'    => [
+                        'nomor_pendaftaran' => $spmb->nomor_pendaftaran,
+                        'nama_lengkap'      => $spmb->nama_lengkap,
+                        'jalur_pendaftaran' => $spmb->jalur_pendaftaran,
+                        'status'            => $spmb->status,
+                        'created_at'        => $spmb->created_at,
+                    ]
+                ], 201);
+            });
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan pada server',
-                'error' => $e->getMessage(),
+                'message' => 'Terjadi kesalahan pada server saat memproses pendaftaran',
+                'error'   => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Endpoint untuk memeriksa status pendaftaran tanpa login (GET /api/spmb/status/{nomor})
+     */
+    public function cekStatus($nomor)
+    {
+        $nomorBersih = strtoupper(trim((string) $nomor));
+
+        $pendaftar = Spmb::where('nomor_pendaftaran', $nomorBersih)->first();
+
+        if (!$pendaftar) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor pendaftaran tidak ditemukan. Periksa kembali nomor Anda.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail status pendaftaran ditemukan',
+            'data'    => [
+                'nomor_pendaftaran' => $pendaftar->nomor_pendaftaran,
+                'nama_lengkap'      => $pendaftar->nama_lengkap,
+                'asal_sekolah'      => $pendaftar->asal_sekolah,
+                'program'           => $pendaftar->program,
+                'jalur_pendaftaran' => $pendaftar->jalur_pendaftaran,
+                'status'            => $pendaftar->status,
+                'tanggal_daftar'    => $pendaftar->created_at?->format('Y-m-d H:i:s'),
+            ]
+        ], 200);
+    }
+
+    /**
+     * Endpoint untuk memperbarui status pendaftaran (PUT /api/spmb/status/{id})
+     * Memerlukan autentikasi Sanctum dan otorisasi admin/panitia.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        // 1. Otorisasi: Hanya user dengan role admin / izin yang berhak mengubah status
+        $user = $request->user();
+        if (!$user || !Gate::allows('update-spmb-status', $user)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki otorisasi untuk memperbarui status pendaftaran.'
+            ], 403);
+        }
+
+        // 2. Validasi status
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string|in:Menunggu Verifikasi,Diverifikasi,Perlu Perbaikan,Lulus,Tidak Lulus',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'errors'  => $validator->errors()
+            ], 422);
+        }
+
+        // 3. Cari data pendaftar
+        $pendaftar = Spmb::find($id);
+
+        if (!$pendaftar) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data pendaftar tidak ditemukan.'
+            ], 404);
+        }
+
+        // 4. Update status secara persisten
+        $pendaftar->status = $request->status;
+        $pendaftar->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status pendaftaran berhasil diperbarui.',
+            'data'    => [
+                'id'                => $pendaftar->id,
+                'nomor_pendaftaran' => $pendaftar->nomor_pendaftaran,
+                'nama_lengkap'      => $pendaftar->nama_lengkap,
+                'status'            => $pendaftar->status,
+                'updated_at'        => $pendaftar->updated_at,
+            ]
+        ], 200);
     }
 }

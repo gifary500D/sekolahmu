@@ -6,23 +6,42 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\AdminController;
 
-Route::get('/', function () {
-    return view('index');
-});
-
+/*
+|--------------------------------------------------------------------------
+| Halaman Publik / Company Profile & SPMB
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/berita', [PageController::class, 'beritaIndex'])->name('berita.index');
 Route::get('/agenda', [PageController::class, 'agendaIndex'])->name('agenda.index');
 Route::get('/galeri', [PageController::class, 'galeriIndex'])->name('galeri.index');
+
+// Halaman Informasi Sekolah (Company Profile)
+Route::get('/tentang', [PageController::class, 'about'])->name('about');
+Route::get('/fasilitas', [PageController::class, 'facilities'])->name('facilities');
+Route::get('/guru', [PageController::class, 'teachers'])->name('teachers');
 
 Route::get('/halo', function () {
     return 'Halo Suclyn, siap ngoding Laravel 12!';
 });
 
+// Autentikasi Web
 Route::get('/login', [PageController::class, 'login'])->name('login');
 Route::post('/proses-login', [PageController::class, 'prosesLogin'])->name('login.post');
 Route::get('/logout', [PageController::class, 'logout'])->name('logout');
 
+// Form Pendaftaran SPMB Publik
+Route::get('/daftar', [PageController::class, 'daftar'])->name('daftar');
+Route::post('/proses-pendaftaran', [PageController::class, 'prosesPendaftaran'])->name('proses-pendaftaran');
+
+/*
+|--------------------------------------------------------------------------
+| Area Terproteksi (Login Diperlukan)
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth'])->group(function () {
+    
+    // Dashboard Utama: Pengalihan Berdasarkan Peran (Admin / Guru / Siswa)
     Route::get('/dashboard', function () {
         $user = auth()->user()->load('kelas');
         if ($user->isAdmin()) {
@@ -32,22 +51,18 @@ Route::middleware(['auth'])->group(function () {
             return app(GuruController::class)->dashboard();
         }
         
-        // Jika siswa belum mengubah password default, wajibkan ubah password
+        // Siswa wajib ganti kata sandi bawaan jika belum diubah
         if ($user->isSiswa() && ! $user->password_changed) {
             return redirect()->route('siswa.password.form');
         }
         
-        // Dynamic tasks for student
         $tugasList = \App\Models\Tugas::where(function($q) use ($user) {
             $q->where('kelas_id', $user->kelas_id)->orWhereNull('kelas_id');
         })->orderBy('tenggat', 'asc')->take(5)->get();
         
         $submitted = \App\Models\TugasSiswa::where('siswa_id', $user->id)->get()->keyBy('tugas_id');
-        
-        // Dynamic announcements
         $pengumuman = \App\Models\Berita::where('status', 'terbit')->latest()->take(2)->get();
 
-        // Dynamic attendance rate
         $className = $user->kelas?->nama;
         $absensiRecords = $className ? \App\Models\Absensi::where('kelas', $className)->get() : collect();
         $totalHadir = 0;
@@ -63,66 +78,85 @@ Route::middleware(['auth'])->group(function () {
         return view('siswa.dashboard', compact('tugasList', 'submitted', 'pengumuman', 'attendanceRate'));
     })->name('dashboard');
 
-    // Admin routes
-    Route::get('/dashboard/admin/spmb', [AdminController::class, 'spmbIndex'])->name('admin.spmb.index');
-    Route::get('/dashboard/admin/spmb/export', [AdminController::class, 'spmbExport'])->name('admin.spmb.export');
-    Route::post('/dashboard/admin/spmb/{id}/status', [AdminController::class, 'spmbUpdateStatus'])->name('admin.spmb.status');
-    
-    Route::get('/dashboard/admin/siswa', [AdminController::class, 'siswaIndex'])->name('admin.siswa.index');
-    Route::get('/dashboard/admin/guru', [AdminController::class, 'guruIndex'])->name('admin.guru.index');
-    
-    // CRUD Kelas (Admin)
-    Route::get('/dashboard/admin/kelas', [AdminController::class, 'kelasIndex'])->name('admin.kelas.index');
-    Route::post('/dashboard/admin/kelas/simpan', [AdminController::class, 'kelasStore'])->name('admin.kelas.store');
-    Route::put('/dashboard/admin/kelas/{id}/update', [AdminController::class, 'kelasUpdate'])->name('admin.kelas.update');
-    Route::delete('/dashboard/admin/kelas/{id}/hapus', [AdminController::class, 'kelasDelete'])->name('admin.kelas.delete');
-
-    // CMS Konten (Admin)
-    Route::get('/dashboard/admin/cms', [AdminController::class, 'cmsIndex'])->name('admin.cms.index');
-    Route::post('/dashboard/admin/cms/berita', [AdminController::class, 'cmsBeritaStore'])->name('admin.cms.berita.store');
-    Route::delete('/dashboard/admin/cms/berita/{id}', [AdminController::class, 'cmsBeritaDelete'])->name('admin.cms.berita.delete');
-
-    Route::get('/dashboard/admin/roster', [AdminController::class, 'rosterIndex'])->name('admin.roster.index');
-    Route::post('/dashboard/admin/roster/simpan', [AdminController::class, 'rosterStore'])->name('admin.roster.store');
-    Route::delete('/dashboard/admin/roster/{id}/hapus', [AdminController::class, 'rosterDelete'])->name('admin.roster.delete');
-
-    Route::get('/dashboard/admin/pengguna', [AdminController::class, 'usersIndex'])->name('admin.users.index');
-    Route::post('/dashboard/admin/pengguna/simpan', [AdminController::class, 'userStore'])->name('admin.users.store');
-    Route::put('/dashboard/admin/pengguna/{id}/update', [AdminController::class, 'userUpdate'])->name('admin.users.update');
-    Route::delete('/dashboard/admin/pengguna/{id}/hapus', [AdminController::class, 'userDelete'])->name('admin.users.delete');
-
-    // Universal Profile & Password Change
+    // Profil Universal & Notifikasi
     Route::get('/dashboard/profil', [PageController::class, 'formProfil'])->name('profile.form');
     Route::post('/dashboard/profil', [PageController::class, 'simpanProfil'])->name('profile.update');
-
-    // Notifications
     Route::get('/dashboard/notifikasi', [PageController::class, 'notificationsIndex'])->name('notifications.index');
 
-    // Student password change routes (Legacy / Shortcut)
-    Route::get('/dashboard/ubah-password', [SiswaController::class, 'formUbahPassword'])->name('siswa.password.form');
-    Route::post('/dashboard/ubah-password', [SiswaController::class, 'simpanUbahPassword'])->name('siswa.password.update');
+    /*
+    |--------------------------------------------------------------------------
+    | Hak Akses: Administrator
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:admin'])->prefix('dashboard/admin')->name('admin.')->group(function () {
+        // SPMB
+        Route::get('/spmb', [AdminController::class, 'spmbIndex'])->name('spmb.index');
+        Route::get('/spmb/export', [AdminController::class, 'spmbExport'])->name('spmb.export');
+        Route::post('/spmb/{id}/status', [AdminController::class, 'spmbUpdateStatus'])->name('spmb.status');
 
-    // Student routes
-    Route::get('/dashboard/tugas', [SiswaController::class, 'tugas'])->name('siswa.tugas');
-    Route::post('/dashboard/tugas/{id}/kumpulkan', [SiswaController::class, 'kumpulkanTugas'])->name('siswa.tugas.submit');
-    Route::delete('/dashboard/tugas/{id}/batalkan', [SiswaController::class, 'batalkanTugas'])->name('siswa.tugas.cancel');
-    Route::get('/dashboard/absensi', [SiswaController::class, 'absensi'])->name('siswa.absensi');
-    Route::get('/dashboard/jadwal', [SiswaController::class, 'roster'])->name('siswa.roster');
-    Route::get('/dashboard/nilai', [SiswaController::class, 'transkripNilai'])->name('siswa.nilai');
+        // Civitas Akademika
+        Route::get('/siswa', [AdminController::class, 'siswaIndex'])->name('siswa.index');
+        Route::get('/guru', [AdminController::class, 'guruIndex'])->name('guru.index');
 
-    // Teacher routes
-    Route::get('/dashboard/guru/tugas', [GuruController::class, 'tugasIndex'])->name('guru.tugas.index');
-    Route::get('/dashboard/guru/tugas/buat', [GuruController::class, 'tugasCreate'])->name('guru.tugas.create');
-    Route::post('/dashboard/guru/tugas/simpan', [GuruController::class, 'tugasStore'])->name('guru.tugas.store');
-    Route::delete('/dashboard/guru/tugas/{id}/hapus', [GuruController::class, 'tugasDelete'])->name('guru.tugas.delete');
-    Route::get('/dashboard/guru/tugas/{id}/pengumpulan', [GuruController::class, 'tugasSubmissions'])->name('guru.tugas.submissions');
-    Route::get('/dashboard/guru/tugas/{id}/export', [GuruController::class, 'exportTugas'])->name('guru.tugas.export');
-    Route::post('/dashboard/guru/tugas/berkas/{id}/nilai', [GuruController::class, 'beriNilai'])->name('guru.tugas.grade');
-    Route::get('/dashboard/guru/tugas/berkas/{id}/unduh', [GuruController::class, 'downloadBerkas'])->name('guru.tugas.download');
-    Route::get('/dashboard/guru/absensi', [GuruController::class, 'absensiIndex'])->name('guru.absensi');
-    Route::get('/dashboard/guru/absensi/export', [GuruController::class, 'exportAbsensi'])->name('guru.absensi.export');
-    Route::post('/dashboard/guru/absensi/simpan', [GuruController::class, 'absensiStore'])->name('guru.absensi.store');
+        // CRUD Kelas
+        Route::get('/kelas', [AdminController::class, 'kelasIndex'])->name('kelas.index');
+        Route::post('/kelas/simpan', [AdminController::class, 'kelasStore'])->name('kelas.store');
+        Route::put('/kelas/{id}/update', [AdminController::class, 'kelasUpdate'])->name('kelas.update');
+        Route::delete('/kelas/{id}/hapus', [AdminController::class, 'kelasDelete'])->name('kelas.delete');
+
+        // CMS Konten
+        Route::get('/cms', [AdminController::class, 'cmsIndex'])->name('cms.index');
+        Route::post('/cms/berita', [AdminController::class, 'cmsBeritaStore'])->name('cms.berita.store');
+        Route::delete('/cms/berita/{id}', [AdminController::class, 'cmsBeritaDelete'])->name('cms.berita.delete');
+
+        // Jadwal Roster
+        Route::get('/roster', [AdminController::class, 'rosterIndex'])->name('roster.index');
+        Route::post('/roster/simpan', [AdminController::class, 'rosterStore'])->name('roster.store');
+        Route::delete('/roster/{id}/hapus', [AdminController::class, 'rosterDelete'])->name('roster.delete');
+
+        // Manajemen Pengguna
+        Route::get('/pengguna', [AdminController::class, 'usersIndex'])->name('users.index');
+        Route::post('/pengguna/simpan', [AdminController::class, 'userStore'])->name('users.store');
+        Route::put('/pengguna/{id}/update', [AdminController::class, 'userUpdate'])->name('users.update');
+        Route::delete('/pengguna/{id}/hapus', [AdminController::class, 'userDelete'])->name('users.delete');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Hak Akses: Guru & Admin
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:guru,admin'])->prefix('dashboard/guru')->name('guru.')->group(function () {
+        // Manajemen Tugas
+        Route::get('/tugas', [GuruController::class, 'tugasIndex'])->name('tugas.index');
+        Route::get('/tugas/buat', [GuruController::class, 'tugasCreate'])->name('tugas.create');
+        Route::post('/tugas/simpan', [GuruController::class, 'tugasStore'])->name('tugas.store');
+        Route::delete('/tugas/{id}/hapus', [GuruController::class, 'tugasDelete'])->name('tugas.delete');
+        Route::get('/tugas/{id}/pengumpulan', [GuruController::class, 'tugasSubmissions'])->name('tugas.submissions');
+        Route::get('/tugas/{id}/export', [GuruController::class, 'exportTugas'])->name('tugas.export');
+        Route::post('/tugas/berkas/{id}/nilai', [GuruController::class, 'beriNilai'])->name('tugas.grade');
+        Route::get('/tugas/berkas/{id}/unduh', [GuruController::class, 'downloadBerkas'])->name('tugas.download');
+
+        // Presensi & Absensi
+        Route::get('/absensi', [GuruController::class, 'absensiIndex'])->name('absensi');
+        Route::get('/absensi/export', [GuruController::class, 'exportAbsensi'])->name('absensi.export');
+        Route::post('/absensi/simpan', [GuruController::class, 'absensiStore'])->name('absensi.store');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Hak Akses: Portal Siswa
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:siswa'])->group(function () {
+        Route::get('/dashboard/ubah-password', [SiswaController::class, 'formUbahPassword'])->name('siswa.password.form');
+        Route::post('/dashboard/ubah-password', [SiswaController::class, 'simpanUbahPassword'])->name('siswa.password.update');
+
+        Route::get('/dashboard/tugas', [SiswaController::class, 'tugas'])->name('siswa.tugas');
+        Route::post('/dashboard/tugas/{id}/kumpulkan', [SiswaController::class, 'kumpulkanTugas'])->name('siswa.tugas.submit');
+        Route::delete('/dashboard/tugas/{id}/batalkan', [SiswaController::class, 'batalkanTugas'])->name('siswa.tugas.cancel');
+        Route::get('/dashboard/absensi', [SiswaController::class, 'absensi'])->name('siswa.absensi');
+        Route::get('/dashboard/jadwal', [SiswaController::class, 'roster'])->name('siswa.roster');
+        Route::get('/dashboard/nilai', [SiswaController::class, 'transkripNilai'])->name('siswa.nilai');
+    });
 });
-
-Route::get('/daftar', [PageController::class, 'daftar'])->name('daftar');
-Route::post('/proses-pendaftaran', [PageController::class, 'prosesPendaftaran']);

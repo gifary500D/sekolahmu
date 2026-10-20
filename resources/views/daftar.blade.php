@@ -8,7 +8,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
             <h1 class="text-3xl md:text-4xl font-bold mb-2">Pendaftaran Siswa Baru</h1>
-            <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA Pemda Bahorok</p>
+            <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA Negeri 1 Medan</p>
         </div>
     </div>
 </section>
@@ -19,31 +19,6 @@
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             <!-- Form Container -->
             <div class="p-6 sm:p-8 md:p-10">
-                @if(session('success'))
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded-r-lg shadow-sm">
-                        <p class="font-bold">Berhasil!</p>
-                        <p>{{ session('success') }}</p>
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded-r-lg shadow-sm">
-                        <p class="font-bold">Kesalahan!</p>
-                        <p>{{ session('error') }}</p>
-                    </div>
-                @endif
-
-                @if($errors->any())
-                    <div class="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 mb-8 rounded-r-lg shadow-sm">
-                        <p class="font-bold mb-2">Mohon perbaiki kesalahan berikut:</p>
-                        <ul class="list-disc list-inside text-sm">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
                 <!-- Info Box -->
                 <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-8 rounded-r-lg">
                     <h3 class="font-semibold text-blue-900 mb-2">ℹ️ Informasi Penting</h3>
@@ -53,6 +28,29 @@
                         <li>• Anda akan menerima notifikasi status pendaftaran melalui email</li>
                     </ul>
                 </div>
+
+                @if (session('success'))
+                    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 shadow-sm flex items-start space-x-3">
+                        <span class="text-2xl">✔</span>
+                        <div>
+                            <h3 class="font-bold text-lg">Pendaftaran Berhasil!</h3>
+                            <p class="text-sm mt-1">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="mb-6 p-4 bg-rose-50 border border-rose-300 rounded-xl text-rose-800 shadow-sm">
+                        <h3 class="font-bold text-base flex items-center">
+                            <span class="mr-2">⚠</span> Terdapat kesalahan pada input formulir:
+                        </h3>
+                        <ul class="list-disc list-inside mt-2 text-sm space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 <!-- Form -->
                 <form id="registrationForm" method="POST" action="/proses-pendaftaran" class="space-y-8">
@@ -74,25 +72,9 @@
                                     type="text" 
                                     id="nama_lengkap" 
                                     name="nama_lengkap" 
+                                    value="{{ old('nama_lengkap', old('nama')) }}"
                                     required
                                     placeholder="Masukkan nama lengkap sesuai akta kelahiran"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                                >
-                            </div>
-
-                            <!-- NIK -->
-                            <div>
-                                <label for="nik" class="block text-sm font-semibold text-gray-700 mb-2">
-                                    NIK (Nomor Induk Kependudukan) <span class="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="nik" 
-                                    name="nik" 
-                                    required
-                                    placeholder="16 digit NIK"
-                                    maxlength="16"
-                                    pattern="[0-9]{16}"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                             </div>
@@ -146,13 +128,14 @@
                             <!-- NISN -->
                             <div>
                                 <label for="nisn" class="block text-sm font-semibold text-gray-700 mb-2">
-                                    NISN <span class="text-red-500">*</span>
+                                    NISN (10 Digit) <span class="text-red-500">*</span>
                                 </label>
                                 <input 
                                     type="text" 
                                     id="nisn" 
                                     name="nisn" 
-                                    required
+                                    value="{{ old('nisn') }}"
+                                    required 
                                     placeholder="10 digit NISN"
                                     maxlength="10"
                                     pattern="[0-9]{10}"
@@ -160,8 +143,26 @@
                                 >
                             </div>
 
-                            <!-- Agama -->
+                            <!-- NIK -->
                             <div>
+                                <label for="nik" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    NIK (16 Digit) <span class="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="nik" 
+                                    name="nik" 
+                                    value="{{ old('nik') }}"
+                                    required 
+                                    placeholder="16 digit NIK sesuai KK"
+                                    maxlength="16"
+                                    pattern="[0-9]{16}"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                >
+                            </div>
+
+                            <!-- Agama -->
+                            <div class="md:col-span-2">
                                 <label for="agama" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Agama <span class="text-red-500">*</span>
                                 </label>
@@ -172,12 +173,12 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                                     <option value="">-- Pilih Agama --</option>
-                                    <option value="islam">Islam</option>
-                                    <option value="kristen">Kristen Protestan</option>
-                                    <option value="katolik">Kristen Katolik</option>
-                                    <option value="hindu">Hindu</option>
-                                    <option value="buddha">Buddha</option>
-                                    <option value="konghucu">Konghucu</option>
+                                    <option value="islam" {{ old('agama') == 'islam' ? 'selected' : '' }}>Islam</option>
+                                    <option value="kristen" {{ old('agama') == 'kristen' ? 'selected' : '' }}>Kristen Protestan</option>
+                                    <option value="katolik" {{ old('agama') == 'katolik' ? 'selected' : '' }}>Kristen Katolik</option>
+                                    <option value="hindu" {{ old('agama') == 'hindu' ? 'selected' : '' }}>Hindu</option>
+                                    <option value="buddha" {{ old('agama') == 'buddha' ? 'selected' : '' }}>Buddha</option>
+                                    <option value="konghucu" {{ old('agama') == 'konghucu' ? 'selected' : '' }}>Konghucu</option>
                                 </select>
                             </div>
                         </div>
@@ -245,7 +246,7 @@
                                     id="kota" 
                                     name="kota" 
                                     required
-                                    placeholder="Kabupaten Langkat"
+                                    placeholder="Medan"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                             </div>
@@ -398,14 +399,15 @@
                                     name="tahun_lulus" 
                                     required
                                     min="2020"
-                                    max="2024"
-                                    placeholder="2024"
+                                    max="{{ date('Y') }}"
+                                    placeholder="{{ date('Y') }}"
+                                    value="{{ old('tahun_lulus') }}"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                             </div>
 
                             <!-- Pilihan Program -->
-                            <div>
+                            <div class="md:col-span-2">
                                 <label for="program" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Pilihan Program <span class="text-red-500">*</span>
                                 </label>
@@ -416,14 +418,14 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                                     <option value="">-- Pilih Program --</option>
-                                    <option value="ipa">Program IPA (Sains)</option>
-                                    <option value="ips">Program IPS (Sosial)</option>
-                                    <option value="bahasa">Program Bahasa</option>
+                                    <option value="ipa" {{ old('program') == 'ipa' ? 'selected' : '' }}>Program IPA (Sains)</option>
+                                    <option value="ips" {{ old('program') == 'ips' ? 'selected' : '' }}>Program IPS (Sosial)</option>
+                                    <option value="bahasa" {{ old('program') == 'bahasa' ? 'selected' : '' }}>Program Bahasa</option>
                                 </select>
                             </div>
 
                             <!-- Jalur Pendaftaran -->
-                            <div>
+                            <div class="md:col-span-2">
                                 <label for="jalur_pendaftaran" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Jalur Pendaftaran <span class="text-red-500">*</span>
                                 </label>
@@ -433,11 +435,11 @@
                                     required
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
-                                    <option value="">-- Pilih Jalur --</option>
-                                    <option value="Zonasi">Zonasi</option>
-                                    <option value="Afirmasi">Afirmasi</option>
-                                    <option value="Prestasi">Prestasi</option>
-                                    <option value="Perpindahan Tugas">Perpindahan Tugas Orang Tua/Wali</option>
+                                    <option value="">-- Pilih Jalur Pendaftaran --</option>
+                                    <option value="Zonasi" {{ old('jalur_pendaftaran') == 'Zonasi' ? 'selected' : '' }}>Zonasi</option>
+                                    <option value="Afirmasi" {{ old('jalur_pendaftaran') == 'Afirmasi' ? 'selected' : '' }}>Afirmasi</option>
+                                    <option value="Prestasi" {{ old('jalur_pendaftaran') == 'Prestasi' ? 'selected' : '' }}>Prestasi</option>
+                                    <option value="Perpindahan Tugas" {{ old('jalur_pendaftaran') == 'Perpindahan Tugas' ? 'selected' : '' }}>Perpindahan Tugas</option>
                                 </select>
                             </div>
                         </div>
@@ -472,7 +474,7 @@
                                     class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
                                 >
                                 <span class="ml-3 text-gray-700">
-                                    Saya setuju dengan tata tertib dan peraturan yang berlaku di SMA Pemda Bahorok
+                                    Saya setuju dengan tata tertib dan peraturan yang berlaku di SMA Negeri 1 Medan
                                 </span>
                             </label>
 

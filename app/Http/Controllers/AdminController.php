@@ -270,7 +270,9 @@ class AdminController extends Controller
             'semester' => 'required|in:Ganjil,Genap',
         ]);
 
-        $roster = Roster::create($request->all());
+        $roster = Roster::create($request->only([
+            'kelas_id', 'mata_pelajaran', 'guru_id', 'hari', 'jam_mulai', 'jam_selesai', 'tahun_ajaran', 'semester'
+        ]));
 
         AuditLog::record('CREATE_ROSTER', 'Menambahkan jadwal pelajaran ' . $roster->mata_pelajaran . ' untuk kelas ID ' . $roster->kelas_id);
 
@@ -307,7 +309,7 @@ class AdminController extends Controller
             'wali_kelas_id' => 'nullable|exists:users,id',
         ]);
 
-        $kelas = Kelas::create($request->all());
+        $kelas = Kelas::create($request->only(['nama', 'tingkat', 'program', 'wali_kelas_id']));
         AuditLog::record('CREATE_KELAS', 'Menambahkan kelas baru: ' . $kelas->nama);
 
         return redirect()->route('admin.kelas.index')->with('success', 'Kelas baru berhasil ditambahkan.');
@@ -323,7 +325,7 @@ class AdminController extends Controller
             'wali_kelas_id' => 'nullable|exists:users,id',
         ]);
 
-        $kelas->update($request->all());
+        $kelas->update($request->only(['nama', 'tingkat', 'program', 'wali_kelas_id']));
         AuditLog::record('UPDATE_KELAS', 'Memperbarui kelas: ' . $kelas->nama);
 
         return redirect()->route('admin.kelas.index')->with('success', 'Data kelas berhasil diperbarui.');

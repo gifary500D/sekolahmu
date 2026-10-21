@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SiswaController;
-use App\Http\Controllers\GuruController;
-use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +40,7 @@ Route::post('/proses-pendaftaran', [PageController::class, 'prosesPendaftaran'])
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
-    
+
     // Dashboard Utama: Pengalihan Berdasarkan Peran (Admin / Guru / Siswa)
     Route::get('/dashboard', function () {
         $user = auth()->user()->load('kelas');
@@ -50,33 +50,12 @@ Route::middleware(['auth'])->group(function () {
         if ($user->isGuru()) {
             return app(GuruController::class)->dashboard();
         }
-        
-        // Siswa wajib ganti kata sandi bawaan jika belum diubah
-        if ($user->isSiswa() && ! $user->password_changed) {
-            return redirect()->route('siswa.password.form');
+        if ($user->isSiswa()) {
+            return app(SiswaController::class)->dashboard();
         }
-        
-        $tugasList = \App\Models\Tugas::where(function($q) use ($user) {
-            $q->where('kelas_id', $user->kelas_id)->orWhereNull('kelas_id');
-        })->orderBy('tenggat', 'asc')->take(5)->get();
-        
-        $submitted = \App\Models\TugasSiswa::where('siswa_id', $user->id)->get()->keyBy('tugas_id');
-        $pengumuman = \App\Models\Berita::where('status', 'terbit')->latest()->take(2)->get();
 
-        $className = $user->kelas?->nama;
-        $absensiRecords = $className ? \App\Models\Absensi::where('kelas', $className)->get() : collect();
-        $totalHadir = 0;
-        $totalAbsen = $absensiRecords->count();
-        foreach ($absensiRecords as $record) {
-            $data = $record->data_kehadiran ?? [];
-            if (isset($data[$user->id]) && $data[$user->id] === 'Hadir') {
-                $totalHadir++;
-            }
-        }
-        $attendanceRate = $totalAbsen > 0 ? round(($totalHadir / $totalAbsen) * 100) : 100;
-
-        return view('siswa.dashboard', compact('tugasList', 'submitted', 'pengumuman', 'attendanceRate'));
-    })->name('dashboard');
+        abort(403);
+    })->middleware(['spmb.diterima'])->name('dashboard');
 
     // Profil Universal & Notifikasi
     Route::get('/dashboard/profil', [PageController::class, 'formProfil'])->name('profile.form');
@@ -97,6 +76,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Civitas Akademika
         Route::get('/siswa', [AdminController::class, 'siswaIndex'])->name('siswa.index');
+        Route::put('/siswa/{id}/kelas', [AdminController::class, 'siswaUpdateKelas'])->name('siswa.kelas');
+        Route::post('/siswa/{id}/reset-password', [AdminController::class, 'resetSiswaPassword'])->name('siswa.reset-password');
         Route::get('/guru', [AdminController::class, 'guruIndex'])->name('guru.index');
 
         // CRUD Kelas
@@ -150,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
     | Hak Akses: Portal Siswa
     |--------------------------------------------------------------------------
     */
-    Route::middleware(['role:siswa'])->group(function () {
+    Route::middleware(['role:siswa', 'spmb.diterima'])->group(function () {
         Route::get('/dashboard/ubah-password', [SiswaController::class, 'formUbahPassword'])->name('siswa.password.form');
         Route::post('/dashboard/ubah-password', [SiswaController::class, 'simpanUbahPassword'])->name('siswa.password.update');
 

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Spmb;
-use App\Models\Kelas;
-use App\Models\Tugas;
-use App\Models\Absensi;
-use App\Models\Roster;
-use App\Models\Berita;
 use App\Models\AuditLog;
+use App\Models\Berita;
+use App\Models\Kelas;
+use App\Models\Roster;
+use App\Models\Spmb;
+use App\Models\User;
 use App\Support\Teks;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -43,8 +43,10 @@ class AdminController extends Controller
      */
     public function spmbIndex()
     {
-        $applicants = Spmb::orderBy('created_at', 'desc')->paginate(15);
-        return view('admin.spmb.index', compact('applicants'));
+        $applicants = Spmb::with('user.kelas')->orderBy('created_at', 'desc')->paginate(15);
+        $kelasList = Kelas::orderBy('tingkat')->orderBy('nama')->get();
+
+        return view('admin.spmb.index', compact('applicants', 'kelasList'));
     }
 
     /**
@@ -53,18 +55,18 @@ class AdminController extends Controller
     public function spmbExport()
     {
         AuditLog::record('EXPORT_SPMB', 'Mengekspor data pendaftar SPMB ke format spreadsheet berborder.');
-        
+
         $applicants = Spmb::orderBy('created_at', 'desc')->get();
-        $filename = 'data-spmb-' . date('Y-m-d') . '.xls';
-        
+        $filename = 'data-spmb-'.date('Y-m-d').'.xls';
+
         $headers = [
-            "Content-Type" => "application/vnd.ms-excel; charset=utf-8",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
+            'Content-Type' => 'application/vnd.ms-excel; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=$filename",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ];
-        
+
         $html = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
         $html .= '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
         $html .= '<style>
@@ -75,10 +77,10 @@ class AdminController extends Controller
             .title { font-size: 16pt; font-weight: bold; text-align: center; margin-bottom: 5px; }
             .subtitle { font-size: 10pt; text-align: center; color: #475569; margin-bottom: 20px; }
         </style></head><body>';
-        
+
         $html .= '<div class="title">LAPORAN DATA PENDAFTARAN SPMB</div>';
-        $html .= '<div class="subtitle">SMA PEMDA BAHOROK · Tanggal Unduh: ' . date('d F Y, H:i') . ' WIB</div>';
-        
+        $html .= '<div class="subtitle">SMA PEMDA BAHOROK · Tanggal Unduh: '.date('d F Y, H:i').' WIB</div>';
+
         $html .= '<table>';
         $html .= '<thead><tr>
             <th>No</th>
@@ -93,27 +95,27 @@ class AdminController extends Controller
             <th>Status Seleksi</th>
             <th>Tanggal Daftar</th>
         </tr></thead><tbody>';
-        
+
         foreach ($applicants as $index => $app) {
             $html .= '<tr>';
-            $html .= '<td class="center">' . ($index + 1) . '</td>';
-            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($app->nomor_pendaftaran)) . '</td>';
-            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($app->nama_lengkap)) . '</td>';
-            $html .= '<td class="center">\'' . htmlspecialchars(Teks::amankanFormulaCsv($app->nisn)) . '</td>';
-            $html .= '<td class="center">\'' . htmlspecialchars(Teks::amankanFormulaCsv($app->nik)) . '</td>';
-            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($app->asal_sekolah)) . '</td>';
-            $html .= '<td class="center">' . htmlspecialchars(Teks::amankanFormulaCsv($app->jalur_pendaftaran)) . '</td>';
-            $html .= '<td class="center">' . strtoupper(htmlspecialchars(Teks::amankanFormulaCsv($app->program))) . '</td>';
-            $html .= '<td class="center">' . number_format($app->nilai_rata, 2) . '</td>';
-            $html .= '<td class="center"><b>' . htmlspecialchars(Teks::amankanFormulaCsv($app->status)) . '</b></td>';
-            $html .= '<td class="center">' . $app->created_at->format('d/m/Y H:i') . '</td>';
+            $html .= '<td class="center">'.($index + 1).'</td>';
+            $html .= '<td>'.htmlspecialchars(Teks::amankanFormulaCsv($app->nomor_pendaftaran)).'</td>';
+            $html .= '<td>'.htmlspecialchars(Teks::amankanFormulaCsv($app->nama_lengkap)).'</td>';
+            $html .= '<td class="center">\''.htmlspecialchars(Teks::amankanFormulaCsv($app->nisn)).'</td>';
+            $html .= '<td class="center">\''.htmlspecialchars(Teks::amankanFormulaCsv($app->nik)).'</td>';
+            $html .= '<td>'.htmlspecialchars(Teks::amankanFormulaCsv($app->asal_sekolah)).'</td>';
+            $html .= '<td class="center">'.htmlspecialchars(Teks::amankanFormulaCsv($app->jalur_pendaftaran)).'</td>';
+            $html .= '<td class="center">'.strtoupper(htmlspecialchars(Teks::amankanFormulaCsv($app->program))).'</td>';
+            $html .= '<td class="center">'.number_format($app->nilai_rata, 2).'</td>';
+            $html .= '<td class="center"><b>'.htmlspecialchars(Teks::amankanFormulaCsv($app->status)).'</b></td>';
+            $html .= '<td class="center">'.$app->created_at->format('d/m/Y H:i').'</td>';
             $html .= '</tr>';
         }
-        
+
         $html .= '</tbody></table>';
         $html .= '<br><p><i>* Pernyataan Konfirmasi Keabsahan Data (BRL-16): Laporan ini dihasilkan secara otomatis dan sah oleh Sistem SekolahKu Digital.</i></p>';
         $html .= '</body></html>';
-        
+
         return response($html, 200, $headers);
     }
 
@@ -126,8 +128,8 @@ class AdminController extends Controller
 
         $allowed = [
             'ijazah' => 'berkas_ijazah_skl',
-            'kk'     => 'berkas_kk',
-            'rapor'  => 'berkas_rapor',
+            'kk' => 'berkas_kk',
+            'rapor' => 'berkas_rapor',
         ];
 
         if (! isset($allowed[$jenis])) {
@@ -156,6 +158,7 @@ class AdminController extends Controller
         $request->validate([
             'status' => 'required|in:Menunggu Verifikasi,Sedang Diverifikasi,Terverifikasi,Diterima,Ditolak',
             'note' => 'nullable|string|max:255',
+            'kelas_id' => 'nullable|exists:kelas,id',
         ]);
 
         $applicant = Spmb::findOrFail($id);
@@ -165,9 +168,85 @@ class AdminController extends Controller
             'note' => $request->note,
         ]);
 
-        AuditLog::record('UPDATE_SPMB_STATUS', 'Memperbarui status pendaftar ' . $applicant->nama_lengkap . ' dari "' . $oldStatus . '" ke "' . $request->status . '".');
+        $tempPassword = null;
 
-        return redirect()->route('admin.spmb.index')->with('success', 'Status pendaftar ' . $applicant->nama_lengkap . ' berhasil diperbarui.');
+        // Sinkronisasi akun User saat status "Diterima"
+        if ($request->status === 'Diterima') {
+            $user = User::where('nisn', $applicant->nisn)
+                ->orWhere('email', $applicant->email)
+                ->first();
+
+            if (! $user) {
+                $tempPassword = 'Sp-'.Str::random(8).'!';
+                $user = User::create([
+                    'name' => $applicant->nama_lengkap,
+                    'email' => $applicant->email,
+                    'nisn' => $applicant->nisn,
+                    'password' => Hash::make($tempPassword),
+                    'role' => 'siswa',
+                    'kelas_id' => $request->kelas_id,
+                    'password_changed' => false,
+                ]);
+            } else {
+                $updateData = [
+                    'name' => $applicant->nama_lengkap,
+                    'email' => $applicant->email,
+                    'nisn' => $applicant->nisn,
+                    'role' => 'siswa',
+                ];
+                if ($request->filled('kelas_id')) {
+                    $updateData['kelas_id'] = $request->kelas_id;
+                }
+                $user->update($updateData);
+            }
+        }
+
+        AuditLog::record('UPDATE_SPMB_STATUS', 'Memperbarui status pendaftar '.$applicant->nama_lengkap.' dari "'.$oldStatus.'" ke "'.$request->status.'".');
+
+        $msg = 'Status pendaftar '.$applicant->nama_lengkap.' berhasil diperbarui menjadi '.$request->status.'.';
+        if ($tempPassword) {
+            $msg .= ' Akun siswa berhasil disinkronkan dengan kata sandi sementara: '.$tempPassword;
+        }
+
+        return redirect()->route('admin.spmb.index')->with('success', $msg);
+    }
+
+    /**
+     * Tetapkan atau ubah rombongan belajar (kelas) siswa
+     */
+    public function siswaUpdateKelas(Request $request, $id)
+    {
+        $request->validate([
+            'kelas_id' => 'nullable|exists:kelas,id',
+        ]);
+
+        $siswa = User::where('role', 'siswa')->findOrFail($id);
+        $siswa->update([
+            'kelas_id' => $request->kelas_id,
+        ]);
+
+        $kelasNama = $siswa->kelas ? $siswa->kelas->nama : 'Belum Ditentukan';
+        AuditLog::record('UPDATE_SISWA_KELAS', 'Menetapkan kelas '.$kelasNama.' untuk siswa '.$siswa->name.'.');
+
+        return redirect()->back()->with('success', 'Kelas untuk siswa '.$siswa->name.' berhasil diperbarui menjadi '.$kelasNama.'.');
+    }
+
+    /**
+     * Reset kata sandi sementara untuk siswa
+     */
+    public function resetSiswaPassword($id)
+    {
+        $siswa = User::where('role', 'siswa')->findOrFail($id);
+        $newTempPassword = 'Sp-'.Str::random(8).'!';
+
+        $siswa->update([
+            'password' => Hash::make($newTempPassword),
+            'password_changed' => false,
+        ]);
+
+        AuditLog::record('RESET_PASSWORD_SISWA', 'Mereset kata sandi sementara untuk siswa: '.$siswa->name.'.');
+
+        return redirect()->back()->with('success', 'Kata sandi sementara untuk siswa '.$siswa->name.' berhasil direset: '.$newTempPassword.'. Siswa wajib mengganti kata sandi ini saat pertama kali masuk.');
     }
 
     /**
@@ -177,6 +256,7 @@ class AdminController extends Controller
     {
         $users = User::with('kelas')->orderBy('created_at', 'desc')->paginate(20);
         $kelasList = Kelas::all();
+
         return view('admin.users.index', compact('users', 'kelasList'));
     }
 
@@ -194,7 +274,7 @@ class AdminController extends Controller
             'nisn' => 'nullable|string|unique:users,nisn',
         ]);
 
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+        return DB::transaction(function () use ($request) {
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -205,7 +285,7 @@ class AdminController extends Controller
                 'password_changed' => true,
             ]);
 
-            AuditLog::record('CREATE_USER', 'Menambahkan pengguna baru: ' . $user->name . ' (' . $user->role . ').');
+            AuditLog::record('CREATE_USER', 'Menambahkan pengguna baru: '.$user->name.' ('.$user->role.').');
 
             return redirect()->route('admin.users.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
         });
@@ -220,13 +300,13 @@ class AdminController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'role' => 'required|in:admin,guru,siswa',
             'kelas_id' => 'nullable|exists:kelas,id',
-            'nisn' => 'nullable|string|unique:users,nisn,' . $user->id,
+            'nisn' => 'nullable|string|unique:users,nisn,'.$user->id,
         ]);
 
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $user) {
+        return DB::transaction(function () use ($request, $user) {
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -236,7 +316,7 @@ class AdminController extends Controller
                 'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
             ]);
 
-            AuditLog::record('UPDATE_USER', 'Memperbarui data pengguna: ' . $user->name);
+            AuditLog::record('UPDATE_USER', 'Memperbarui data pengguna: '.$user->name);
 
             return redirect()->route('admin.users.index')->with('success', 'Data pengguna berhasil diperbarui.');
         });
@@ -255,7 +335,7 @@ class AdminController extends Controller
         $name = $user->name;
         $user->delete();
 
-        AuditLog::record('DELETE_USER', 'Menghapus pengguna: ' . $name . '.');
+        AuditLog::record('DELETE_USER', 'Menghapus pengguna: '.$name.'.');
 
         return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
     }
@@ -267,6 +347,7 @@ class AdminController extends Controller
     {
         $siswaList = User::with('kelas')->where('role', 'siswa')->orderBy('created_at', 'desc')->paginate(20);
         $kelasList = Kelas::all();
+
         return view('admin.siswa.index', compact('siswaList', 'kelasList'));
     }
 
@@ -276,6 +357,7 @@ class AdminController extends Controller
     public function guruIndex()
     {
         $guruList = User::whereIn('role', ['guru', 'admin'])->orderBy('created_at', 'desc')->paginate(20);
+
         return view('admin.guru.index', compact('guruList'));
     }
 
@@ -287,6 +369,7 @@ class AdminController extends Controller
         $rosters = Roster::with(['kelas', 'guru'])->orderBy('kelas_id')->orderBy('hari')->get();
         $kelasList = Kelas::all();
         $guruList = User::where('role', 'guru')->get();
+
         return view('admin.roster.index', compact('rosters', 'kelasList', 'guruList'));
     }
 
@@ -304,10 +387,10 @@ class AdminController extends Controller
         ]);
 
         $roster = Roster::create($request->only([
-            'kelas_id', 'mata_pelajaran', 'guru_id', 'hari', 'jam_mulai', 'jam_selesai', 'tahun_ajaran', 'semester'
+            'kelas_id', 'mata_pelajaran', 'guru_id', 'hari', 'jam_mulai', 'jam_selesai', 'tahun_ajaran', 'semester',
         ]));
 
-        AuditLog::record('CREATE_ROSTER', 'Menambahkan jadwal pelajaran ' . $roster->mata_pelajaran . ' untuk kelas ID ' . $roster->kelas_id);
+        AuditLog::record('CREATE_ROSTER', 'Menambahkan jadwal pelajaran '.$roster->mata_pelajaran.' untuk kelas ID '.$roster->kelas_id);
 
         return redirect()->route('admin.roster.index')->with('success', 'Jadwal pelajaran (roster) berhasil ditambahkan.');
     }
@@ -318,7 +401,7 @@ class AdminController extends Controller
         $subject = $roster->mata_pelajaran;
         $roster->delete();
 
-        AuditLog::record('DELETE_ROSTER', 'Menghapus jadwal pelajaran ' . $subject);
+        AuditLog::record('DELETE_ROSTER', 'Menghapus jadwal pelajaran '.$subject);
 
         return redirect()->route('admin.roster.index')->with('success', 'Jadwal pelajaran berhasil dihapus.');
     }
@@ -330,6 +413,7 @@ class AdminController extends Controller
     {
         $kelasList = Kelas::with('waliKelas')->withCount('siswa')->get();
         $guruList = User::where('role', 'guru')->get();
+
         return view('admin.kelas.index', compact('kelasList', 'guruList'));
     }
 
@@ -343,7 +427,7 @@ class AdminController extends Controller
         ]);
 
         $kelas = Kelas::create($request->only(['nama', 'tingkat', 'program', 'wali_kelas_id']));
-        AuditLog::record('CREATE_KELAS', 'Menambahkan kelas baru: ' . $kelas->nama);
+        AuditLog::record('CREATE_KELAS', 'Menambahkan kelas baru: '.$kelas->nama);
 
         return redirect()->route('admin.kelas.index')->with('success', 'Kelas baru berhasil ditambahkan.');
     }
@@ -352,14 +436,14 @@ class AdminController extends Controller
     {
         $kelas = Kelas::findOrFail($id);
         $request->validate([
-            'nama' => 'required|string|max:255|unique:kelas,nama,' . $kelas->id,
+            'nama' => 'required|string|max:255|unique:kelas,nama,'.$kelas->id,
             'tingkat' => 'required|in:10,11,12',
             'program' => 'required|in:ipa,ips,bahasa',
             'wali_kelas_id' => 'nullable|exists:users,id',
         ]);
 
         $kelas->update($request->only(['nama', 'tingkat', 'program', 'wali_kelas_id']));
-        AuditLog::record('UPDATE_KELAS', 'Memperbarui kelas: ' . $kelas->nama);
+        AuditLog::record('UPDATE_KELAS', 'Memperbarui kelas: '.$kelas->nama);
 
         return redirect()->route('admin.kelas.index')->with('success', 'Data kelas berhasil diperbarui.');
     }
@@ -370,7 +454,7 @@ class AdminController extends Controller
         $nama = $kelas->nama;
         $kelas->delete();
 
-        AuditLog::record('DELETE_KELAS', 'Menghapus kelas: ' . $nama);
+        AuditLog::record('DELETE_KELAS', 'Menghapus kelas: '.$nama);
 
         return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil dihapus.');
     }
@@ -381,6 +465,7 @@ class AdminController extends Controller
     public function cmsIndex()
     {
         $beritaList = Berita::latest()->get();
+
         return view('admin.cms.index', compact('beritaList'));
     }
 
@@ -401,7 +486,7 @@ class AdminController extends Controller
         $berita = Berita::create([
             'judul' => $request->judul,
             'slug' => Berita::slugUnik($request->judul),
-            'ringkasan' => \Illuminate\Support\Str::limit(strip_tags($request->konten), 200),
+            'ringkasan' => Str::limit(strip_tags($request->konten), 200),
             'konten' => $request->konten,
             'status' => $request->status === 'arsip' ? 'draf' : 'terbit',
             'gambar_path' => $gambarPath,
@@ -409,7 +494,7 @@ class AdminController extends Controller
             'penulis_id' => auth()->id(),
         ]);
 
-        AuditLog::record('CREATE_BERITA', 'Mempublikasikan berita portal: ' . $berita->judul);
+        AuditLog::record('CREATE_BERITA', 'Mempublikasikan berita portal: '.$berita->judul);
 
         return redirect()->route('admin.cms.index')->with('success', 'Berita berhasil dipublikasikan.');
     }

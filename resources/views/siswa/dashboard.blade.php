@@ -197,6 +197,10 @@
                             <span class="font-semibold text-slate-900 dark:text-white">{{ auth()->user()->email ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                            <span class="text-slate-500 dark:text-slate-400">Kelas / Rombel</span>
+                            <span class="font-semibold text-blue-700 dark:text-blue-400">{{ auth()->user()->kelas->nama ?? 'Belum Ditentukan' }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
                             <span class="text-slate-500 dark:text-slate-400">Tahun Bergabung</span>
                             <span class="font-semibold text-slate-900 dark:text-white">{{ auth()->user()->created_at?->format('Y') ?? 2026 }}</span>
                         </div>

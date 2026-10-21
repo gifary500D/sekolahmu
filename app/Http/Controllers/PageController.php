@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agenda;
+use App\Models\Berita;
+use App\Models\Galeri;
 use App\Models\Spmb;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -19,16 +23,16 @@ class PageController extends Controller
      */
     public function index()
     {
-        $berita = \Illuminate\Support\Facades\Cache::remember('landing_berita', 3600, function() {
-            return \App\Models\Berita::where('status', 'terbit')->latest()->take(3)->get();
+        $berita = Cache::remember('landing_berita', 3600, function () {
+            return Berita::where('status', 'terbit')->latest()->take(3)->get();
         });
-        
-        $galeri = \Illuminate\Support\Facades\Cache::remember('landing_galeri', 3600, function() {
-            return \App\Models\Galeri::latest()->take(6)->get();
+
+        $galeri = Cache::remember('landing_galeri', 3600, function () {
+            return Galeri::latest()->take(6)->get();
         });
-        
-        $agenda = \Illuminate\Support\Facades\Cache::remember('landing_agenda', 3600, function() {
-            return \App\Models\Agenda::where('mulai', '>=', now())->orderBy('mulai', 'asc')->take(4)->get();
+
+        $agenda = Cache::remember('landing_agenda', 3600, function () {
+            return Agenda::where('mulai', '>=', now())->orderBy('mulai', 'asc')->take(4)->get();
         });
 
         return view('index', compact('berita', 'galeri', 'agenda'));
@@ -71,7 +75,24 @@ class PageController extends Controller
         $field = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'nisn';
 
         if (auth()->attempt([$field => $loginField, 'password' => $password], $remember)) {
+            $user = auth()->user();
+
+            // Pendaftar SPMB hanya boleh mengakses sesi sistem setelah status resmi "Diterima"
+            if ($user->isSiswa()) {
+                $spmb = $user->spmb ?? Spmb::where('nisn', $user->nisn)->orWhere('email', $user->email)->first();
+                if ($spmb && $spmb->status !== 'Diterima') {
+                    auth()->logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+
+                    return redirect()->route('login')->withErrors([
+                        'login' => 'Akun Anda belum dapat mengakses dashboard siswa. Status pendaftaran SPMB Anda saat ini: "'.$spmb->status.'". Akses dashboard hanya dibuka setelah status dinyatakan "Diterima".',
+                    ])->withInput();
+                }
+            }
+
             $request->session()->regenerate();
+
             return redirect()->intended('/dashboard');
         }
 
@@ -88,6 +109,7 @@ class PageController extends Controller
         auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 
@@ -97,12 +119,12 @@ class PageController extends Controller
     public function prosesPendaftaran(Request $request)
     {
         // Mendukung payload jika frontend mengirim 'nama' bukan 'nama_lengkap'
-        if (!$request->has('nama_lengkap') && $request->has('nama')) {
+        if (! $request->has('nama_lengkap') && $request->has('nama')) {
             $request->merge(['nama_lengkap' => $request->nama]);
         }
 
         $tahunSekarang = (int) date('Y');
-        
+
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required|string|max:255',
             'gender' => 'required|in:laki-laki,perempuan',
@@ -127,8 +149,8 @@ class PageController extends Controller
             'program' => 'required|in:ipa,ips,bahasa',
             'jalur_pendaftaran' => 'required|in:Zonasi,Afirmasi,Prestasi,Perpindahan Tugas',
             'berkas_ijazah_skl' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'berkas_kk'         => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'berkas_rapor'      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'berkas_kk' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'berkas_rapor' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'confirm_data' => 'accepted',
             'agree_terms' => 'accepted',
             'agree_privacy' => 'accepted',
@@ -145,7 +167,7 @@ class PageController extends Controller
         try {
             $result = DB::transaction(function () use ($request, $validator, &$uploadedFiles) {
                 $data = $validator->validated();
-                
+
                 // Hapus field persetujuan formulir yang bukan kolom database
                 unset($data['confirm_data'], $data['agree_terms'], $data['agree_privacy']);
 
@@ -174,7 +196,7 @@ class PageController extends Controller
                 $spmbRecord = Spmb::create($data);
 
                 // Buat akun User otomatis dengan kata sandi acak sementara yang unik
-                $tempPassword = 'Sp-' . Str::random(8) . '!';
+                $tempPassword = 'Sp-'.Str::random(8).'!';
                 User::create([
                     'name' => $data['nama_lengkap'],
                     'email' => $data['email'],
@@ -191,7 +213,7 @@ class PageController extends Controller
             });
 
             return redirect()->route('daftar')
-                ->with('success', 'Pendaftaran Berhasil! Nomor Pendaftaran Anda: ' . $result['spmb']->nomor_pendaftaran . '. Kata sandi sementara akun Anda: ' . $result['temp_password'] . '. Harap segera masuk dan ubah kata sandi Anda.')
+                ->with('success', 'Pendaftaran Berhasil! Nomor Pendaftaran Anda: '.$result['spmb']->nomor_pendaftaran.'. Kata sandi sementara akun Anda: '.$result['temp_password'].'. Harap segera masuk dan ubah kata sandi Anda.')
                 ->with('nomor_pendaftaran', $result['spmb']->nomor_pendaftaran);
 
         } catch (\Throwable $e) {
@@ -210,19 +232,22 @@ class PageController extends Controller
 
     public function beritaIndex()
     {
-        $beritaList = \App\Models\Berita::where('status', 'terbit')->latest()->paginate(9);
+        $beritaList = Berita::where('status', 'terbit')->latest()->paginate(9);
+
         return view('berita.index', compact('beritaList'));
     }
 
     public function agendaIndex()
     {
-        $agendaList = \App\Models\Agenda::orderBy('mulai', 'asc')->paginate(12);
+        $agendaList = Agenda::orderBy('mulai', 'asc')->paginate(12);
+
         return view('agenda.index', compact('agendaList'));
     }
 
     public function galeriIndex()
     {
-        $galeriList = \App\Models\Galeri::latest()->paginate(12);
+        $galeriList = Galeri::latest()->paginate(12);
+
         return view('galeri.index', compact('galeriList'));
     }
 
@@ -232,6 +257,7 @@ class PageController extends Controller
     public function formProfil()
     {
         $user = auth()->user();
+
         return view('layouts.profile', compact('user'));
     }
 
@@ -244,7 +270,7 @@ class PageController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
@@ -266,6 +292,7 @@ class PageController extends Controller
     {
         $user = auth()->user();
         $notifications = \DB::table('notifications')->where('notifiable_id', $user->id)->orderBy('created_at', 'desc')->paginate(15);
+
         return view('layouts.notifications', compact('notifications'));
     }
 

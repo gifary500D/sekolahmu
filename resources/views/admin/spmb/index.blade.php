@@ -44,6 +44,17 @@
             </div>
         @endif
 
+        <!-- Banner Informasi Alur Status SPMB & Dashboard -->
+        <div class="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 p-4 mb-6 rounded-xl text-blue-900 dark:text-blue-200 text-xs sm:text-sm flex items-start gap-3 shadow-sm">
+            <span class="text-lg">ℹ️</span>
+            <div>
+                <p class="font-bold">Ketentuan Alur Verifikasi &amp; Akses Dashboard:</p>
+                <p class="mt-0.5 text-blue-800 dark:text-blue-300 leading-relaxed">
+                    Siswa baru hanya dapat mengakses dashboard portal siswa setelah status dinyatakan <strong class="underline">"Diterima"</strong>. Status <em>"Terverifikasi"</em> adalah verifikasi berkas awal. Saat status diubah menjadi <strong>"Diterima"</strong>, sistem otomatis mensinkronisasi akun User siswa dan Anda dapat langsung menetapkan kelas (rombel).
+                </p>
+            </div>
+        </div>
+
         <!-- Applicants Table -->
         <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
             <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
@@ -86,6 +97,7 @@
                                             'Ditolak' => 'bg-red-50 dark:bg-red-950/60 text-red-800 dark:text-red-300',
                                             default => 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                                         };
+                                        $linkedUser = $applicant->user_record;
                                     @endphp
                                     <span class="px-2.5 py-1 rounded {{ $badgeColor }} text-xs font-semibold inline-block mb-1">
                                         {{ $applicant->status }}
@@ -93,11 +105,23 @@
                                     @if($applicant->note)
                                         <p class="text-[11px] text-slate-500 dark:text-slate-400 italic">Catatan: {{ $applicant->note }}</p>
                                     @endif
+                                    <div class="mt-1 pt-1 border-t border-slate-100 dark:border-slate-800 text-[11px]">
+                                        @if($linkedUser)
+                                            <span class="text-emerald-600 dark:text-emerald-400 font-medium block">
+                                                Akun: {{ $linkedUser->email }}
+                                            </span>
+                                            <span class="text-slate-500 dark:text-slate-400 block">
+                                                Kelas: {{ $linkedUser->kelas->nama ?? 'Belum Ditentukan' }}
+                                            </span>
+                                        @else
+                                            <span class="text-slate-400 dark:text-slate-500 block italic">Akun: Belum Dibuat</span>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     <form action="{{ route('admin.spmb.status', $applicant->id) }}" method="POST" class="space-y-2 inline-block text-left">
                                         @csrf
-                                        <div class="flex items-center gap-2 justify-end">
+                                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 justify-end">
                                             <select name="status" required class="px-3 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-semibold focus:ring-2 focus:ring-blue-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
                                                 <option value="Menunggu Verifikasi" {{ $applicant->status == 'Menunggu Verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
                                                 <option value="Sedang Diverifikasi" {{ $applicant->status == 'Sedang Diverifikasi' ? 'selected' : '' }}>Sedang Diverifikasi</option>
@@ -105,12 +129,28 @@
                                                 <option value="Diterima" {{ $applicant->status == 'Diterima' ? 'selected' : '' }}>Diterima</option>
                                                 <option value="Ditolak" {{ $applicant->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                                             </select>
+                                            <select name="kelas_id" class="px-2.5 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-medium focus:ring-2 focus:ring-blue-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                                                <option value="">-- Tetapkan Kelas --</option>
+                                                @foreach($kelasList as $kelas)
+                                                    <option value="{{ $kelas->id }}" {{ ($linkedUser && $linkedUser->kelas_id == $kelas->id) ? 'selected' : '' }}>{{ $kelas->nama }}</option>
+                                                @endforeach
+                                            </select>
                                             <button type="submit" class="px-3 py-1.5 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-semibold transition-colors">
                                                 Simpan
                                             </button>
                                         </div>
                                         <input type="text" name="note" value="{{ old('note', $applicant->note) }}" placeholder="Catatan verifikasi..." class="w-full px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg text-xs focus:ring-2 focus:ring-blue-600 focus:outline-none">
                                     </form>
+                                    @if($linkedUser)
+                                        <div class="mt-2 text-right">
+                                            <form action="{{ route('admin.siswa.reset-password', $linkedUser->id) }}" method="POST" class="inline" onsubmit="return confirm('Reset kata sandi sementara untuk siswa {{ $linkedUser->name }}?');">
+                                                @csrf
+                                                <button type="submit" class="text-[11px] text-amber-700 dark:text-amber-400 hover:underline">
+                                                    Reset Sandi Sementara
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

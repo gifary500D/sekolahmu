@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -34,6 +35,29 @@ class User extends Authenticatable
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'kelas_id');
+    }
+
+    /**
+     * Relasi ke pendaftar SPMB berdasarkan NISN.
+     */
+    public function spmb()
+    {
+        return $this->hasOne(Spmb::class, 'nisn', 'nisn');
+    }
+
+    /**
+     * Ambil data pendaftaran SPMB siswa (berdasarkan NISN atau Email).
+     */
+    public function getSpmbRecordAttribute(): ?Spmb
+    {
+        if ($this->nisn) {
+            $spmb = Spmb::where('nisn', $this->nisn)->first();
+            if ($spmb) {
+                return $spmb;
+            }
+        }
+
+        return Spmb::where('email', $this->email)->first();
     }
 
     /**
@@ -81,7 +105,7 @@ class User extends Authenticatable
     /**
      * Ambil koleksi kelas yang dikelola atau menjadi tanggung jawab pengguna.
      */
-    public function managedKelas(): \Illuminate\Support\Collection
+    public function managedKelas(): Collection
     {
         if ($this->isAdmin()) {
             return Kelas::all();
@@ -90,6 +114,7 @@ class User extends Authenticatable
         if ($this->isGuru()) {
             $wali = Kelas::where('wali_kelas_id', $this->id)->get();
             $dariRoster = Kelas::whereHas('rosters', fn ($q) => $q->where('guru_id', $this->id))->get();
+
             return $wali->merge($dariRoster)->unique('id')->values();
         }
 
@@ -136,4 +161,3 @@ class User extends Authenticatable
             ->exists();
     }
 }
-

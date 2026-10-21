@@ -68,18 +68,37 @@
                                     <span class="text-xs text-slate-500 dark:text-slate-400">{{ $siswa->email }}</span>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 text-xs font-semibold">
-                                        {{ $siswa->kelas->nama ?? 'Belum Ditentukan' }}
-                                    </span>
+                                    <form action="{{ route('admin.siswa.kelas', $siswa->id) }}" method="POST" class="flex items-center gap-1.5">
+                                        @csrf
+                                        @method('PUT')
+                                        <select name="kelas_id" onchange="this.form.submit()" class="px-2.5 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 font-medium focus:ring-2 focus:ring-blue-600 text-slate-800 dark:text-slate-200">
+                                            <option value="">-- Belum Ditentukan --</option>
+                                            @foreach($kelasList as $kelas)
+                                                <option value="{{ $kelas->id }}" {{ $siswa->kelas_id == $kelas->id ? 'selected' : '' }}>
+                                                    {{ $kelas->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block mt-1">Pilih untuk ubah rombel</span>
                                 </td>
                                 <td class="py-4 px-6 text-xs text-slate-500 dark:text-slate-400">
                                     {{ $siswa->created_at->format('d M Y') }}
+                                    @if(! $siswa->password_changed)
+                                        <span class="text-[10px] text-amber-600 dark:text-amber-400 block font-semibold mt-0.5">Sandi Sementara</span>
+                                    @endif
                                 </td>
-                                <td class="py-4 px-6 text-right">
+                                <td class="py-4 px-6 text-right space-x-1">
+                                    <form action="{{ route('admin.siswa.reset-password', $siswa->id) }}" method="POST" class="inline" onsubmit="return confirm('Reset kata sandi sementara untuk siswa {{ $siswa->name }}?');">
+                                        @csrf
+                                        <button type="submit" class="px-2.5 py-1.5 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/50 text-amber-700 dark:text-amber-300 font-semibold rounded-lg text-xs transition-colors" title="Reset Kata Sandi Sementara">
+                                            Reset Sandi
+                                        </button>
+                                    </form>
                                     <form action="{{ route('admin.users.delete', $siswa->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus siswa ini?');" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="px-3 py-1.5 bg-red-50 dark:bg-red-950/50 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 font-semibold rounded-lg text-xs transition-colors">
+                                        <button type="submit" class="px-2.5 py-1.5 bg-red-50 dark:bg-red-950/50 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 font-semibold rounded-lg text-xs transition-colors">
                                             Hapus
                                         </button>
                                     </form>

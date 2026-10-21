@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi;
+use App\Models\Berita;
+use App\Models\Roster;
 use App\Models\Tugas;
 use App\Models\TugasSiswa;
-use App\Models\Absensi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -12,17 +15,51 @@ use Illuminate\Support\Facades\Storage;
 class SiswaController extends Controller
 {
     /**
+     * Tampilkan dashboard utama siswa
+     */
+    public function dashboard()
+    {
+        $user = auth()->user()->load('kelas');
+
+        // Siswa wajib ganti kata sandi bawaan jika belum diubah
+        if (! $user->password_changed) {
+            return redirect()->route('siswa.password.form');
+        }
+
+        $tugasList = Tugas::where(function ($q) use ($user) {
+            $q->where('kelas_id', $user->kelas_id)->orWhereNull('kelas_id');
+        })->orderBy('tenggat', 'asc')->take(5)->get();
+
+        $submitted = TugasSiswa::where('siswa_id', $user->id)->get()->keyBy('tugas_id');
+        $pengumuman = Berita::where('status', 'terbit')->latest()->take(2)->get();
+
+        $className = $user->kelas?->nama;
+        $absensiRecords = $className ? Absensi::where('kelas', $className)->get() : collect();
+        $totalHadir = 0;
+        $totalAbsen = $absensiRecords->count();
+        foreach ($absensiRecords as $record) {
+            $data = $record->data_kehadiran ?? [];
+            if (isset($data[$user->id]) && $data[$user->id] === 'Hadir') {
+                $totalHadir++;
+            }
+        }
+        $attendanceRate = $totalAbsen > 0 ? round(($totalHadir / $totalAbsen) * 100) : 100;
+
+        return view('siswa.dashboard', compact('tugasList', 'submitted', 'pengumuman', 'attendanceRate'));
+    }
+
+    /**
      * Tampilkan daftar tugas siswa
      */
     public function tugas()
     {
         $user = auth()->user();
-        
+
         // Ambil daftar tugas khusus untuk kelas siswa tersebut atau tugas umum (kelas_id null)
-        $tugasList = Tugas::where(function($q) use ($user) {
+        $tugasList = Tugas::where(function ($q) use ($user) {
             $q->where('kelas_id', $user->kelas_id)->orWhereNull('kelas_id');
         })->orderBy('tenggat', 'asc')->get();
-        
+
         // Ambil status pengerjaan tugas oleh siswa ini
         $submitted = TugasSiswa::where('siswa_id', $user->id)->get()->keyBy('tugas_id');
 
@@ -35,7 +72,7 @@ class SiswaController extends Controller
     public function kumpulkanTugas(Request $request, $id)
     {
         $user = auth()->user();
-        
+
         $request->validate([
             'berkas' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:10240', // max 10MB
         ], [
@@ -50,14 +87,14 @@ class SiswaController extends Controller
             abort(403, 'Anda tidak berhak mengumpulkan tugas untuk kelas lain.');
         }
 
-        if (now()->greaterThan(\Carbon\Carbon::parse($tugas->tenggat))) {
+        if (now()->greaterThan(Carbon::parse($tugas->tenggat))) {
             return redirect()->back()->with('error', 'Maaf, tenggat waktu pengumpulan tugas ini telah terlewat. Anda tidak dapat mengunggah berkas.');
         }
 
         $filePath = null;
         if ($request->hasFile('berkas')) {
             $file = $request->file('berkas');
-            $filename = time() . '_' . $user->id . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $file->getClientOriginalName());
+            $filename = time().'_'.$user->id.'_'.preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $file->getClientOriginalName());
             $filePath = $file->storeAs('private/tugas', $filename, 'local');
         }
 
@@ -82,7 +119,7 @@ class SiswaController extends Controller
     public function batalkanTugas($id)
     {
         $user = auth()->user();
-        
+
         $submission = TugasSiswa::where('tugas_id', $id)->where('siswa_id', $user->id)->first();
         if ($submission) {
             if ($submission->file_path && Storage::disk('local')->exists($submission->file_path)) {
@@ -121,7 +158,7 @@ class SiswaController extends Controller
     {
         $user = auth()->user()->load('kelas');
         $className = $user->kelas?->nama;
-        
+
         // Ambil data absensi khusus kelas siswa tersebut
         $absensiList = $className ? Absensi::where('kelas', $className)->orderBy('tanggal', 'desc')->get() : collect();
 
@@ -135,6 +172,7 @@ class SiswaController extends Controller
     {
         $user = auth()->user();
         $submissions = TugasSiswa::with('tugas')->where('siswa_id', $user->id)->orderBy('updated_at', 'desc')->get();
+
         return view('siswa.nilai', compact('submissions'));
     }
 
@@ -144,7 +182,8 @@ class SiswaController extends Controller
     public function roster()
     {
         $user = auth()->user()->load('kelas');
-        $rosters = $user->kelas_id ? \App\Models\Roster::with('guru')->where('kelas_id', $user->kelas_id)->orderBy('hari')->orderBy('jam_mulai')->get() : collect();
+        $rosters = $user->kelas_id ? Roster::with('guru')->where('kelas_id', $user->kelas_id)->orderBy('hari')->orderBy('jam_mulai')->get() : collect();
+
         return view('siswa.roster', compact('rosters', 'user'));
     }
 

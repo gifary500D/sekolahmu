@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Middleware\CheckIdleTimeout;
+use App\Http\Middleware\EnsurePasswordChanged;
+use App\Http\Middleware\EnsureRole;
+use App\Http\Middleware\EnsureSpmbDiterima;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-use App\Http\Middleware\CheckIdleTimeout;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,8 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
             CheckIdleTimeout::class,
         ]);
         $middleware->alias([
-            'role' => \App\Http\Middleware\EnsureRole::class,
-            'password.changed' => \App\Http\Middleware\EnsurePasswordChanged::class,
+            'role' => EnsureRole::class,
+            'password.changed' => EnsurePasswordChanged::class,
+            'spmb.diterima' => EnsureSpmbDiterima::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

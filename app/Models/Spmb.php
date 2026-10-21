@@ -39,7 +39,31 @@ class Spmb extends Model
         'berkas_kk',
         'berkas_rapor',
         'status',
+        'note',
     ];
+
+    /**
+     * Relasi ke akun User Siswa berdasarkan NISN.
+     */
+    public function user()
+    {
+        return $this->hasOne(User::class, 'nisn', 'nisn');
+    }
+
+    /**
+     * Ambil akun User terkait pendaftar ini (berdasarkan NISN atau Email).
+     */
+    public function getUserRecordAttribute(): ?User
+    {
+        if ($this->nisn) {
+            $user = User::where('nisn', $this->nisn)->first();
+            if ($user) {
+                return $user;
+            }
+        }
+
+        return User::where('email', $this->email)->first();
+    }
 
     /**
      * Generate Nomor Pendaftaran SPMB yang unik dan persisten.
@@ -59,11 +83,11 @@ class Spmb extends Model
             $nextSeq = ((int) $matches[1]) + 1;
         }
 
-        $nomor = $prefix . str_pad($nextSeq, 4, '0', STR_PAD_LEFT);
+        $nomor = $prefix.str_pad($nextSeq, 4, '0', STR_PAD_LEFT);
 
         while (static::where('nomor_pendaftaran', $nomor)->exists()) {
             $nextSeq++;
-            $nomor = $prefix . str_pad($nextSeq, 4, '0', STR_PAD_LEFT);
+            $nomor = $prefix.str_pad($nextSeq, 4, '0', STR_PAD_LEFT);
         }
 
         return $nomor;

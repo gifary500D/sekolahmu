@@ -23,7 +23,7 @@
 {{-- =============================================
      FILTER & SEARCH
      ============================================= --}}
-<section class="py-5 sm:py-6 bg-white border-b border-gray-200 sticky top-16 z-30">
+<section class="py-5 sm:py-6 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 sticky top-16 z-30 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -33,7 +33,7 @@
                     type="text"
                     id="searchGaleri"
                     placeholder="Cari foto atau album..."
-                    class="w-full px-5 py-3 pl-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1E63D6] focus:border-transparent outline-none transition-all text-sm"
+                    class="w-full px-5 py-3 pl-11 border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#1E63D6] focus:border-transparent outline-none transition-all text-sm"
                 >
                 <svg class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -46,19 +46,19 @@
                     Semua
                 </button>
                 <button data-filter="akademik"
-                    class="filter-btn flex-shrink-0 px-5 py-2.5 border-2 border-gray-300 text-gray-600 rounded-full font-semibold text-sm whitespace-nowrap hover:border-[#1E63D6] hover:text-[#1E63D6] transition-colors">
+                    class="filter-btn flex-shrink-0 px-5 py-2.5 border-2 border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-300 rounded-full font-semibold text-sm whitespace-nowrap hover:border-[#1E63D6] hover:text-[#1E63D6] dark:hover:border-blue-400 dark:hover:text-blue-400 transition-colors">
                     Akademik
                 </button>
                 <button data-filter="olahraga"
-                    class="filter-btn flex-shrink-0 px-5 py-2.5 border-2 border-gray-300 text-gray-600 rounded-full font-semibold text-sm whitespace-nowrap hover:border-[#1E63D6] hover:text-[#1E63D6] transition-colors">
+                    class="filter-btn flex-shrink-0 px-5 py-2.5 border-2 border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-300 rounded-full font-semibold text-sm whitespace-nowrap hover:border-[#1E63D6] hover:text-[#1E63D6] dark:hover:border-blue-400 dark:hover:text-blue-400 transition-colors">
                     Olahraga
                 </button>
                 <button data-filter="kegiatan"
-                    class="filter-btn flex-shrink-0 px-5 py-2.5 border-2 border-gray-300 text-gray-600 rounded-full font-semibold text-sm whitespace-nowrap hover:border-[#1E63D6] hover:text-[#1E63D6] transition-colors">
+                    class="filter-btn flex-shrink-0 px-5 py-2.5 border-2 border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-300 rounded-full font-semibold text-sm whitespace-nowrap hover:border-[#1E63D6] hover:text-[#1E63D6] dark:hover:border-blue-400 dark:hover:text-blue-400 transition-colors">
                     Kegiatan
                 </button>
                 <button data-filter="fasilitas"
-                    class="filter-btn flex-shrink-0 px-5 py-2.5 border-2 border-gray-300 text-gray-600 rounded-full font-semibold text-sm whitespace-nowrap hover:border-[#1E63D6] hover:text-[#1E63D6] transition-colors">
+                    class="filter-btn flex-shrink-0 px-5 py-2.5 border-2 border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-300 rounded-full font-semibold text-sm whitespace-nowrap hover:border-[#1E63D6] hover:text-[#1E63D6] dark:hover:border-blue-400 dark:hover:text-blue-400 transition-colors">
                     Fasilitas
                 </button>
             </div>
@@ -71,7 +71,7 @@
 {{-- =============================================
      GALERI GRID
      ============================================= --}}
-<section class="py-12 sm:py-16 bg-gray-50">
+<section class="py-12 sm:py-16 bg-gray-50 dark:bg-slate-950 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         @php
@@ -103,8 +103,8 @@
                  onclick="openLightbox({{ $photo['id'] }})">
 
                 {{-- Rasio: portrait = 4:5, landscape = 16:9 --}}
-                <div class="relative overflow-hidden rounded-xl bg-[#0F2F6B]/10 border border-gray-200
-                            group-hover:shadow-xl group-hover:border-[#1E63D6]/30 transition-all duration-300
+                <div class="relative overflow-hidden rounded-xl bg-[#0F2F6B]/10 dark:bg-slate-900 border border-gray-200 dark:border-slate-800
+                            group-hover:shadow-xl group-hover:border-[#1E63D6]/30 dark:group-hover:border-blue-500/30 transition-all duration-300
                             {{ $photo['ratio'] === 'portrait' ? 'aspect-[4/5]' : 'aspect-video' }}">
 
                     {{-- Kosongkan: ganti src dengan {{ asset($photo['image_path']) }} --}}
@@ -117,7 +117,7 @@
                     >
 
                     {{-- Placeholder saat gambar belum ada --}}
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 img-placeholder">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-slate-500 img-placeholder">
                         <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 18h16.5M3.75 6h16.5"/>
                         </svg>
@@ -155,28 +155,28 @@
 
         {{-- State kosong --}}
         <div id="noResults" class="hidden text-center py-16">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
+                <svg class="w-8 h-8 text-gray-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909"/>
                 </svg>
             </div>
-            <p class="text-gray-600 font-semibold">Tidak ada foto yang ditemukan</p>
-            <p class="text-gray-400 text-sm mt-1">Coba ubah filter atau kata kunci</p>
+            <p class="text-gray-600 dark:text-slate-300 font-semibold">Tidak ada foto yang ditemukan</p>
+            <p class="text-gray-400 dark:text-slate-500 text-sm mt-1">Coba ubah filter atau kata kunci</p>
         </div>
 
         {{-- Pagination --}}
         <div class="flex justify-center items-center gap-2 mt-12" role="navigation" aria-label="Halaman galeri">
             <button aria-label="Halaman sebelumnya"
-                class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors">
+                class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
             </button>
             <button aria-current="page" class="w-9 h-9 rounded-lg bg-[#1E63D6] text-white font-semibold text-sm">1</button>
-            <button class="w-9 h-9 rounded-lg border border-gray-300 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition-colors">2</button>
-            <button class="w-9 h-9 rounded-lg border border-gray-300 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition-colors">3</button>
+            <button class="w-9 h-9 rounded-lg border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-300 font-semibold text-sm hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">2</button>
+            <button class="w-9 h-9 rounded-lg border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-300 font-semibold text-sm hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">3</button>
             <button aria-label="Halaman berikutnya"
-                class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors">
+                class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -338,9 +338,9 @@ filterButtons.forEach(btn => {
         currentFilter = this.dataset.filter;
         filterButtons.forEach(b => {
             b.classList.remove('bg-[#1E63D6]', 'text-white');
-            b.classList.add('border-2', 'border-gray-300', 'text-gray-600');
+            b.classList.add('border-2', 'border-gray-300', 'dark:border-slate-700', 'text-gray-600', 'dark:text-slate-300');
         });
-        this.classList.remove('border-2', 'border-gray-300', 'text-gray-600');
+        this.classList.remove('border-2', 'border-gray-300', 'dark:border-slate-700', 'text-gray-600', 'dark:text-slate-300');
         this.classList.add('bg-[#1E63D6]', 'text-white');
         filterItems();
     });

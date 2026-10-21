@@ -1,5 +1,38 @@
 // Antigravity Client Scripts: Dynamic Greetings & UI Enhancements
 (function () {
+    // Night Mode (Dark Mode) Helper & Storage Sync
+    window.toggleDarkMode = function () {
+        const isDark = document.documentElement.classList.toggle('dark');
+        try {
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        } catch (e) {}
+        window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: isDark ? 'dark' : 'light' } }));
+    };
+
+    // Listen for storage changes across browser tabs
+    window.addEventListener('storage', function (e) {
+        if (e.key === 'theme') {
+            if (e.newValue === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else if (e.newValue === 'light') {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    });
+
+    // Sync system color scheme when no explicit preference in localStorage
+    if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+            if (!localStorage.getItem('theme')) {
+                if (e.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+        });
+    }
+
     function getDeviceGreeting() {
         const hour = new Date().getHours();
         if (hour >= 4 && hour <= 10) {

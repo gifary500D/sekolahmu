@@ -3,7 +3,7 @@
 @section('title', 'Galeri Foto Kegiatan Sekolah')
 
 @section('content')
-<div class="min-h-screen bg-slate-900 text-white py-12">
+<div class="min-h-screen bg-slate-900 dark:bg-slate-950 text-white py-12 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-12">

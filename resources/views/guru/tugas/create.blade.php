@@ -3,25 +3,25 @@
 @section('title', 'Buat Tugas Baru')
 
 @section('content')
-<div class="min-h-screen bg-slate-100 py-8">
+<div class="min-h-screen bg-slate-100 dark:bg-slate-950 py-8">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-6 sm:p-8 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div class="p-6 sm:p-8 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/60">
                 <div>
-                    <span class="inline-block px-3 py-1 rounded-md bg-emerald-50 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-1">
+                    <span class="inline-block px-3 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-semibold uppercase tracking-wider mb-1">
                         Formulir Pengajar
                     </span>
-                    <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Buat Penugasan Baru</h1>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Buat Penugasan Baru</h1>
                 </div>
-                <a href="{{ route('guru.tugas.index') }}" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-sm font-semibold transition-colors">
+                <a href="{{ route('guru.tugas.index') }}" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-semibold transition-colors">
                     Kembali
                 </a>
             </div>
 
             @if($errors->any())
                 <div class="p-6 sm:px-8 pt-6">
-                    <div class="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 rounded-r-lg text-sm">
+                    <div class="bg-red-50 dark:bg-red-950/40 border-l-4 border-red-500 text-red-800 dark:text-red-300 p-4 rounded-r-lg text-sm">
                         <p class="font-semibold mb-1">Mohon perbaiki kesalahan berikut:</p>
                         <ul class="list-disc list-inside">
                             @foreach($errors->all() as $error)
@@ -36,14 +36,14 @@
                 @csrf
 
                 <div>
-                    <label for="judul" class="block text-sm font-semibold text-slate-700 mb-2">Judul Tugas <span class="text-red-500">*</span></label>
-                    <input type="text" id="judul" name="judul" required value="{{ old('judul') }}" placeholder="Contoh: Laporan Praktikum Fotosintesis" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                    <label for="judul" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Judul Tugas <span class="text-red-500">*</span></label>
+                    <input type="text" id="judul" name="judul" required value="{{ old('judul') }}" placeholder="Contoh: Laporan Praktikum Fotosintesis" class="w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <label for="mata_pelajaran" class="block text-sm font-semibold text-slate-700 mb-2">Mata Pelajaran <span class="text-red-500">*</span></label>
-                        <select id="mata_pelajaran" name="mata_pelajaran" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                        <label for="mata_pelajaran" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Mata Pelajaran <span class="text-red-500">*</span></label>
+                        <select id="mata_pelajaran" name="mata_pelajaran" required class="w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
                             <option value="">-- Pilih Mata Pelajaran --</option>
                             <optgroup label="Kelompok Umum (Wajib)">
                                 <option value="Pendidikan Agama dan Budi Pekerti" {{ old('mata_pelajaran') == 'Pendidikan Agama dan Budi Pekerti' ? 'selected' : '' }}>Pendidikan Agama dan Budi Pekerti</option>
@@ -72,8 +72,8 @@
                     </div>
 
                     <div>
-                        <label for="kelas_id" class="block text-sm font-semibold text-slate-700 mb-2">Target Kelas <span class="text-red-500">*</span></label>
-                        <select id="kelas_id" name="kelas_id" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                        <label for="kelas_id" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Target Kelas <span class="text-red-500">*</span></label>
+                        <select id="kelas_id" name="kelas_id" required class="w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
                             <option value="">-- Pilih Kelas --</option>
                             @foreach($kelasList as $kelas)
                                 <option value="{{ $kelas->id }}" {{ old('kelas_id') == $kelas->id ? 'selected' : '' }}>{{ $kelas->nama }}</option>
@@ -84,13 +84,13 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <label for="tenggat" class="block text-sm font-semibold text-slate-700 mb-2">Tenggat Waktu <span class="text-red-500">*</span></label>
-                        <input type="datetime-local" id="tenggat" name="tenggat" required value="{{ old('tenggat') }}" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                        <label for="tenggat" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tenggat Waktu <span class="text-red-500">*</span></label>
+                        <input type="datetime-local" id="tenggat" name="tenggat" required value="{{ old('tenggat') }}" class="w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
                     </div>
 
                     <div>
-                        <label for="prioritas" class="block text-sm font-semibold text-slate-700 mb-2">Tingkat Prioritas <span class="text-red-500">*</span></label>
-                        <select id="prioritas" name="prioritas" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                        <label for="prioritas" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tingkat Prioritas <span class="text-red-500">*</span></label>
+                        <select id="prioritas" name="prioritas" required class="w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
                             <option value="rendah" {{ old('prioritas') == 'rendah' ? 'selected' : '' }}>Rendah</option>
                             <option value="sedang" {{ old('prioritas') == 'sedang' ? 'selected' : '' }}>Sedang</option>
                             <option value="tinggi" {{ old('prioritas') == 'tinggi' ? 'selected' : '' }}>Tinggi</option>
@@ -99,12 +99,12 @@
                 </div>
 
                 <div>
-                    <label for="deskripsi" class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi &amp; Petunjuk Tugas</label>
-                    <textarea id="deskripsi" name="deskripsi" rows="5" placeholder="Tuliskan instruksi pengerjaan tugas secara rinci di sini..." class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">{{ old('deskripsi') }}</textarea>
+                    <label for="deskripsi" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Deskripsi &amp; Petunjuk Tugas</label>
+                    <textarea id="deskripsi" name="deskripsi" rows="5" placeholder="Tuliskan instruksi pengerjaan tugas secara rinci di sini..." class="w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">{{ old('deskripsi') }}</textarea>
                 </div>
 
-                <div class="flex justify-end gap-3 pt-4 border-t border-slate-200">
-                    <a href="{{ route('guru.tugas.index') }}" class="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-sm font-semibold transition-colors">Batal</a>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <a href="{{ route('guru.tugas.index') }}" class="px-6 py-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-semibold transition-colors">Batal</a>
                     <button type="submit" class="px-8 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-sm font-bold shadow-sm transition-all">Terbitkan Tugas</button>
                 </div>
             </form>

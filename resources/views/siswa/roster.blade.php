@@ -3,53 +3,53 @@
 @section('title', 'Jadwal Pelajaran Kelas')
 
 @section('content')
-<div class="min-h-screen bg-slate-100 py-8">
+<div class="min-h-screen bg-slate-100 dark:bg-slate-950 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header Banner -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <span class="inline-block px-3 py-1 rounded-md bg-purple-50 text-purple-800 text-xs font-semibold uppercase tracking-wider mb-2">
+                <span class="inline-block px-3 py-1 rounded-md bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 text-xs font-semibold uppercase tracking-wider mb-2">
                     Portal Akademik Siswa
                 </span>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Jadwal Pelajaran (Roster)</h1>
-                <p class="text-slate-600 text-sm mt-1">Jadwal kegiatan belajar mengajar harian untuk kelas {{ $user->kelas->nama ?? 'Siswa' }}.</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Jadwal Pelajaran (Roster)</h1>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Jadwal kegiatan belajar mengajar harian untuk kelas {{ $user->kelas->nama ?? 'Siswa' }}.</p>
             </div>
             <div>
-                <a href="{{ route('dashboard') }}" class="inline-flex items-center px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-sm font-semibold transition-colors">
+                <a href="{{ route('dashboard') }}" class="inline-flex items-center px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-semibold transition-colors">
                     Kembali ke Dashboard
                 </a>
             </div>
         </div>
 
         <!-- Roster Table -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-6 border-b border-slate-200 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-slate-900">Rombongan Belajar: {{ $user->kelas->nama ?? '-' }}</h2>
-                <span class="text-xs text-slate-500">Tahun Ajaran 2026/2027</span>
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white">Rombongan Belajar: {{ $user->kelas->nama ?? '-' }}</h2>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Tahun Ajaran 2026/2027</span>
             </div>
             
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-sm">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-xs tracking-wider">
+                        <tr class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 uppercase text-xs tracking-wider">
                             <th class="py-3 px-6">Hari</th>
                             <th class="py-3 px-6">Jam Pelajaran</th>
                             <th class="py-3 px-6">Mata Pelajaran</th>
                             <th class="py-3 px-6">Guru Pengampu</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
                         @forelse($rosters as $roster)
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-4 px-6 font-bold text-slate-900">{{ $roster->hari }}</td>
-                                <td class="py-4 px-6 font-mono text-xs">{{ $roster->jam_mulai }} - {{ $roster->jam_selesai }}</td>
-                                <td class="py-4 px-6 font-semibold text-blue-700">{{ $roster->mata_pelajaran }}</td>
-                                <td class="py-4 px-6">{{ $roster->guru->name ?? 'Guru Pengampu' }}</td>
+                            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                                <td class="py-4 px-6 font-bold text-slate-900 dark:text-white">{{ $roster->hari }}</td>
+                                <td class="py-4 px-6 font-mono text-xs text-slate-600 dark:text-slate-400">{{ $roster->jam_mulai }} - {{ $roster->jam_selesai }}</td>
+                                <td class="py-4 px-6 font-semibold text-blue-700 dark:text-blue-400">{{ $roster->mata_pelajaran }}</td>
+                                <td class="py-4 px-6 text-slate-700 dark:text-slate-300">{{ $roster->guru->name ?? 'Guru Pengampu' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="py-12 text-center text-slate-500 text-xs">
+                                <td colspan="4" class="py-12 text-center text-slate-500 dark:text-slate-400 text-xs">
                                     Belum ada jadwal pelajaran (roster) yang diatur untuk kelas Anda.
                                 </td>
                             </tr>

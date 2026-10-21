@@ -12,16 +12,16 @@
 </section>
 
 <!-- Content Section -->
-<section class="py-16 sm:py-20 bg-white">
+<section class="py-16 sm:py-20 bg-white dark:bg-slate-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <!-- Main Content -->
             <div class="lg:col-span-2">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6">Visi & Misi</h2>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Visi & Misi</h2>
                 
                 <div class="mb-10">
                     <h3 class="text-2xl font-semibold text-amber-500 mb-4">Visi</h3>
-                    <p class="text-gray-700 text-lg leading-relaxed">
+                    <p class="text-gray-700 dark:text-slate-300 text-lg leading-relaxed">
                         Menjadi sekolah menengah atas unggul yang menghasilkan peserta didik berkarakter, cerdas, 
                         kreatif, dan berdaya saing tinggi di tingkat nasional maupun internasional.
                     </p>
@@ -32,25 +32,25 @@
                     <ul class="space-y-4">
                         <li class="flex gap-4 group">
                             <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-400 text-blue-950 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">1</span>
-                            <span class="text-gray-700 text-lg">Menyelenggarakan pendidikan berkualitas tinggi yang mengintegrasikan nilai-nilai keagamaan dan kebangsaan</span>
+                            <span class="text-gray-700 dark:text-slate-300 text-lg">Menyelenggarakan pendidikan berkualitas tinggi yang mengintegrasikan nilai-nilai keagamaan dan kebangsaan</span>
                         </li>
                         <li class="flex gap-4 group">
                             <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-400 text-blue-950 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">2</span>
-                            <span class="text-gray-700 text-lg">Mengembangkan potensi peserta didik secara optimal melalui pembelajaran inovatif dan berbasis teknologi</span>
+                            <span class="text-gray-700 dark:text-slate-300 text-lg">Mengembangkan potensi peserta didik secara optimal melalui pembelajaran inovatif dan berbasis teknologi</span>
                         </li>
                         <li class="flex gap-4 group">
                             <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-400 text-blue-950 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">3</span>
-                            <span class="text-gray-700 text-lg">Membangun budaya sekolah yang inklusif, demokratis, dan berorientasi pada keunggulan</span>
+                            <span class="text-gray-700 dark:text-slate-300 text-lg">Membangun budaya sekolah yang inklusif, demokratis, dan berorientasi pada keunggulan</span>
                         </li>
                         <li class="flex gap-4 group">
                             <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-400 text-blue-950 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">4</span>
-                            <span class="text-gray-700 text-lg">Mempersiapkan peserta didik untuk menjadi warga negara yang bertanggung jawab dan berdaya saing global</span>
+                            <span class="text-gray-700 dark:text-slate-300 text-lg">Mempersiapkan peserta didik untuk menjadi warga negara yang bertanggung jawab dan berdaya saing global</span>
                         </li>
                     </ul>
                 </div>
 
-                <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12">Sejarah Singkat</h2>
-                <div class="prose max-w-none text-gray-700">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 mt-12">Sejarah Singkat</h2>
+                <div class="prose max-w-none text-gray-700 dark:text-slate-300">
                     <p class="mb-4">
                         SMA Pemda Bahorok didirikan sebagai salah satu institusi pendidikan terkemuka di Bahorok, Langkat. 
                         Dengan dedikasi dan pengalaman, sekolah kami telah mencetak ribuan alumni yang sukses dan berpengaruh di berbagai bidang.
@@ -104,52 +104,52 @@
 </section>
 
 <!-- Values Section -->
-<section class="py-16 sm:py-20 bg-gray-50">
+<section class="py-16 sm:py-20 bg-gray-50 dark:bg-slate-950">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Nilai-Nilai Kami</h2>
-            <p class="text-gray-600 text-lg max-w-2xl mx-auto">Prinsip-prinsip yang kami pegang teguh dalam setiap aspek pendidikan</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Nilai-Nilai Kami</h2>
+            <p class="text-gray-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">Prinsip-prinsip yang kami pegang teguh dalam setiap aspek pendidikan</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-xl p-8 text-center hover:shadow-xl transition-all duration-300 group border border-gray-100">
-                <div class="w-16 h-16 rounded-full bg-blue-100 mx-auto mb-6 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
-                    <svg class="w-8 h-8 text-blue-900 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-8 text-center hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-slate-800">
+                <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-950/60 mx-auto mb-6 flex items-center justify-center group-hover:bg-amber-100 dark:group-hover:bg-amber-950/60 transition-colors">
+                    <svg class="w-8 h-8 text-blue-900 dark:text-blue-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-500 transition-colors">Integritas</h3>
-                <p class="text-gray-600">Menjunjung tinggi nilai-nilai kejujuran dan kebenaran dalam setiap tindakan</p>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-500 transition-colors">Integritas</h3>
+                <p class="text-gray-600 dark:text-slate-400">Menjunjung tinggi nilai-nilai kejujuran dan kebenaran dalam setiap tindakan</p>
             </div>
 
-            <div class="bg-white rounded-xl p-8 text-center hover:shadow-xl transition-all duration-300 group border border-gray-100">
-                <div class="w-16 h-16 rounded-full bg-green-100 mx-auto mb-6 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
-                    <svg class="w-8 h-8 text-green-900 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-8 text-center hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-slate-800">
+                <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-emerald-950/60 mx-auto mb-6 flex items-center justify-center group-hover:bg-amber-100 dark:group-hover:bg-amber-950/60 transition-colors">
+                    <svg class="w-8 h-8 text-green-900 dark:text-emerald-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-500 transition-colors">Keunggulan</h3>
-                <p class="text-gray-600">Berupaya maksimal untuk mencapai standar tertinggi dalam segala hal</p>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-500 transition-colors">Keunggulan</h3>
+                <p class="text-gray-600 dark:text-slate-400">Berupaya maksimal untuk mencapai standar tertinggi dalam segala hal</p>
             </div>
 
-            <div class="bg-white rounded-xl p-8 text-center hover:shadow-xl transition-all duration-300 group border border-gray-100">
-                <div class="w-16 h-16 rounded-full bg-purple-100 mx-auto mb-6 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
-                    <svg class="w-8 h-8 text-purple-900 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-8 text-center hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-slate-800">
+                <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-950/60 mx-auto mb-6 flex items-center justify-center group-hover:bg-amber-100 dark:group-hover:bg-amber-950/60 transition-colors">
+                    <svg class="w-8 h-8 text-purple-900 dark:text-purple-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 19H9a6 6 0 016-6v0a6 6 0 016 6v0h-6z" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-500 transition-colors">Kebersamaan</h3>
-                <p class="text-gray-600">Membangun lingkungan yang solid, inklusif, dan saling mendukung</p>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-500 transition-colors">Kebersamaan</h3>
+                <p class="text-gray-600 dark:text-slate-400">Membangun lingkungan yang solid, inklusif, dan saling mendukung</p>
             </div>
 
-            <div class="bg-white rounded-xl p-8 text-center hover:shadow-xl transition-all duration-300 group border border-gray-100">
-                <div class="w-16 h-16 rounded-full bg-rose-100 mx-auto mb-6 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
-                    <svg class="w-8 h-8 text-rose-900 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-8 text-center hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-slate-800">
+                <div class="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-950/60 mx-auto mb-6 flex items-center justify-center group-hover:bg-amber-100 dark:group-hover:bg-amber-950/60 transition-colors">
+                    <svg class="w-8 h-8 text-rose-900 dark:text-rose-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-500 transition-colors">Inovasi</h3>
-                <p class="text-gray-600">Terus berinovasi dan beradaptasi dengan perkembangan zaman</p>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-500 transition-colors">Inovasi</h3>
+                <p class="text-gray-600 dark:text-slate-400">Terus berinovasi dan beradaptasi dengan perkembangan zaman</p>
             </div>
         </div>
     </div>

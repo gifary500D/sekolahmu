@@ -137,6 +137,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/tugas/{id}/export', [GuruController::class, 'exportTugas'])->name('tugas.export');
         Route::post('/tugas/berkas/{id}/nilai', [GuruController::class, 'beriNilai'])->name('tugas.grade');
         Route::get('/tugas/berkas/{id}/unduh', [GuruController::class, 'downloadBerkas'])->name('tugas.download');
+        Route::get('/tugas/berkas/{id}/pratinjau', [GuruController::class, 'previewBerkas'])->name('tugas.preview');
 
         // Presensi & Absensi
         Route::get('/absensi', [GuruController::class, 'absensiIndex'])->name('absensi');

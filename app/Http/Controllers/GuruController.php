@@ -158,6 +158,29 @@ class GuruController extends Controller
     }
 
     /**
+     * Pratinjau berkas tugas siswa secara aman melalui streaming/response controller dari storage privat
+     */
+    public function previewBerkas($submissionId)
+    {
+        $user = auth()->user();
+        $submission = TugasSiswa::with('tugas')->findOrFail($submissionId);
+
+        if ($user->isSiswa()) {
+            abort(403, 'Akses ditolak: Siswa tidak diizinkan mengakses rute pratinjau guru.');
+        }
+
+        if ($user->isGuru() && (int) $submission->tugas?->guru_id !== (int) $user->id) {
+            abort(403, 'Anda tidak berhak melihat berkas pengumpulan tugas guru lain.');
+        }
+
+        if (! $submission->file_path || ! Storage::disk('local')->exists($submission->file_path)) {
+            abort(404, 'Berkas lampiran tidak ditemukan di server.');
+        }
+
+        return Storage::disk('local')->response($submission->file_path);
+    }
+
+    /**
      * Kelola absensi (Pilih kelas untuk menampilkan daftar siswa)
      */
     public function absensiIndex(Request $request)

@@ -67,12 +67,19 @@
                                     </span>
                                 </td>
                                 <td class="py-4 px-6 font-mono text-xs {{ $isExpired ? 'text-red-600 font-bold' : 'text-slate-700 font-semibold' }}">
-                                    {{ $tugas->tenggat }}
+                                    {{ \Carbon\Carbon::parse($tugas->tenggat)->format('d M Y, H:i') }}
                                     @if($isExpired)
                                         <span class="block text-[10px] text-red-500 font-sans font-bold">(Tenggat Terlewat)</span>
                                     @endif
                                 </td>
-                                <td class="py-4 px-6 text-right space-x-2">
+                                <td class="py-4 px-6 text-right space-x-2 whitespace-nowrap">
+                                    <button 
+                                        type="button" 
+                                        onclick="openTaskModal('{{ addslashes($tugas->judul) }}', '{{ addslashes($tugas->mata_pelajaran) }}', '{{ addslashes($tugas->kelas->nama ?? 'Semua Kelas') }}', '{{ ucfirst($tugas->prioritas) }}', '{{ \Carbon\Carbon::parse($tugas->tenggat)->format('d M Y, H:i') }}', '{{ addslashes(str_replace(["\r\n", "\r", "\n"], '\n', $tugas->deskripsi ?? 'Tidak ada petunjuk tambahan.')) }}', '{{ route('guru.tugas.submissions', $tugas->id) }}')"
+                                        class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold transition-colors inline-block"
+                                    >
+                                        Pratinjau
+                                    </button>
                                     <a href="{{ route('guru.tugas.submissions', $tugas->id) }}" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg text-xs font-semibold transition-colors inline-block">
                                         Periksa
                                     </a>
@@ -97,4 +104,68 @@
 
     </div>
 </div>
+
+<!-- Modal Pratinjau Detail Tugas -->
+<div id="taskDetailModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
+        <div class="p-4 sm:p-6 bg-slate-900 text-white flex justify-between items-center">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 block mb-0.5">Pratinjau &amp; Detail Tugas</span>
+                <h3 id="modalTaskTitle" class="font-bold text-lg">Judul Tugas</h3>
+            </div>
+            <button type="button" onclick="closeTaskModal()" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white flex items-center justify-center transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="p-6 space-y-4 overflow-y-auto">
+            <div class="grid grid-cols-2 gap-4 text-xs">
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 block mb-0.5">Mata Pelajaran:</span>
+                    <strong id="modalTaskSubject" class="text-slate-900 font-semibold text-sm"></strong>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 block mb-0.5">Target Kelas:</span>
+                    <strong id="modalTaskClass" class="text-slate-900 font-semibold text-sm"></strong>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 block mb-0.5">Tingkat Prioritas:</span>
+                    <strong id="modalTaskPriority" class="text-slate-900 font-semibold text-sm"></strong>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 block mb-0.5">Tenggat Waktu:</span>
+                    <strong id="modalTaskDeadline" class="text-slate-900 font-semibold text-sm"></strong>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Petunjuk &amp; Instruksi Pengerjaan:</h4>
+                <p id="modalTaskDesc" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed"></p>
+            </div>
+        </div>
+        <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
+            <a id="modalSubmissionsLink" href="#" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors">
+                Periksa Pengumpulan Siswa &rarr;
+            </a>
+            <button type="button" onclick="closeTaskModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold transition-colors">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openTaskModal(title, subject, className, priority, deadline, desc, subUrl) {
+    document.getElementById('modalTaskTitle').textContent = title;
+    document.getElementById('modalTaskSubject').textContent = subject;
+    document.getElementById('modalTaskClass').textContent = className;
+    document.getElementById('modalTaskPriority').textContent = priority;
+    document.getElementById('modalTaskDeadline').textContent = deadline;
+    document.getElementById('modalTaskDesc').textContent = desc;
+    document.getElementById('modalSubmissionsLink').href = subUrl;
+    document.getElementById('taskDetailModal').classList.remove('hidden');
+}
+
+function closeTaskModal() {
+    document.getElementById('taskDetailModal').classList.add('hidden');
+}
+</script>
 @endsection

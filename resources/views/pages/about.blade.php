@@ -6,7 +6,7 @@
 <!-- Hero Section -->
 <section class="py-12 sm:py-16 bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Tentang SMA Negeri 1 Medan</h1>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Tentang SMA Pemda Bahorok</h1>
         <p class="text-lg text-blue-100 max-w-2xl mx-auto">Mengenal lebih jauh tentang institusi pendidikan terkemuka kami</p>
     </div>
 </section>
@@ -52,8 +52,8 @@
                 <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12">Sejarah Singkat</h2>
                 <div class="prose max-w-none text-gray-700">
                     <p class="mb-4">
-                        SMA Negeri 1 Medan didirikan pada tahun 1973 sebagai salah satu institusi pendidikan terkemuka di Kota Medan. 
-                        Dengan lebih dari 50 tahun pengalaman, sekolah kami telah mencetak ribuan alumni yang sukses dan berpengaruh di berbagai bidang.
+                        SMA Pemda Bahorok didirikan sebagai salah satu institusi pendidikan terkemuka di Bahorok, Langkat. 
+                        Dengan dedikasi dan pengalaman, sekolah kami telah mencetak ribuan alumni yang sukses dan berpengaruh di berbagai bidang.
                     </p>
                     <p class="mb-4">
                         Perjalanan kami dimulai dengan dedikasi para pendiri dan pengajar yang percaya pada kekuatan pendidikan dalam mengubah 
@@ -61,8 +61,8 @@
                         fondasi utama dalam setiap kegiatan pembelajaran.
                     </p>
                     <p>
-                        Dengan berbagai penghargaan dan prestasi yang telah diraih, SMA Negeri 1 Medan terus berinovasi dan berkembang untuk 
-                        memenuhi standar pendidikan internasional dan kebutuhan zaman.
+                        Dengan berbagai penghargaan dan prestasi yang telah diraih, SMA Pemda Bahorok terus berinovasi dan berkembang untuk 
+                        memenuhi standar pendidikan unggul dan kebutuhan zaman.
                     </p>
                 </div>
             </div>
@@ -159,7 +159,7 @@
 <section class="py-16 sm:py-20 bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-6">Ingin Bergabung Dengan Kami?</h2>
-        <p class="text-lg text-blue-100 mb-8">Daftarkan diri Anda dan menjadi bagian dari keluarga besar SMA Negeri 1 Medan</p>
+        <p class="text-lg text-blue-100 mb-8">Daftarkan diri Anda dan menjadi bagian dari keluarga besar SMA Pemda Bahorok</p>
         <a href="/daftar" class="inline-block bg-amber-400 text-blue-950 px-10 py-4 rounded-lg font-bold hover:bg-amber-300 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/30">
             Daftar Sekarang
         </a>

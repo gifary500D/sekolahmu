@@ -8,7 +8,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
             <h1 class="text-3xl md:text-4xl font-bold mb-2">Pendaftaran Siswa Baru</h1>
-            <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA Negeri 1 Medan</p>
+            <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA Pemda Bahorok</p>
         </div>
     </div>
 </section>
@@ -474,7 +474,7 @@
                                     class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
                                 >
                                 <span class="ml-3 text-gray-700">
-                                    Saya setuju dengan tata tertib dan peraturan yang berlaku di SMA Negeri 1 Medan
+                                    Saya setuju dengan tata tertib dan peraturan yang berlaku di SMA Pemda Bahorok
                                 </span>
                             </label>
 

@@ -7,12 +7,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
 @php
-    $hour = date('H');
-    if ($hour >= 4 && $hour < 12) {
+    $hour = (int) now()->timezone('Asia/Jakarta')->format('G');
+    if ($hour >= 4 && $hour <= 10) {
         $greetings = 'Selamat Pagi';
-    } elseif ($hour >= 12 && $hour < 15) {
+    } elseif ($hour >= 11 && $hour <= 14) {
         $greetings = 'Selamat Siang';
-    } elseif ($hour >= 15 && $hour < 18) {
+    } elseif ($hour >= 15 && $hour <= 17) {
         $greetings = 'Selamat Sore';
     } else {
         $greetings = 'Selamat Malam';
@@ -24,7 +24,7 @@
                 <span class="inline-block px-3 py-1 rounded-md bg-emerald-50 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-2">
                     Panel Guru &amp; Pengajar
                 </span>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ $greetings }}, {{ auth()->user()->name ?? 'Bapak/Ibu Guru' }}</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900"><span class="dynamic-greeting" data-greeting>{{ $greetings }}</span>, {{ auth()->user()->name ?? 'Bapak/Ibu Guru' }}</h1>
                 <p class="text-slate-600 text-sm mt-1">Kelola absensi kelas, penugasan mata pelajaran, dan penilaian siswa SMA Pemda Bahorok.</p>
             </div>
             <div class="flex items-center gap-3">

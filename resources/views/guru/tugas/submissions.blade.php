@@ -13,7 +13,7 @@
                     Evaluasi &amp; Penilaian
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ $tugas->judul }}</h1>
-                <p class="text-slate-600 text-sm mt-1">Kelas: <strong class="text-slate-900">{{ $tugas->kelas->nama ?? 'Semua Kelas' }}</strong> · Mata Pelajaran: {{ $tugas->mata_pelajaran }}</p>
+                <p class="text-slate-600 text-sm mt-1">Kelas: <strong class="text-slate-900">{{ $tugas->kelas->nama ?? 'Semua Kelas' }}</strong> · Mata Pelajaran: {{ $tugas->mata_pelajaran }} · Tenggat: <span class="font-mono text-xs font-semibold">{{ $tugas->tenggat ? \Carbon\Carbon::parse($tugas->tenggat)->format('d M Y, H:i') : '-' }}</span></p>
             </div>
             <div class="flex items-center gap-3">
                 <a href="{{ route('guru.tugas.export', $tugas->id) }}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm flex items-center gap-1.5">
@@ -25,6 +25,13 @@
                 </a>
             </div>
         </div>
+
+        @if($tugas->deskripsi)
+            <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-5 mb-8 text-xs text-slate-700 shadow-sm">
+                <span class="inline-block px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold uppercase tracking-wider text-[10px] mb-2">Petunjuk &amp; Instruksi Tugas</span>
+                <p class="whitespace-pre-line leading-relaxed text-sm text-slate-800">{{ $tugas->deskripsi }}</p>
+            </div>
+        @endif
 
         @if(session('success'))
             <div class="bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 p-4 mb-6 rounded-r-lg text-sm shadow-sm">
@@ -86,15 +93,13 @@
                                 <td class="py-4 px-6">
                                     @if($sub && $sub->file_path)
                                         <div class="flex items-center gap-2">
-                                            @if($isImage || $isPdf)
-                                                <button 
-                                                    type="button" 
-                                                    onclick="openPreview('{{ asset('storage/' . $sub->file_path) }}', '{{ $isImage ? 'image' : 'pdf' }}', '{{ $siswa->name }}')"
-                                                    class="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded text-xs font-semibold transition-colors"
-                                                >
-                                                    Pratinjau
-                                                </button>
-                                            @endif
+                                            <button 
+                                                type="button" 
+                                                onclick="openPreview('{{ route('guru.tugas.preview', $sub->id) }}', '{{ $isImage ? 'image' : ($isPdf ? 'pdf' : 'other') }}', '{{ addslashes($siswa->name) }}', '{{ route('guru.tugas.download', $sub->id) }}')"
+                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded text-xs font-semibold transition-colors"
+                                            >
+                                                Pratinjau
+                                            </button>
                                             <a href="{{ route('guru.tugas.download', $sub->id) }}" class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded text-xs font-semibold transition-colors">
                                                 Unduh
                                             </a>
@@ -157,9 +162,15 @@
                 <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 block mb-0.5">Pratinjau Tugas Siswa</span>
                 <h3 id="modalStudentName" class="font-bold text-lg">Nama Siswa</h3>
             </div>
-            <button onclick="closePreview()" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white flex items-center justify-center transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
+            <div class="flex items-center gap-2">
+                <a id="modalDownloadBtn" href="#" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Unduh
+                </a>
+                <button type="button" onclick="closePreview()" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white flex items-center justify-center transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
         </div>
         <div class="p-6 flex-1 overflow-auto bg-slate-900/5 flex items-center justify-center min-h-[400px]">
             <div id="previewContainer" class="w-full h-full flex items-center justify-center">
@@ -167,24 +178,40 @@
             </div>
         </div>
         <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
-            <button onclick="closePreview()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-sm font-semibold transition-colors">Tutup</button>
+            <button type="button" onclick="closePreview()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-sm font-semibold transition-colors">Tutup</button>
         </div>
     </div>
 </div>
 
 <script>
-function openPreview(url, type, studentName) {
+function openPreview(url, type, studentName, downloadUrl) {
     const modal = document.getElementById('previewModal');
     const container = document.getElementById('previewContainer');
+    const downloadBtn = document.getElementById('modalDownloadBtn');
+
     document.getElementById('modalStudentName').innerText = 'Berkas Lampiran - ' + studentName;
-    
+    if (downloadBtn) {
+        downloadBtn.href = downloadUrl || url;
+    }
+
     container.innerHTML = '';
     if (type === 'image') {
         container.innerHTML = `<img src="${url}" alt="Pratinjau Tugas" class="max-w-full max-h-[70vh] rounded-lg shadow-md object-contain">`;
     } else if (type === 'pdf') {
         container.innerHTML = `<iframe src="${url}" class="w-full h-[70vh] rounded-lg border border-slate-200"></iframe>`;
+    } else {
+        container.innerHTML = `
+            <div class="text-center p-8 bg-white rounded-xl shadow-sm border border-slate-200 max-w-md mx-auto">
+                <svg class="w-14 h-14 text-slate-400 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <h4 class="text-sm font-bold text-slate-800 mb-1">Format Dokumen Biner</h4>
+                <p class="text-xs text-slate-500 mb-4 leading-relaxed">Berkas ini (DOC/DOCX/Arsip) tidak dapat ditampilkan langsung di peramban web. Silakan unduh berkas untuk memeriksanya di aplikasi pembaca dokumen Anda.</p>
+                <a href="${downloadUrl || url}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors">
+                    Unduh Berkas Sekarang
+                </a>
+            </div>
+        `;
     }
-    
+
     modal.classList.remove('hidden');
 }
 

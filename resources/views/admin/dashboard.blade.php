@@ -7,12 +7,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
 @php
-    $hour = date('H');
-    if ($hour >= 4 && $hour < 12) {
+    $hour = (int) now()->timezone('Asia/Jakarta')->format('G');
+    if ($hour >= 4 && $hour <= 10) {
         $greetings = 'Selamat Pagi';
-    } elseif ($hour >= 12 && $hour < 15) {
+    } elseif ($hour >= 11 && $hour <= 14) {
         $greetings = 'Selamat Siang';
-    } elseif ($hour >= 15 && $hour < 18) {
+    } elseif ($hour >= 15 && $hour <= 17) {
         $greetings = 'Selamat Sore';
     } else {
         $greetings = 'Selamat Malam';
@@ -24,7 +24,7 @@
                 <span class="inline-block px-3.5 py-1 rounded-full bg-blue-700/60 text-blue-100 text-xs font-semibold uppercase tracking-wider mb-3 border border-blue-600/50">
                     Panel Kontrol Administrator
                 </span>
-                <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">{{ $greetings }}, {{ auth()->user()->name ?? 'Administrator' }}</h1>
+                <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight"><span class="dynamic-greeting" data-greeting>{{ $greetings }}</span>, {{ auth()->user()->name ?? 'Administrator' }}</h1>
                 <p class="text-blue-200 text-sm mt-2 max-w-2xl leading-relaxed">Kelola sistem akademik terpadu, verifikasi pendaftaran peserta didik baru (SPMB), dan pengaturan pengguna secara real-time.</p>
             </div>
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">

@@ -7,7 +7,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-12">
-            <span class="inline-block text-amber-600 dark:text-amber-400 font-bold tracking-widest text-xs uppercase mb-2 bg-amber-50 dark:bg-amber-950/60 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800">Kalender Akademik</span>
             <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Agenda Kegiatan Sekolah</h1>
             <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
                 Catat tanggal penting, jadwal ujian, kegiatan ekstrakurikuler, dan acara resmi SMA Pemda Bahorok.

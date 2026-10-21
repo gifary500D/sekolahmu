@@ -1,5 +1,27 @@
-// Antigravity Client Scripts: Dynamic Greetings & UI Enhancements
+// Antigravity Client Scripts: AOS, Dynamic Greetings & UI Enhancements
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 (function () {
+    // Inisialisasi Animate On Scroll (AOS)
+    if (typeof window !== 'undefined') {
+        window.AOS = AOS;
+        const initAos = function () {
+            AOS.init({
+                duration: 700,
+                once: true,
+                offset: 60,
+                easing: 'ease-out-cubic'
+            });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAos);
+        } else {
+            initAos();
+        }
+    }
+
     // Night Mode (Dark Mode) Helper & Storage Sync
     window.toggleDarkMode = function () {
         const isDark = document.documentElement.classList.toggle('dark');

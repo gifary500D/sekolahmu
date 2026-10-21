@@ -9,9 +9,6 @@
      ============================================= --}}
 <section class="py-12 sm:py-16 bg-[#0F2F6B] text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <span class="inline-block bg-[#FFC20E]/20 border border-[#FFC20E]/30 text-[#FFC20E] text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide mb-4">
-            Jadwal & Kegiatan
-        </span>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Agenda Sekolah</h1>
         <p class="text-base sm:text-lg text-blue-100 max-w-2xl mx-auto">
             Pantau seluruh jadwal kegiatan, acara, dan momen penting SMA Pemda Bahorok

@@ -14,9 +14,6 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
             <!-- Content -->
             <div class="text-white text-center md:text-left">
-                <span class="inline-block px-4 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 text-xs sm:text-sm font-semibold tracking-wide uppercase mb-5">
-                    Sekolah Menengah Atas Negeri
-                </span>
                 <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                     Selamat Datang di <span class="text-amber-300">SMA Pemda Bahorok</span>
                 </h1>
@@ -88,7 +85,6 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
             <!-- Content -->
             <div class="order-2 md:order-1">
-                <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Tentang Sekolah</span>
                 <h2 class="section-title dark:text-white">Tentang Kami</h2>
                 <p class="text-gray-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed mb-6">
                     SMA Pemda Bahorok adalah institusi pendidikan terkemuka di Kabupaten Langkat yang berkomitmen untuk memberikan pendidikan berkualitas tinggi dengan pendekatan holistik. Kami percaya bahwa setiap siswa memiliki potensi unik yang perlu dikembangkan secara optimal.
@@ -163,7 +159,6 @@
 <section id="guru" class="py-16 sm:py-20 bg-slate-50 dark:bg-slate-950 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Pendidik Profesional</span>
             <h2 class="section-title mx-auto max-w-2xl dark:text-white">Tenaga Pengajar</h2>
             <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
                 Daftar dewan guru dan staf pengajar berdedikasi tinggi di SMA Pemda Bahorok
@@ -257,7 +252,6 @@
 <section id="program" class="py-16 sm:py-20 bg-white dark:bg-slate-900 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Kurikulum</span>
             <h2 class="section-title mx-auto max-w-2xl dark:text-white">Program Unggulan Kami</h2>
             <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
                 Kami menawarkan berbagai program pendidikan yang dirancang untuk mengembangkan potensi siswa secara holistik
@@ -351,7 +345,6 @@
 <section id="fasilitas" class="py-16 sm:py-20 bg-gray-50 dark:bg-slate-950 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Sarana Prasarana</span>
             <h2 class="section-title mx-auto max-w-2xl dark:text-white">Fasilitas &amp; Sarana</h2>
             <p class="text-gray-600 dark:text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
                 Dilengkapi dengan fasilitas modern untuk mendukung proses pembelajaran yang optimal
@@ -626,7 +619,6 @@
 <section id="lokasi" class="py-16 sm:py-20 bg-white dark:bg-slate-900 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Kunjungi Kami</span>
             <h2 class="section-title mx-auto max-w-2xl dark:text-white">Lokasi Sekolah</h2>
             <p class="text-gray-600 dark:text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
                 Temukan kami di lokasi yang strategis dan mudah dijangkau

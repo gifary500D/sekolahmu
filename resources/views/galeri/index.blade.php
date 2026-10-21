@@ -7,7 +7,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-12">
-            <span class="inline-block text-amber-400 font-bold tracking-widest text-xs uppercase mb-2 bg-amber-950/60 px-3 py-1 rounded-full border border-amber-500/30">Dokumentasi Visual</span>
             <h1 class="text-3xl sm:text-4xl font-extrabold mb-4">Galeri Foto Kegiatan Sekolah</h1>
             <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
                 Momen kebersamaan, fasilitas modern, dan aktivitas belajar mengajar di lingkungan SMA Pemda Bahorok.

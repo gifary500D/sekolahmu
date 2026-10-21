@@ -21,9 +21,6 @@
         <!-- Header Banner -->
         <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <span class="inline-block px-3 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 text-xs font-semibold uppercase tracking-wider mb-2">
-                    Portal Siswa Akademik
-                </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white"><span class="dynamic-greeting" data-greeting>{{ $greetings }}</span>, {{ auth()->user()->name ?? 'Siswa' }}</h1>
                 <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Pantau tugas sekolah, jadwal pelajaran, dan catatan kehadiran Anda di SMA Pemda Bahorok.</p>
             </div>

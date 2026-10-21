@@ -21,9 +21,6 @@
         <!-- Header Banner -->
         <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 dark:from-slate-900 dark:via-blue-950 dark:to-slate-900 rounded-2xl shadow-md p-6 sm:p-8 mb-8 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-transparent dark:border-slate-800">
             <div>
-                <span class="inline-block px-3.5 py-1 rounded-full bg-blue-700/60 dark:bg-blue-600/40 text-blue-100 text-xs font-semibold uppercase tracking-wider mb-3 border border-blue-600/50">
-                    Panel Kontrol Administrator
-                </span>
                 <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight"><span class="dynamic-greeting" data-greeting>{{ $greetings }}</span>, {{ auth()->user()->name ?? 'Administrator' }}</h1>
                 <p class="text-blue-200 text-sm mt-2 max-w-2xl leading-relaxed">Kelola sistem akademik terpadu, verifikasi pendaftaran peserta didik baru (SPMB), dan pengaturan pengguna secara real-time.</p>
             </div>

@@ -7,7 +7,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-12">
-            <span class="inline-block text-blue-700 dark:text-blue-300 font-bold tracking-widest text-xs uppercase mb-2 bg-blue-50 dark:bg-blue-950/60 px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800">Informasi Resmi</span>
             <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Berita &amp; Pengumuman Sekolah</h1>
             <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
                 Ikuti perkembangan terbaru, artikel kegiatan, dan pengumuman penting dari civitas akademika SMA Pemda Bahorok.

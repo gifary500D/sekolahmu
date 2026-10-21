@@ -8,9 +8,6 @@
         
         <!-- Header -->
         <div class="text-center mb-8">
-            <span class="inline-block px-3 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 text-xs font-semibold uppercase tracking-wider mb-3">
-                Autentikasi Pengguna
-            </span>
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Masuk ke Portal</h1>
             <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">SMA Pemda Bahorok, Kabupaten Langkat</p>
         </div>

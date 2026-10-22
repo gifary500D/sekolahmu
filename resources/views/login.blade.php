@@ -84,7 +84,7 @@
                     <span>Guru</span>
                     <span class="text-[10px] font-normal text-emerald-600 dark:text-emerald-400">Rina S.Pd</span>
                 </button>
-                <button type="button" onclick="fillDemo('alya.murid@demo.sch.id', 'password')" class="px-2 py-2.5 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-bold transition-colors border border-amber-200 dark:border-amber-800 flex flex-col items-center gap-0.5">
+                <button type="button" onclick="fillDemo('alya.murid@demo.sch.id', 'password')" title="Email: alya.murid@demo.sch.id (NISN: 0081234567)" class="px-2 py-2.5 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-bold transition-colors border border-amber-200 dark:border-amber-800 flex flex-col items-center gap-0.5">
                     <span>Siswa</span>
                     <span class="text-[10px] font-normal text-amber-600 dark:text-amber-400">Alya (NISN)</span>
                 </button>

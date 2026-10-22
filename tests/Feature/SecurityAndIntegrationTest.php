@@ -109,3 +109,83 @@ test('halaman company profile dapat diakses publik', function () {
     $this->get('/fasilitas')->assertStatus(200);
     $this->get('/guru')->assertStatus(200);
 });
+
+test('demo login admin auto provisioning berfungsi tanpa seed manual', function () {
+    $this->withoutVite();
+
+    // Pastikan user belum ada di DB
+    $this->assertDatabaseMissing('users', ['email' => 'suclyn@sekolah.sch.id']);
+
+    $response = $this->post('/proses-login', [
+        'login' => 'suclyn@sekolah.sch.id',
+        'password' => 'password',
+    ]);
+
+    $response->assertRedirect('/dashboard');
+    $this->assertAuthenticated();
+    $this->assertDatabaseHas('users', [
+        'email' => 'suclyn@sekolah.sch.id',
+        'role' => 'admin',
+    ]);
+
+    $dashboardRes = $this->get('/dashboard');
+    $dashboardRes->assertOk();
+    $dashboardRes->assertSee('Admin');
+});
+
+test('demo login guru auto provisioning berfungsi dengan profil kelas lengkap', function () {
+    $this->withoutVite();
+
+    $this->assertDatabaseMissing('users', ['email' => 'rina.kartika@demo.sch.id']);
+
+    $response = $this->post('/proses-login', [
+        'login' => 'rina.kartika@demo.sch.id',
+        'password' => 'password',
+    ]);
+
+    $response->assertRedirect('/dashboard');
+    $this->assertAuthenticated();
+    $this->assertDatabaseHas('users', [
+        'email' => 'rina.kartika@demo.sch.id',
+        'role' => 'guru',
+    ]);
+
+    $dashboardRes = $this->get('/dashboard');
+    $dashboardRes->assertOk();
+    $dashboardRes->assertSee('Rina Kartika');
+});
+
+test('demo login siswa auto provisioning email dan nisn langsung aktif', function () {
+    $this->withoutVite();
+
+    // 1. Login menggunakan email Alya
+    $responseEmail = $this->post('/proses-login', [
+        'login' => 'alya.murid@demo.sch.id',
+        'password' => 'password',
+    ]);
+
+    $responseEmail->assertRedirect('/dashboard');
+    $this->assertAuthenticated();
+    $this->assertDatabaseHas('users', [
+        'email' => 'alya.murid@demo.sch.id',
+        'nisn' => '0081234567',
+        'role' => 'siswa',
+    ]);
+
+    $dashboardRes = $this->get('/dashboard');
+    $dashboardRes->assertOk();
+    $dashboardRes->assertSee('Alya Murid');
+
+    // 2. Logout lalu login menggunakan NISN Alya
+    $this->post('/logout');
+    $this->assertGuest();
+
+    $responseNisn = $this->post('/proses-login', [
+        'login' => '0081234567',
+        'password' => 'password',
+    ]);
+
+    $responseNisn->assertRedirect('/dashboard');
+    $this->assertAuthenticated();
+    $this->get('/dashboard')->assertOk();
+});

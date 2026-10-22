@@ -13,7 +13,7 @@
                     Portal Akademik Siswa
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Jadwal Pelajaran (Roster)</h1>
-                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Jadwal kegiatan belajar mengajar harian untuk kelas {{ $user->kelas->nama ?? 'Siswa' }}.</p>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Jadwal kegiatan belajar mengajar harian untuk kelas {{ $user->kelas?->nama ?? 'Siswa' }}.</p>
             </div>
             <div>
                 <a href="{{ route('dashboard') }}" class="inline-flex items-center px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-semibold transition-colors">
@@ -25,7 +25,7 @@
         <!-- Roster Table -->
         <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
             <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-slate-900 dark:text-white">Rombongan Belajar: {{ $user->kelas->nama ?? '-' }}</h2>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white">Rombongan Belajar: {{ $user->kelas?->nama ?? '-' }}</h2>
                 <span class="text-xs text-slate-500 dark:text-slate-400">Tahun Ajaran 2026/2027</span>
             </div>
             

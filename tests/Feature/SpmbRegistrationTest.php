@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-uses(Tests\TestCase::class, RefreshDatabase::class);
+uses(TestCase::class, RefreshDatabase::class);
 
 test('user can view registration page', function () {
     $response = $this->get('/daftar');
@@ -43,7 +44,7 @@ test('user can submit registration form successfully', function () {
 
     $response->assertRedirect();
     $response->assertSessionHas('success');
-    
+
     $this->assertDatabaseHas('spmb', [
         'nik' => '1234567890123456',
         'nama_lengkap' => 'Budi Santoso',

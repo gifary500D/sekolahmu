@@ -197,4 +197,3 @@ class TugasController extends Controller
         ], 200);
     }
 }
-

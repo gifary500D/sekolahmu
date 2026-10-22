@@ -7,6 +7,9 @@
 <section class="bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm p-2 mb-3 shadow-md border border-white/30">
+                <img src="{{ asset('images/logo-pendidikan.svg') }}" alt="Logo Pendidikan" class="w-12 h-12 object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><polygon points=\'50,5 95,38 77,90 23,90 5,38\' fill=\'%230F2F6B\' stroke=\'%23F59E0B\' stroke-width=\'5\'/><circle cx=\'50\' cy=\'50\' r=\'18\' fill=\'%23F59E0B\'/></svg>';">
+            </div>
             <h1 class="text-3xl md:text-4xl font-bold mb-2">Pendaftaran Siswa Baru</h1>
             <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA/SMK Pemda Bahorok</p>
         </div>

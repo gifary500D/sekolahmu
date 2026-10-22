@@ -2,19 +2,17 @@
 
 use App\Models\Absensi;
 use App\Models\Kelas;
-use App\Models\Roster;
 use App\Models\Spmb;
 use App\Models\Tugas;
-use App\Models\TugasSiswa;
 use App\Models\User;
-use App\Support\Teks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
-uses(Tests\TestCase::class, RefreshDatabase::class);
+uses(TestCase::class, RefreshDatabase::class);
 
 test('skenario 1: akses tanpa login ditolak ke endpoint terproteksi', function () {
     // API Sanctum
@@ -163,7 +161,7 @@ test('skenario 5: validasi input ketat pada NISN, NIK, dan MIME upload SPMB', fu
 
     $response = $this->postJson('/api/spmb/daftar', $payload);
     $response->assertStatus(422)
-             ->assertJsonValidationErrors(['nisn', 'nik', 'berkas_ijazah_skl']);
+        ->assertJsonValidationErrors(['nisn', 'nik', 'berkas_ijazah_skl']);
 });
 
 test('skenario 6: endpoint publik cek status mencegah kebocoran PII dan enumerasi', function () {
@@ -182,8 +180,8 @@ test('skenario 6: endpoint publik cek status mencegah kebocoran PII dan enumeras
     // Akses tanpa login
     $response = $this->getJson('/api/spmb/status/SPMB-2026-7777');
     $response->assertOk()
-             ->assertJsonPath('data.nomor_pendaftaran', 'SPMB-2026-7777')
-             ->assertJsonPath('data.nama_lengkap', 'M******* R**** P******'); // Ter-masking
+        ->assertJsonPath('data.nomor_pendaftaran', 'SPMB-2026-7777')
+        ->assertJsonPath('data.nama_lengkap', 'M******* R**** P******'); // Ter-masking
 
     // PII sensitif tidak boleh bocor
     $response->assertJsonMissingPath('data.nisn');
@@ -227,7 +225,7 @@ test('skenario 7: pendaftaran dengan NISN atau NIK duplikat ditolak', function (
 
     $response = $this->postJson('/api/spmb/daftar', $payload);
     $response->assertStatus(422)
-             ->assertJsonValidationErrors(['nisn', 'nik']);
+        ->assertJsonValidationErrors(['nisn', 'nik']);
 });
 
 test('skenario 8: kegagalan transaksi SPMB melakukan rollback berkas upload fisik', function () {

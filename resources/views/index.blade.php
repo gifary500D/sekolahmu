@@ -474,9 +474,12 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @forelse($berita ?? [] as $item)
+                @php
+                    $itemImg = $item->gambar_path ?? $item->gambar ?? null;
+                @endphp
                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex flex-col">
                     <img 
-                        src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000&auto=format&fit=crop' }}" 
+                        src="{{ $itemImg ? route('media.file', ['path' => $itemImg]) : 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000&auto=format&fit=crop' }}" 
                         alt="{{ $item->judul }}" 
                         class="w-full h-48 object-cover"
                     >
@@ -580,9 +583,12 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($galeri ?? [] as $foto)
+                @php
+                    $galeriImg = $foto->gambar_path ?? $foto->gambar ?? null;
+                @endphp
                 <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
                     <img 
-                        src="{{ $foto->gambar ? asset('storage/' . $foto->gambar) : 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1000&auto=format&fit=crop' }}" 
+                        src="{{ $galeriImg ? route('media.file', ['path' => $galeriImg]) : 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1000&auto=format&fit=crop' }}" 
                         alt="Galeri Sekolah" 
                         class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                     >

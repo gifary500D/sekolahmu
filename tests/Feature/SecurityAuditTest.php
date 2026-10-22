@@ -6,13 +6,12 @@ use App\Models\Tugas;
 use App\Models\TugasSiswa;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
-uses(Tests\TestCase::class, RefreshDatabase::class);
+uses(TestCase::class, RefreshDatabase::class);
 
 test('skenario 1: siswa tidak dapat mengakses atau mengunduh berkas tugas siswa lain', function () {
     Storage::fake('local');
@@ -47,7 +46,7 @@ test('skenario 1: siswa tidak dapat mengakses atau mengunduh berkas tugas siswa 
     ]);
 
     // Simpan berkas tugas siswa 1 di storage privat local
-    $filePath = 'private/tugas/tugas_siswa1_' . time() . '.pdf';
+    $filePath = 'private/tugas/tugas_siswa1_'.time().'.pdf';
     Storage::disk('local')->put($filePath, 'konten tugas siswa 1');
 
     $submissionSiswa1 = TugasSiswa::create([
@@ -288,27 +287,27 @@ test('skenario 8: endpoint status SPMB mengembalikan data minimal dan validasi n
     // 1. Format nomor tidak sesuai regex SPMB ditolak 422
     $responseInvalid = $this->getJson('/api/spmb/status/MALICIOUS-INPUT');
     $responseInvalid->assertStatus(422)
-                    ->assertJsonPath('success', false)
-                    ->assertJsonValidationErrors(['nomor']);
+        ->assertJsonPath('success', false)
+        ->assertJsonValidationErrors(['nomor']);
 
     // 2. Format valid mengembalikan hanya data yang diminimalkan
     $responseValid = $this->getJson('/api/spmb/status/SPMB-2026-8888');
     $responseValid->assertOk()
-                  ->assertJsonPath('success', true)
-                  ->assertJsonPath('data.nomor_pendaftaran', 'SPMB-2026-8888')
-                  ->assertJsonPath('data.nama_lengkap', 'A**** F**** R*****')
-                  ->assertJsonPath('data.status', 'Lulus Seleksi')
-                  ->assertJsonStructure([
-                      'data' => ['nomor_pendaftaran', 'nama_lengkap', 'status']
-                  ]);
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('data.nomor_pendaftaran', 'SPMB-2026-8888')
+        ->assertJsonPath('data.nama_lengkap', 'A**** F**** R*****')
+        ->assertJsonPath('data.status', 'Lulus Seleksi')
+        ->assertJsonStructure([
+            'data' => ['nomor_pendaftaran', 'nama_lengkap', 'status'],
+        ]);
 
     // Pastikan tidak membocorkan PII atau data sekunder
     $responseValid->assertJsonMissingPath('data.asal_sekolah')
-                  ->assertJsonMissingPath('data.program')
-                  ->assertJsonMissingPath('data.jalur_pendaftaran')
-                  ->assertJsonMissingPath('data.tanggal_daftar')
-                  ->assertJsonMissingPath('data.nisn')
-                  ->assertJsonMissingPath('data.nik');
+        ->assertJsonMissingPath('data.program')
+        ->assertJsonMissingPath('data.jalur_pendaftaran')
+        ->assertJsonMissingPath('data.tanggal_daftar')
+        ->assertJsonMissingPath('data.nisn')
+        ->assertJsonMissingPath('data.nik');
 
     // 3. Verifikasi tambahan jika parameter NISN tidak cocok ditolak 403
     $responseWrongNisn = $this->getJson('/api/spmb/status/SPMB-2026-8888?nisn=9999999999');

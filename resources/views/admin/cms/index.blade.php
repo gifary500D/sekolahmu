@@ -41,7 +41,8 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Gambar Utama</label>
-                        <input type="file" name="gambar" accept="image/*" class="text-xs text-slate-500 dark:text-slate-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 dark:file:bg-blue-950/60 file:text-blue-700 dark:file:text-blue-300 cursor-pointer">
+                        <input type="file" id="gambarBeritaInput" name="gambar" accept="image/*" class="text-xs text-slate-500 dark:text-slate-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 dark:file:bg-blue-950/60 file:text-blue-700 dark:file:text-blue-300 cursor-pointer">
+                        <div id="gambarCompressInfo" class="mt-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium hidden"></div>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Isi Berita / Konten <span class="text-rose-500">*</span></label>
@@ -63,7 +64,7 @@
                     @forelse($beritaList as $berita)
                         @php
                             $pubTime = ($berita->diterbitkan_pada ?? $berita->created_at)?->format('d M Y, H:i') ?? '-';
-                            $imgSrc = $berita->gambar_path ? asset('storage/' . $berita->gambar_path) : '';
+                            $imgSrc = $berita->gambar_path ? route('media.file', ['path' => $berita->gambar_path]) : '';
                         @endphp
                         <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                             <div class="flex items-start gap-3 flex-1">
@@ -158,5 +159,76 @@ function openCmsNewsModal(title, time, imgUrl, content, status) {
 function closeCmsNewsModal() {
     document.getElementById('cmsNewsModal').classList.add('hidden');
 }
+
+// Kompresi Gambar Otomatis Berbasis HTML5 Canvas (Maks 1280px, JPEG 0.8, < 500KB)
+document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.getElementById('gambarBeritaInput');
+    const infoEl = document.getElementById('gambarCompressInfo');
+    if (!fileInput) return;
+
+    fileInput.addEventListener('change', function (e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+
+        if (infoEl) {
+            infoEl.textContent = 'Memproses kompresi gambar otomatis...';
+            infoEl.className = 'mt-1.5 text-[11px] text-blue-600 dark:text-blue-400 font-medium';
+            infoEl.classList.remove('hidden');
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const img = new Image();
+            img.onload = function () {
+                const maxDim = 1280;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxDim || height > maxDim) {
+                    if (width > height) {
+                        height = Math.round((height * maxDim) / width);
+                        width = maxDim;
+                    } else {
+                        width = Math.round((width * maxDim) / height);
+                        height = maxDim;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob(function (blob) {
+                    if (!blob) return;
+
+                    const cleanName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+                    const compressedFile = new File([blob], cleanName, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    });
+
+                    try {
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(compressedFile);
+                        fileInput.files = dataTransfer.files;
+
+                        if (infoEl) {
+                            const originalKb = (file.size / 1024).toFixed(0);
+                            const compressedKb = (compressedFile.size / 1024).toFixed(0);
+                            infoEl.textContent = `✓ Gambar berhasil dikompresi: ${originalKb} KB → ${compressedKb} KB (${width}x${height}px)`;
+                            infoEl.className = 'mt-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium';
+                        }
+                    } catch (err) {
+                        console.warn('DataTransfer tidak didukung oleh browser:', err);
+                    }
+                }, 'image/jpeg', 0.8);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+});
 </script>
 @endsection

@@ -329,4 +329,21 @@ class SpmbVerificationAndDashboardAccessTest extends TestCase
         $res->assertOk();
         $res->assertSee('XI-IPA-1');
     }
+
+    public function test_admin_spmb_update_status_dengan_note_dan_self_healing_berfungsi(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $data = $this->createSpmbDanUser('Menunggu Verifikasi', false);
+
+        $res = $this->actingAs($admin)->post(route('admin.spmb.status', $data['spmb']->id), [
+            'status' => 'Terverifikasi',
+            'note' => 'Berkas pendaftaran lengkap dan valid.',
+        ]);
+
+        $res->assertRedirect(route('admin.spmb.index'));
+
+        $data['spmb']->refresh();
+        $this->assertEquals('Terverifikasi', $data['spmb']->status);
+        $this->assertEquals('Berkas pendaftaran lengkap dan valid.', $data['spmb']->note);
+    }
 }

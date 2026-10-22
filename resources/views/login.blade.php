@@ -8,6 +8,9 @@
         
         <!-- Header -->
         <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mb-3 shadow-sm">
+                <img src="{{ asset('images/logo-pendidikan.svg') }}" alt="Logo Pendidikan" class="w-10 h-10 object-contain drop-shadow-sm" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><polygon points=\'50,5 95,38 77,90 23,90 5,38\' fill=\'%230F2F6B\' stroke=\'%23F59E0B\' stroke-width=\'5\'/><circle cx=\'50\' cy=\'50\' r=\'18\' fill=\'%23F59E0B\'/></svg>';">
+            </div>
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Masuk ke Portal</h1>
             <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">SMA/SMK Pemda Bahorok, Kabupaten Langkat</p>
         </div>

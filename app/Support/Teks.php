@@ -24,7 +24,7 @@ class Teks
     {
         $str = (string) $nilai;
         if ($str !== '' && in_array($str[0], ['=', '+', '-', '@', "\t", "\r"], true)) {
-            return "'" . $str;
+            return "'".$str;
         }
 
         return $str;
@@ -48,9 +48,9 @@ class Teks
             if ($len <= 1) {
                 $masked[] = $word;
             } elseif ($len === 2) {
-                $masked[] = mb_substr($word, 0, 1) . '*';
+                $masked[] = mb_substr($word, 0, 1).'*';
             } else {
-                $masked[] = mb_substr($word, 0, 1) . str_repeat('*', $len - 1);
+                $masked[] = mb_substr($word, 0, 1).str_repeat('*', $len - 1);
             }
         }
 
@@ -65,4 +65,3 @@ class Teks
         return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $value);
     }
 }
-

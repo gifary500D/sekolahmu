@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E40AF" />
+      <stop offset="100%" stop-color="#0F2F6B" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="50%" stop-color="#EAB308" />
+      <stop offset="100%" stop-color="#CA8A04" />
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#EA580C" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#FEF08A" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Emblem Pentagon (Segi Lima Lambang Pendidikan Nasional) -->
+  <polygon points="100,12 188,76 154,180 46,180 12,76" fill="url(#blueGrad)" stroke="url(#goldGrad)" stroke-width="6" stroke-linejoin="round" filter="url(#shadow)" />
+  <polygon points="100,24 174,78 146,168 54,168 26,78" fill="none" stroke="url(#goldGrad)" stroke-width="2" stroke-linejoin="round" opacity="0.8" />
+
+  <!-- Tut Wuri Handayani Wings -->
+  <!-- Left Wings -->
+  <path d="M100,125 C82,125 58,112 40,82 C55,85 75,92 100,110 Z" fill="url(#goldGrad)" opacity="0.95" />
+  <path d="M100,135 C75,135 52,120 35,95 C52,98 75,108 100,122 Z" fill="url(#goldGrad)" opacity="0.9" />
+  <path d="M100,145 C70,145 46,132 30,112 C48,115 72,125 100,134 Z" fill="url(#goldGrad)" opacity="0.85" />
+
+  <!-- Right Wings -->
+  <path d="M100,125 C118,125 142,112 160,82 C145,85 125,92 100,110 Z" fill="url(#goldGrad)" opacity="0.95" />
+  <path d="M100,135 C125,135 148,120 165,95 C148,98 125,108 100,122 Z" fill="url(#goldGrad)" opacity="0.9" />
+  <path d="M100,145 C130,145 154,132 170,112 C152,115 128,125 100,134 Z" fill="url(#goldGrad)" opacity="0.85" />
+
+  <!-- Open Book Symbol (Buku Terbuka Pengetahuan) -->
+  <path d="M100,150 C86,142 66,142 50,148 L50,158 C68,152 86,152 100,160 C114,152 132,152 150,158 L150,148 C134,142 114,142 100,150 Z" fill="url(#goldGrad)" stroke="#78350F" stroke-width="1.5" />
+  <path d="M100,150 L100,160" stroke="#78350F" stroke-width="2" />
+
+  <!-- Central Blazing Torch (Api Obor Belencong) -->
+  <path d="M96,142 L104,142 L102,115 L98,115 Z" fill="url(#goldGrad)" stroke="#B45309" stroke-width="1" />
+  <ellipse cx="100" cy="115" rx="8" ry="3" fill="url(#goldGrad)" />
+  <path d="M100,50 C92,68 85,82 88,96 C90,105 95,112 100,115 C105,112 110,105 112,96 C115,82 108,68 100,50 Z" fill="url(#flameGrad)" />
+  <path d="M100,62 C95,74 91,84 93,94 C95,100 98,105 100,107 C102,105 105,100 107,94 C109,84 105,74 100,62 Z" fill="#FEF08A" />
+
+  <!-- Bintang Prestasi -->
+  <polygon points="100,34 102.5,41 110,41 104,45.5 106.5,52.5 100,48 93.5,52.5 96,45.5 90,41 97.5,41" fill="url(#goldGrad)" stroke="#B45309" stroke-width="0.75" />
+</svg>

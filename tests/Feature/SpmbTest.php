@@ -19,10 +19,10 @@
 use App\Models\Spmb;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
 
-uses(Tests\TestCase::class, RefreshDatabase::class);
+uses(TestCase::class, RefreshDatabase::class);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helper: payload valid untuk pendaftaran API
@@ -30,27 +30,27 @@ uses(Tests\TestCase::class, RefreshDatabase::class);
 function validSpmbPayload(array $override = []): array
 {
     return array_merge([
-        'nama_lengkap'      => 'Budi Santoso',
-        'gender'            => 'laki-laki',
-        'tempat_lahir'      => 'Medan',
-        'tanggal_lahir'     => '2007-06-15',
-        'nisn'              => '1234567890',
-        'nik'               => '1234567890123456',
-        'agama'             => 'Islam',
-        'email'             => 'budi@example.com',
-        'telepon'           => '081234567890',
-        'alamat'            => 'Jl. Contoh No. 1',
-        'kota'              => 'Medan',
-        'provinsi'          => 'Sumatera Utara',
-        'nama_ayah'         => 'Ahmad Santoso',
-        'pekerjaan_ayah'    => 'PNS',
-        'nama_ibu'          => 'Siti Aminah',
-        'pekerjaan_ibu'     => 'Guru',
-        'telepon_ortu'      => '081298765432',
-        'asal_sekolah'      => 'SMP Negeri 1 Medan',
-        'nilai_rata'        => 87.5,
-        'tahun_lulus'       => (int) date('Y'),
-        'program'           => 'ipa',
+        'nama_lengkap' => 'Budi Santoso',
+        'gender' => 'laki-laki',
+        'tempat_lahir' => 'Medan',
+        'tanggal_lahir' => '2007-06-15',
+        'nisn' => '1234567890',
+        'nik' => '1234567890123456',
+        'agama' => 'Islam',
+        'email' => 'budi@example.com',
+        'telepon' => '081234567890',
+        'alamat' => 'Jl. Contoh No. 1',
+        'kota' => 'Medan',
+        'provinsi' => 'Sumatera Utara',
+        'nama_ayah' => 'Ahmad Santoso',
+        'pekerjaan_ayah' => 'PNS',
+        'nama_ibu' => 'Siti Aminah',
+        'pekerjaan_ibu' => 'Guru',
+        'telepon_ortu' => '081298765432',
+        'asal_sekolah' => 'SMP Negeri 1 Medan',
+        'nilai_rata' => 87.5,
+        'tahun_lulus' => (int) date('Y'),
+        'program' => 'ipa',
         'jalur_pendaftaran' => 'Zonasi',
     ], $override);
 }
@@ -64,20 +64,20 @@ test('pendaftaran berhasil menyimpan ke database dan mengembalikan nomor registr
     $response = $this->postJson('/api/spmb/daftar', validSpmbPayload());
 
     $response->assertStatus(201)
-             ->assertJsonPath('success', true)
-             ->assertJsonStructure([
-                 'success',
-                 'message',
-                 'data' => ['nomor_pendaftaran', 'nama_lengkap', 'jalur_pendaftaran', 'status'],
-             ]);
+        ->assertJsonPath('success', true)
+        ->assertJsonStructure([
+            'success',
+            'message',
+            'data' => ['nomor_pendaftaran', 'nama_lengkap', 'jalur_pendaftaran', 'status'],
+        ]);
 
     $nomor = $response->json('data.nomor_pendaftaran');
-    expect($nomor)->toStartWith('SPMB-' . date('Y') . '-');
+    expect($nomor)->toStartWith('SPMB-'.date('Y').'-');
 
     // Data tersimpan secara persisten di DB
     $this->assertDatabaseHas('spmb', [
-        'nisn'  => '1234567890',
-        'nik'   => '1234567890123456',
+        'nisn' => '1234567890',
+        'nik' => '1234567890123456',
         'status' => 'Menunggu Verifikasi',
         'nomor_pendaftaran' => $nomor,
     ]);
@@ -91,12 +91,12 @@ test('dua pendaftaran berurutan menghasilkan nomor pendaftaran yang berbeda', fu
 
     $r1 = $this->postJson('/api/spmb/daftar', validSpmbPayload([
         'nisn' => '1111111111',
-        'nik'  => '1111111111111111',
+        'nik' => '1111111111111111',
         'email' => 'user1@example.com',
     ]));
     $r2 = $this->postJson('/api/spmb/daftar', validSpmbPayload([
         'nisn' => '2222222222',
-        'nik'  => '2222222222222222',
+        'nik' => '2222222222222222',
         'email' => 'user2@example.com',
     ]));
 
@@ -116,9 +116,9 @@ test('pendaftaran gagal validasi jika NISN tidak 10 digit', function () {
     ]));
 
     $response->assertStatus(422)
-             ->assertJsonPath('success', false)
-             ->assertJsonPath('message', 'Validasi gagal')
-             ->assertJsonValidationErrors(['nisn']);
+        ->assertJsonPath('success', false)
+        ->assertJsonPath('message', 'Validasi gagal')
+        ->assertJsonValidationErrors(['nisn']);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -127,9 +127,9 @@ test('pendaftaran gagal validasi jika NISN tidak 10 digit', function () {
 test('pendaftaran gagal jika NISN sudah terdaftar', function () {
     // Buat record awal
     Spmb::factory()->create([
-        'nisn'              => '1234567890',
+        'nisn' => '1234567890',
         'nomor_pendaftaran' => 'SPMB-2025-0001',
-        'status'            => 'Menunggu Verifikasi',
+        'status' => 'Menunggu Verifikasi',
     ]);
 
     $response = $this->postJson('/api/spmb/daftar', validSpmbPayload([
@@ -137,7 +137,7 @@ test('pendaftaran gagal jika NISN sudah terdaftar', function () {
     ]));
 
     $response->assertStatus(422)
-             ->assertJsonValidationErrors(['nisn']);
+        ->assertJsonValidationErrors(['nisn']);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -146,20 +146,20 @@ test('pendaftaran gagal jika NISN sudah terdaftar', function () {
 test('cek status mengembalikan data pendaftar berdasarkan nomor pendaftaran', function () {
     Spmb::factory()->create([
         'nomor_pendaftaran' => 'SPMB-2026-0001',
-        'nama_lengkap'      => 'Budi Santoso',
-        'status'            => 'Diverifikasi',
+        'nama_lengkap' => 'Budi Santoso',
+        'status' => 'Diverifikasi',
     ]);
 
     $response = $this->getJson('/api/spmb/status/SPMB-2026-0001');
 
     $response->assertStatus(200)
-             ->assertJsonPath('success', true)
-             ->assertJsonPath('data.nomor_pendaftaran', 'SPMB-2026-0001')
-             ->assertJsonPath('data.nama_lengkap', 'B*** S******')
-             ->assertJsonPath('data.status', 'Diverifikasi')
-             ->assertJsonStructure([
-                 'data' => ['nomor_pendaftaran', 'nama_lengkap', 'status']
-             ]);
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('data.nomor_pendaftaran', 'SPMB-2026-0001')
+        ->assertJsonPath('data.nama_lengkap', 'B*** S******')
+        ->assertJsonPath('data.status', 'Diverifikasi')
+        ->assertJsonStructure([
+            'data' => ['nomor_pendaftaran', 'nama_lengkap', 'status'],
+        ]);
 
     // Pastikan data minimal dan data sensitif tidak bocor
     $response->assertJsonMissingPath('data.asal_sekolah');
@@ -177,7 +177,7 @@ test('cek status mengembalikan 404 jika nomor pendaftaran tidak ditemukan', func
     $response = $this->getJson('/api/spmb/status/SPMB-9999-9999');
 
     $response->assertStatus(404)
-             ->assertJsonPath('success', false);
+        ->assertJsonPath('success', false);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -188,21 +188,21 @@ test('update status berhasil dilakukan oleh admin yang terautentikasi', function
 
     $spmb = Spmb::factory()->create([
         'nomor_pendaftaran' => 'SPMB-2026-0099',
-        'status'            => 'Menunggu Verifikasi',
+        'status' => 'Menunggu Verifikasi',
     ]);
 
     $response = $this->actingAs($admin)
-                     ->putJson("/api/spmb/status/{$spmb->id}", [
-                         'status' => 'Lulus',
-                     ]);
+        ->putJson("/api/spmb/status/{$spmb->id}", [
+            'status' => 'Lulus',
+        ]);
 
     $response->assertStatus(200)
-             ->assertJsonPath('success', true)
-             ->assertJsonPath('data.status', 'Lulus');
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('data.status', 'Lulus');
 
     // Perubahan tersimpan di DB
     $this->assertDatabaseHas('spmb', [
-        'id'     => $spmb->id,
+        'id' => $spmb->id,
         'status' => 'Lulus',
     ]);
 });
@@ -213,7 +213,7 @@ test('update status berhasil dilakukan oleh admin yang terautentikasi', function
 test('update status ditolak 403 jika tidak terautentikasi (request tanpa user)', function () {
     $spmb = Spmb::factory()->create([
         'nomor_pendaftaran' => 'SPMB-2026-0100',
-        'status'            => 'Menunggu Verifikasi',
+        'status' => 'Menunggu Verifikasi',
     ]);
 
     // Tidak ada actingAs — $request->user() akan null → controller returns 403
@@ -232,20 +232,20 @@ test('update status ditolak 403 jika user terautentikasi bukan admin', function 
 
     $spmb = Spmb::factory()->create([
         'nomor_pendaftaran' => 'SPMB-2026-0101',
-        'status'            => 'Menunggu Verifikasi',
+        'status' => 'Menunggu Verifikasi',
     ]);
 
     $response = $this->actingAs($regularUser)
-                     ->putJson("/api/spmb/status/{$spmb->id}", [
-                         'status' => 'Lulus',
-                     ]);
+        ->putJson("/api/spmb/status/{$spmb->id}", [
+            'status' => 'Lulus',
+        ]);
 
     $response->assertStatus(403)
-             ->assertJsonPath('success', false);
+        ->assertJsonPath('success', false);
 
     // Status tidak berubah
     $this->assertDatabaseHas('spmb', [
-        'id'     => $spmb->id,
+        'id' => $spmb->id,
         'status' => 'Menunggu Verifikasi',
     ]);
 });
@@ -258,17 +258,17 @@ test('update status ditolak 422 jika nilai status tidak valid', function () {
 
     $spmb = Spmb::factory()->create([
         'nomor_pendaftaran' => 'SPMB-2026-0102',
-        'status'            => 'Menunggu Verifikasi',
+        'status' => 'Menunggu Verifikasi',
     ]);
 
     $response = $this->actingAs($admin)
-                     ->putJson("/api/spmb/status/{$spmb->id}", [
-                         'status' => 'STATUS_TIDAK_ADA',
-                     ]);
+        ->putJson("/api/spmb/status/{$spmb->id}", [
+            'status' => 'STATUS_TIDAK_ADA',
+        ]);
 
     $response->assertStatus(422)
-             ->assertJsonPath('success', false)
-             ->assertJsonValidationErrors(['status']);
+        ->assertJsonPath('success', false)
+        ->assertJsonValidationErrors(['status']);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -278,12 +278,12 @@ test('update status mengembalikan 404 jika ID pendaftar tidak ada', function () 
     $admin = User::factory()->create(['role' => 'admin']);
 
     $response = $this->actingAs($admin)
-                     ->putJson('/api/spmb/status/99999', [
-                         'status' => 'Lulus',
-                     ]);
+        ->putJson('/api/spmb/status/99999', [
+            'status' => 'Lulus',
+        ]);
 
     $response->assertStatus(404)
-             ->assertJsonPath('success', false);
+        ->assertJsonPath('success', false);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -293,15 +293,15 @@ test('proses pendaftaran via web form berhasil dan redirect dengan nomor pendaft
     Storage::fake('public');
 
     $payload = validSpmbPayload([
-        'confirm_data'   => '1',
-        'agree_terms'    => '1',
-        'agree_privacy'  => '1',
+        'confirm_data' => '1',
+        'agree_terms' => '1',
+        'agree_privacy' => '1',
     ]);
 
     $response = $this->withoutVite()
-                     ->post('/proses-pendaftaran', array_merge($payload, [
-                         '_token' => csrf_token(),
-                     ]));
+        ->post('/proses-pendaftaran', array_merge($payload, [
+            '_token' => csrf_token(),
+        ]));
 
     $response->assertStatus(302);         // redirect
     $response->assertRedirect('/daftar'); // kembali ke halaman daftar
@@ -322,7 +322,7 @@ test('proses pendaftaran via web form gagal jika NISN tidak valid dan redirect b
     $payload = validSpmbPayload(['nisn' => '123']); // NISN tidak 10 digit
 
     $response = $this->withoutVite()
-                     ->post('/proses-pendaftaran', $payload);
+        ->post('/proses-pendaftaran', $payload);
 
     $response->assertStatus(302);
     $response->assertSessionHasErrors(['nisn']);

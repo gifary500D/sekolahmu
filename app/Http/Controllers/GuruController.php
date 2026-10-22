@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi;
+use App\Models\AuditLog;
+use App\Models\Kelas;
 use App\Models\Tugas;
 use App\Models\TugasSiswa;
-use App\Models\Absensi;
-use App\Models\Kelas;
 use App\Models\User;
-use App\Models\AuditLog;
 use App\Support\Teks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class GuruController extends Controller
 {
@@ -20,7 +21,7 @@ class GuruController extends Controller
     public function dashboard()
     {
         $user = auth()->user();
-        
+
         $tugasList = Tugas::where('guru_id', $user->id)->orderBy('tenggat', 'asc')->get();
         $totalSiswa = User::where('role', 'siswa')->count();
         $kelasBinaan = Kelas::with('siswa')->get();
@@ -46,6 +47,7 @@ class GuruController extends Controller
     {
         $user = auth()->user();
         $kelasList = $user->managedKelas();
+
         return view('guru.tugas.create', compact('kelasList'));
     }
 
@@ -79,7 +81,7 @@ class GuruController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
-        AuditLog::record('CREATE_TUGAS', 'Guru membuat tugas baru: ' . $tugas->judul . ' (' . $tugas->mata_pelajaran . ').');
+        AuditLog::record('CREATE_TUGAS', 'Guru membuat tugas baru: '.$tugas->judul.' ('.$tugas->mata_pelajaran.').');
 
         return redirect()->route('guru.tugas.index')->with('success', 'Tugas berhasil dibuat dan dibagikan ke siswa.');
     }
@@ -95,11 +97,11 @@ class GuruController extends Controller
         if ($user->isGuru() && (int) $tugas->guru_id !== (int) $user->id) {
             abort(403, 'Anda tidak berhak melihat pengumpulan tugas guru lain.');
         }
-        
+
         // Ambil siswa di kelas terkait dan pengumpulannya
         $kelasId = $tugas->kelas_id;
         $siswaList = User::where('role', 'siswa')->where('kelas_id', $kelasId)->get();
-        
+
         $submissions = TugasSiswa::where('tugas_id', $id)->get()->keyBy('siswa_id');
 
         return view('guru.tugas.submissions', compact('tugas', 'siswaList', 'submissions'));
@@ -129,7 +131,7 @@ class GuruController extends Controller
             'status' => 'selesai',
         ]);
 
-        AuditLog::record('GRADE_TUGAS', 'Guru memberi nilai ' . $request->nilai . ' untuk tugas ' . $submission->tugas?->judul . ' siswa ' . $submission->siswa?->name);
+        AuditLog::record('GRADE_TUGAS', 'Guru memberi nilai '.$request->nilai.' untuk tugas '.$submission->tugas?->judul.' siswa '.$submission->siswa?->name);
 
         return redirect()->back()->with('success', 'Nilai dan catatan evaluasi berhasil disimpan.');
     }
@@ -188,7 +190,7 @@ class GuruController extends Controller
         $user = auth()->user();
         $kelasList = $user->managedKelas();
         $selectedKelasId = $request->input('kelas_id', $kelasList->first()?->id);
-        
+
         if ($selectedKelasId && ! $user->canManageKelas($selectedKelasId)) {
             abort(403, 'Anda tidak berhak mengakses kelas ini.');
         }
@@ -228,9 +230,9 @@ class GuruController extends Controller
             ]
         );
 
-        AuditLog::record('SAVE_ABSENSI', 'Guru menyimpan absensi kelas ' . $request->kelas . ' tanggal ' . $request->tanggal);
+        AuditLog::record('SAVE_ABSENSI', 'Guru menyimpan absensi kelas '.$request->kelas.' tanggal '.$request->tanggal);
 
-        return redirect()->route('guru.absensi')->with('success', 'Absensi harian untuk kelas ' . $request->kelas . ' berhasil disimpan.');
+        return redirect()->route('guru.absensi')->with('success', 'Absensi harian untuk kelas '.$request->kelas.' berhasil disimpan.');
     }
 
     /**
@@ -245,26 +247,26 @@ class GuruController extends Controller
             abort(403, 'Anda tidak berhak mengekspor absensi kelas ini.');
         }
 
-        AuditLog::record('EXPORT_ABSENSI', 'Guru mengekspor rekapitulasi absensi kelas: ' . $kelasName);
+        AuditLog::record('EXPORT_ABSENSI', 'Guru mengekspor rekapitulasi absensi kelas: '.$kelasName);
 
         $managedKelasNames = $user->managedKelas()->pluck('nama')->all();
 
-        $absensiRecords = Absensi::when($request->filled('kelas'), function($q) use ($request) {
+        $absensiRecords = Absensi::when($request->filled('kelas'), function ($q) use ($request) {
             $q->where('kelas', $request->kelas);
-        }, function($q) use ($managedKelasNames, $user) {
+        }, function ($q) use ($managedKelasNames, $user) {
             if ($user->isGuru()) {
                 $q->whereIn('kelas', $managedKelasNames);
             }
         })->orderBy('tanggal', 'desc')->get();
 
-        $filename = 'rekap-absensi-' . \Illuminate\Support\Str::slug($kelasName) . '-' . date('Y-m-d') . '.xls';
+        $filename = 'rekap-absensi-'.Str::slug($kelasName).'-'.date('Y-m-d').'.xls';
 
         $headers = [
-            "Content-Type" => "application/vnd.ms-excel; charset=utf-8",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
+            'Content-Type' => 'application/vnd.ms-excel; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=$filename",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ];
 
         $html = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
@@ -278,8 +280,8 @@ class GuruController extends Controller
             .subtitle { font-size: 10pt; text-align: center; color: #475569; margin-bottom: 20px; }
         </style></head><body>';
 
-        $html .= '<div class="title">REKAPITULASI KEHADIRAN SISWA - KELAS ' . strtoupper(htmlspecialchars($kelasName)) . '</div>';
-        $html .= '<div class="subtitle">SMA/SMK PEMDA BAHOROK · Tanggal Ekspor: ' . date('d F Y, H:i') . ' WIB</div>';
+        $html .= '<div class="title">REKAPITULASI KEHADIRAN SISWA - KELAS '.strtoupper(htmlspecialchars($kelasName)).'</div>';
+        $html .= '<div class="subtitle">SMA/SMK PEMDA BAHOROK · Tanggal Ekspor: '.date('d F Y, H:i').' WIB</div>';
 
         $html .= '<table>';
         $html .= '<thead><tr>
@@ -292,7 +294,7 @@ class GuruController extends Controller
 
         $no = 1;
         $absensiRecords = $absensiRecords->all();
-        
+
         // Ambil semua ID siswa yang ada di data kehadiran untuk batch loading
         $allSiswaIds = [];
         foreach ($absensiRecords as $rec) {
@@ -304,14 +306,14 @@ class GuruController extends Controller
             $dataKehadiran = $rec->data_kehadiran ?? [];
             foreach ($dataKehadiran as $siswaId => $status) {
                 $siswa = $siswaCache->get($siswaId);
-                $siswaName = $siswa ? $siswa->name : 'Siswa ID #' . $siswaId;
-                
+                $siswaName = $siswa ? $siswa->name : 'Siswa ID #'.$siswaId;
+
                 $html .= '<tr>';
-                $html .= '<td class="center">' . $no++ . '</td>';
-                $html .= '<td class="center">' . htmlspecialchars(Teks::amankanFormulaCsv($rec->tanggal)) . '</td>';
-                $html .= '<td class="center">' . htmlspecialchars(Teks::amankanFormulaCsv($rec->kelas)) . '</td>';
-                $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($siswaName)) . '</td>';
-                $html .= '<td class="center"><b>' . htmlspecialchars(Teks::amankanFormulaCsv($status)) . '</b></td>';
+                $html .= '<td class="center">'.$no++.'</td>';
+                $html .= '<td class="center">'.htmlspecialchars(Teks::amankanFormulaCsv($rec->tanggal)).'</td>';
+                $html .= '<td class="center">'.htmlspecialchars(Teks::amankanFormulaCsv($rec->kelas)).'</td>';
+                $html .= '<td>'.htmlspecialchars(Teks::amankanFormulaCsv($siswaName)).'</td>';
+                $html .= '<td class="center"><b>'.htmlspecialchars(Teks::amankanFormulaCsv($status)).'</b></td>';
                 $html .= '</tr>';
             }
         }
@@ -335,17 +337,17 @@ class GuruController extends Controller
             abort(403, 'Anda tidak berhak mengekspor rekap tugas guru lain.');
         }
 
-        AuditLog::record('EXPORT_TUGAS', 'Guru mengekspor nilai tugas: ' . $tugas->judul . ' (' . $tugas->mata_pelajaran . ')');
+        AuditLog::record('EXPORT_TUGAS', 'Guru mengekspor nilai tugas: '.$tugas->judul.' ('.$tugas->mata_pelajaran.')');
 
         $submissions = TugasSiswa::with('siswa')->where('tugas_id', $id)->get();
-        $filename = 'nilai-tugas-' . \Illuminate\Support\Str::slug($tugas->judul) . '-' . date('Y-m-d') . '.xls';
+        $filename = 'nilai-tugas-'.Str::slug($tugas->judul).'-'.date('Y-m-d').'.xls';
 
         $headers = [
-            "Content-Type" => "application/vnd.ms-excel; charset=utf-8",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
+            'Content-Type' => 'application/vnd.ms-excel; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=$filename",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ];
 
         $html = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
@@ -360,7 +362,7 @@ class GuruController extends Controller
         </style></head><body>';
 
         $html .= '<div class="title">DAFTAR NILAI & EVALUASI TUGAS SISWA</div>';
-        $html .= '<div class="subtitle">' . strtoupper(htmlspecialchars($tugas->judul)) . ' · MAPEL: ' . strtoupper(htmlspecialchars($tugas->mata_pelajaran)) . ' · KELAS: ' . strtoupper(htmlspecialchars($tugas->kelas?->nama ?? '-')) . '</div>';
+        $html .= '<div class="subtitle">'.strtoupper(htmlspecialchars($tugas->judul)).' · MAPEL: '.strtoupper(htmlspecialchars($tugas->mata_pelajaran)).' · KELAS: '.strtoupper(htmlspecialchars($tugas->kelas?->nama ?? '-')).'</div>';
 
         $html .= '<table>';
         $html .= '<thead><tr>
@@ -375,13 +377,13 @@ class GuruController extends Controller
 
         foreach ($submissions as $index => $sub) {
             $html .= '<tr>';
-            $html .= '<td class="center">' . ($index + 1) . '</td>';
-            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($sub->siswa?->name ?? '-')) . '</td>';
-            $html .= '<td class="center">\'' . htmlspecialchars(Teks::amankanFormulaCsv($sub->siswa?->nisn ?? '-')) . '</td>';
-            $html .= '<td class="center">' . ($sub->status === 'selesai' ? 'Sudah Dikumpulkan' : 'Belum') . '</td>';
-            $html .= '<td class="center"><b>' . ($sub->nilai !== null ? number_format($sub->nilai, 1) : '-') . '</b></td>';
-            $html .= '<td>' . htmlspecialchars(Teks::amankanFormulaCsv($sub->catatan ?? '-')) . '</td>';
-            $html .= '<td class="center">' . ($sub->diselesaikan_pada ? $sub->diselesaikan_pada->format('d/m/Y H:i') : '-') . '</td>';
+            $html .= '<td class="center">'.($index + 1).'</td>';
+            $html .= '<td>'.htmlspecialchars(Teks::amankanFormulaCsv($sub->siswa?->name ?? '-')).'</td>';
+            $html .= '<td class="center">\''.htmlspecialchars(Teks::amankanFormulaCsv($sub->siswa?->nisn ?? '-')).'</td>';
+            $html .= '<td class="center">'.($sub->status === 'selesai' ? 'Sudah Dikumpulkan' : 'Belum').'</td>';
+            $html .= '<td class="center"><b>'.($sub->nilai !== null ? number_format($sub->nilai, 1) : '-').'</b></td>';
+            $html .= '<td>'.htmlspecialchars(Teks::amankanFormulaCsv($sub->catatan ?? '-')).'</td>';
+            $html .= '<td class="center">'.($sub->diselesaikan_pada ? $sub->diselesaikan_pada->format('d/m/Y H:i') : '-').'</td>';
             $html .= '</tr>';
         }
 
@@ -399,7 +401,7 @@ class GuruController extends Controller
         $judul = $tugas->judul;
         $tugas->delete();
 
-        AuditLog::record('DELETE_TUGAS', 'Guru menghapus penugasan: ' . $judul);
+        AuditLog::record('DELETE_TUGAS', 'Guru menghapus penugasan: '.$judul);
 
         return redirect()->route('guru.tugas.index')->with('success', 'Penugasan berhasil dihapus.');
     }

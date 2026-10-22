@@ -45,7 +45,7 @@
                 <div class="flex items-center">
                     <a href="/" class="flex items-center group gap-3">
                         <div class="w-12 h-12 flex items-center justify-center bg-transparent group-hover:scale-105 transition-transform">
-                            <img src="{{ asset('images/logo-skansa.png') }}" alt="Logo SMA/SMK Pemda Bahorok" class="w-11 h-11 object-contain drop-shadow-sm">
+                            <img src="{{ asset('images/logo-pendidikan.svg') }}" alt="Logo Pendidikan" class="w-11 h-11 object-contain drop-shadow-sm" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><polygon points=\'50,5 95,38 77,90 23,90 5,38\' fill=\'%230F2F6B\' stroke=\'%23F59E0B\' stroke-width=\'5\'/><circle cx=\'50\' cy=\'50\' r=\'18\' fill=\'%23F59E0B\'/></svg>';">
                         </div>
                         <div>
                             <span class="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400 block">Yayasan Pendidikan</span>
@@ -164,7 +164,7 @@
                 <!-- Col 1: Brand & Bio -->
                 <div class="space-y-4">
                     <div class="flex items-center gap-3">
-                        <img src="{{ asset('images/logo-skansa.png') }}" alt="Logo SMA/SMK Pemda Bahorok" class="w-12 h-12 object-contain">
+                        <img src="{{ asset('images/logo-pendidikan.svg') }}" alt="Logo Pendidikan" class="w-12 h-12 object-contain" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><polygon points=\'50,5 95,38 77,90 23,90 5,38\' fill=\'%230F2F6B\' stroke=\'%23F59E0B\' stroke-width=\'5\'/><circle cx=\'50\' cy=\'50\' r=\'18\' fill=\'%23F59E0B\'/></svg>';">
                         <div>
                             <span class="text-[11px] font-bold uppercase tracking-widest text-blue-400 block">Yayasan Pendidikan</span>
                             <h3 class="text-xl font-extrabold text-white">SMA/SMK Pemda Bahorok</h3>

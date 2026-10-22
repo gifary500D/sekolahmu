@@ -8,6 +8,7 @@ use App\Models\Tugas;
 use App\Models\TugasSiswa;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -182,5 +183,51 @@ class SapaanDanTugasBeritaTest extends TestCase
         $resSub->assertSee('previewModal');
         $resSub->assertSee('openPreview');
         $resSub->assertSee('Petunjuk &amp; Instruksi Tugas', false);
+    }
+
+    public function test_upload_berita_gambar_dan_render_via_media_route_berfungsi(): void
+    {
+        Storage::fake('public');
+
+        $admin = User::factory()->create(['role' => 'admin', 'password_changed' => true]);
+        $fakeImage = UploadedFile::fake()->create('kegiatan-sekolah.jpg', 100, 'image/jpeg');
+
+        // Upload Berita
+        $response = $this->actingAs($admin)->post(route('admin.cms.berita.store'), [
+            'judul' => 'Inovasi Robotika Siswa SMA/SMK',
+            'konten' => 'Siswa berhasil menciptakan robot pemilah sampah otomatis.',
+            'status' => 'terbit',
+            'gambar' => $fakeImage,
+        ]);
+
+        $response->assertRedirect(route('admin.cms.index'));
+
+        $berita = Berita::where('judul', 'Inovasi Robotika Siswa SMA/SMK')->first();
+        $this->assertNotNull($berita);
+        $this->assertNotNull($berita->gambar_path);
+        Storage::disk('public')->assertExists($berita->gambar_path);
+
+        // Verifikasi URL /media/{path} pada halaman CMS Berita Admin
+        $resCms = $this->actingAs($admin)->get(route('admin.cms.index'));
+        $resCms->assertOk();
+        $expectedMediaUrl = route('media.file', ['path' => $berita->gambar_path]);
+        $resCms->assertSee($expectedMediaUrl, false);
+        $resCms->assertSee('gambarBeritaInput');
+        $resCms->assertSee('gambarCompressInfo');
+
+        // Verifikasi Halaman Berita Publik memuat URL media
+        $resBerita = $this->get(route('berita.index'));
+        $resBerita->assertOk();
+        $resBerita->assertSee($expectedMediaUrl, false);
+
+        // Verifikasi route /media/{path} mengembalikan file status 200
+        $resMedia = $this->get($expectedMediaUrl);
+        $resMedia->assertOk();
+
+        // Verifikasi route /media/{path} mengembalikan 404 untuk file yang tidak ada
+        $this->get('/media/berita/tidak-ada-file-xyz.jpg')->assertNotFound();
+
+        // Verifikasi path traversal diblokir dengan 400
+        $this->get('/media/../config/app.php')->assertStatus(400);
     }
 }

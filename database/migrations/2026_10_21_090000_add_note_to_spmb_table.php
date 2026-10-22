@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('spmb', function (Blueprint $table) {
-            $table->string('note')->nullable()->after('status');
-        });
+        if (! Schema::hasColumn('spmb', 'note')) {
+            Schema::table('spmb', function (Blueprint $table) {
+                $table->text('note')->nullable()->after('status');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('spmb', function (Blueprint $table) {
-            $table->dropColumn('note');
-        });
+        if (Schema::hasColumn('spmb', 'note')) {
+            Schema::table('spmb', function (Blueprint $table) {
+                $table->dropColumn('note');
+            });
+        }
     }
 };

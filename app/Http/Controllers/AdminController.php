@@ -12,6 +12,7 @@ use App\Support\Teks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -163,10 +164,25 @@ class AdminController extends Controller
 
         $applicant = Spmb::findOrFail($id);
         $oldStatus = $applicant->status;
-        $applicant->update([
+
+        // Mekanisme self-healing otomatis kolom 'note' di cPanel/localhost
+        if (! Schema::hasColumn('spmb', 'note')) {
+            try {
+                Schema::table('spmb', fn ($t) => $t->text('note')->nullable());
+            } catch (\Throwable $e) {
+                // Abaikan jika tidak memiliki izin ALTER TABLE
+            }
+        }
+
+        $updateData = [
             'status' => $request->status,
-            'note' => $request->note,
-        ]);
+        ];
+
+        if (Schema::hasColumn('spmb', 'note')) {
+            $updateData['note'] = $request->note;
+        }
+
+        $applicant->update($updateData);
 
         $tempPassword = null;
 
@@ -475,11 +491,15 @@ class AdminController extends Controller
             'judul' => 'required|string|max:150',
             'konten' => 'required|string',
             'status' => 'required|in:terbit,arsip',
-            'gambar' => 'nullable|image|max:2048',
+            'gambar' => 'nullable|image|max:10240',
         ]);
 
         $gambarPath = null;
         if ($request->hasFile('gambar')) {
+            $storageDir = storage_path('app/public/berita');
+            if (! file_exists($storageDir)) {
+                @mkdir($storageDir, 0755, true);
+            }
             $gambarPath = $request->file('gambar')->store('berita', 'public');
         }
 
@@ -502,6 +522,9 @@ class AdminController extends Controller
     public function cmsBeritaDelete($id)
     {
         $berita = Berita::findOrFail($id);
+        if ($berita->gambar_path && Storage::disk('public')->exists($berita->gambar_path)) {
+            Storage::disk('public')->delete($berita->gambar_path);
+        }
         $berita->delete();
 
         AuditLog::record('DELETE_BERITA', 'Menghapus berita portal.');

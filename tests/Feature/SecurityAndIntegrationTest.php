@@ -4,9 +4,9 @@ use App\Models\Kelas;
 use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
-uses(Tests\TestCase::class, RefreshDatabase::class);
+uses(TestCase::class, RefreshDatabase::class);
 
 test('siswa tidak dapat mengakses dashboard admin (privilege escalation blocked)', function () {
     $siswa = User::factory()->create(['role' => 'siswa']);
@@ -57,9 +57,9 @@ test('api tugas dapat membuat tugas dengan skema database yang valid', function 
     ]);
 
     $response->assertStatus(201)
-             ->assertJsonPath('success', true)
-             ->assertJsonPath('data.judul', 'Tugas Fisika Dasar')
-             ->assertJsonPath('data.prioritas', 'tinggi');
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('data.judul', 'Tugas Fisika Dasar')
+        ->assertJsonPath('data.prioritas', 'tinggi');
 
     $this->assertDatabaseHas('tugas', [
         'judul' => 'Tugas Fisika Dasar',
@@ -83,8 +83,8 @@ test('api tugas daftarTugas dapat memuat tugas per kelas', function () {
 
     $response = $this->actingAs($guru, 'sanctum')->getJson('/api/tugas/kelas/X-IPA-1');
     $response->assertStatus(200)
-             ->assertJsonPath('success', true)
-             ->assertJsonCount(1, 'data');
+        ->assertJsonPath('success', true)
+        ->assertJsonCount(1, 'data');
 });
 
 test('relasi statusSiswa pada model Tugas berfungsi dengan baik', function () {

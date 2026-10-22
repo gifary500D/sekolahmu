@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -236,7 +237,15 @@ class SpmbController extends Controller
         // 4. Update status secara persisten
         $pendaftar->status = $request->status;
         if ($request->has('note')) {
-            $pendaftar->note = $request->note;
+            if (! Schema::hasColumn('spmb', 'note')) {
+                try {
+                    Schema::table('spmb', fn ($t) => $t->text('note')->nullable());
+                } catch (\Throwable $e) {
+                }
+            }
+            if (Schema::hasColumn('spmb', 'note')) {
+                $pendaftar->note = $request->note;
+            }
         }
         $pendaftar->save();
 

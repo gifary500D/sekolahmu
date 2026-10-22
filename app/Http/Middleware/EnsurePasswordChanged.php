@@ -13,7 +13,7 @@ class EnsurePasswordChanged
      * Memaksa siswa yang belum mengubah kata sandi default (password_changed = false)
      * untuk memperbarui kata sandi terlebih dahulu sebelum mengakses fitur siswa.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {

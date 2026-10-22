@@ -102,6 +102,7 @@ class AbsensiController extends Controller
 
                 $clone = clone $item;
                 $clone->data_kehadiran = $filteredKehadiran;
+
                 return $clone;
             });
         }
@@ -163,7 +164,7 @@ class AbsensiController extends Controller
 
                 if (is_array($kehadiranList)) {
                     foreach ($kehadiranList as $key => $siswa) {
-                        $nama = is_array($siswa) ? ($siswa['nama'] ?? '-') : ('Siswa ID #' . $key);
+                        $nama = is_array($siswa) ? ($siswa['nama'] ?? '-') : ('Siswa ID #'.$key);
                         $status = is_array($siswa) ? ($siswa['status'] ?? '-') : (string) $siswa;
 
                         // Mitigasi Formula Injection (CSV Injection)
@@ -183,4 +184,3 @@ class AbsensiController extends Controller
         return Response::stream($callback, 200, $headers);
     }
 }
-

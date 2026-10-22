@@ -2,15 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Kelas;
-use App\Models\Spmb;
-use App\Models\Berita;
-use App\Models\Agenda;
-use App\Models\Galeri;
-use App\Models\Tugas;
-use App\Models\Roster;
 use App\Models\Absensi;
+use App\Models\Agenda;
+use App\Models\Berita;
+use App\Models\Galeri;
+use App\Models\Kelas;
+use App\Models\Roster;
+use App\Models\Spmb;
+use App\Models\Tugas;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -27,8 +27,8 @@ class ProductionSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             $tingkat = $tingkatList[array_rand($tingkatList)];
             $program = $programList[array_rand($programList)];
-            $nama = ($tingkat == '10' ? 'X' : ($tingkat == '11' ? 'XI' : 'XII')) . ' ' . strtoupper($program) . ' ' . (($i % 3) + 1);
-            
+            $nama = ($tingkat == '10' ? 'X' : ($tingkat == '11' ? 'XI' : 'XII')).' '.strtoupper($program).' '.(($i % 3) + 1);
+
             $kelas = Kelas::firstOrCreate(
                 ['nama' => $nama],
                 [
@@ -64,12 +64,12 @@ class ProductionSeeder extends Seeder
         $namaGuru = [
             'Drs. H. Abdullah, M.Pd.', 'Siti Rahmawati, S.Pd.', 'Budi Santoso, M.Sc.',
             'Dewi Lestari, S.Pd.', 'Ahmad Fauzi, M.Pd.', 'Sri Wahyuni, S.Si.',
-            'Eko Prasetyo, S.Kom.', 'Nurul Hidayah, M.Pd.'
+            'Eko Prasetyo, S.Kom.', 'Nurul Hidayah, M.Pd.',
         ];
         $guruList = [];
         foreach ($namaGuru as $index => $nama) {
             $guru = User::updateOrCreate(
-                ['email' => 'guru' . ($index + 1) . '@sekolahmu.sch.id'],
+                ['email' => 'guru'.($index + 1).'@sekolahmu.sch.id'],
                 [
                     'name' => $nama,
                     'password' => Hash::make('password'),
@@ -85,12 +85,12 @@ class ProductionSeeder extends Seeder
         $namaSiswaBelakang = ['Pratama', 'Ramadhani', 'Saputra', 'Wulandari', 'Kurniawan', 'Utami', 'Santoso', 'Hidayat', 'Lestari', 'Nugroho'];
 
         for ($i = 1; $i <= 40; $i++) {
-            $nama = $namaSiswaDepan[array_rand($namaSiswaDepan)] . ' ' . $namaSiswaBelakang[array_rand($namaSiswaBelakang)];
-            $nisn = '308' . str_pad($i, 7, '0', STR_PAD_LEFT);
+            $nama = $namaSiswaDepan[array_rand($namaSiswaDepan)].' '.$namaSiswaBelakang[array_rand($namaSiswaBelakang)];
+            $nisn = '308'.str_pad($i, 7, '0', STR_PAD_LEFT);
             $kelas = $kelasList[array_rand($kelasList)];
 
             User::updateOrCreate(
-                ['email' => 'siswa' . $i . '@sekolahmu.sch.id'],
+                ['email' => 'siswa'.$i.'@sekolahmu.sch.id'],
                 [
                     'name' => $nama,
                     'nisn' => $nisn,
@@ -104,30 +104,30 @@ class ProductionSeeder extends Seeder
 
         // 3. Seed SPMB (50 Pendaftar)
         for ($i = 1; $i <= 50; $i++) {
-            $nama = $namaSiswaDepan[array_rand($namaSiswaDepan)] . ' ' . $namaSiswaBelakang[array_rand($namaSiswaBelakang)];
-            $nomorPendaftaran = 'SPMB-2026-' . str_pad($i, 3, '0', STR_PAD_LEFT);
-            
+            $nama = $namaSiswaDepan[array_rand($namaSiswaDepan)].' '.$namaSiswaBelakang[array_rand($namaSiswaBelakang)];
+            $nomorPendaftaran = 'SPMB-2026-'.str_pad($i, 3, '0', STR_PAD_LEFT);
+
             Spmb::updateOrCreate(
                 ['nomor_pendaftaran' => $nomorPendaftaran],
                 [
                     'nama_lengkap' => $nama,
                     'gender' => $i % 2 == 0 ? 'perempuan' : 'laki-laki',
                     'tempat_lahir' => 'Bahorok',
-                    'tanggal_lahir' => '2010-03-' . str_pad(($i % 28) + 1, 2, '0', STR_PAD_LEFT),
-                    'nisn' => '987' . str_pad($i, 7, '0', STR_PAD_LEFT),
-                    'nik' => '1207' . str_pad($i, 12, '0', STR_PAD_LEFT),
+                    'tanggal_lahir' => '2010-03-'.str_pad(($i % 28) + 1, 2, '0', STR_PAD_LEFT),
+                    'nisn' => '987'.str_pad($i, 7, '0', STR_PAD_LEFT),
+                    'nik' => '1207'.str_pad($i, 12, '0', STR_PAD_LEFT),
                     'agama' => 'Islam',
-                    'email' => 'pendaftar' . $i . '@example.com',
-                    'telepon' => '0812' . rand(10000000, 99999999),
-                    'alamat' => 'Jl. Pembangunan No. ' . $i . ', Bahorok',
+                    'email' => 'pendaftar'.$i.'@example.com',
+                    'telepon' => '0812'.rand(10000000, 99999999),
+                    'alamat' => 'Jl. Pembangunan No. '.$i.', Bahorok',
                     'kota' => 'Langkat',
                     'provinsi' => 'Sumatera Utara',
-                    'nama_ayah' => 'Ayah ' . $nama,
+                    'nama_ayah' => 'Ayah '.$nama,
                     'pekerjaan_ayah' => 'Wiraswasta',
-                    'nama_ibu' => 'Ibu ' . $nama,
+                    'nama_ibu' => 'Ibu '.$nama,
                     'pekerjaan_ibu' => 'Ibu Rumah Tangga',
-                    'telepon_ortu' => '0813' . rand(10000000, 99999999),
-                    'asal_sekolah' => 'SMP Negeri ' . (($i % 5) + 1) . ' Bahorok',
+                    'telepon_ortu' => '0813'.rand(10000000, 99999999),
+                    'asal_sekolah' => 'SMP Negeri '.(($i % 5) + 1).' Bahorok',
                     'nilai_rata' => rand(75, 98) + (rand(0, 99) / 100),
                     'tahun_lulus' => 2026,
                     'program' => $programList[array_rand($programList)],
@@ -142,13 +142,13 @@ class ProductionSeeder extends Seeder
         $adminId = $adminUser ? $adminUser->id : null;
         $topikBerita = ['Prestasi Gemilang', 'Kegiatan Ekstrakurikuler', 'Penyuluhan Kesehatan', 'Porseni Antar Kelas', 'Pelatihan Olimpiade Sains', 'Kunjungan Edukatif', 'Ujian Sekolah Berbasis Digital', 'Peringatan Hari Besar Nasional'];
         for ($i = 1; $i <= 50; $i++) {
-            $judul = $topikBerita[array_rand($topikBerita)] . ' ' . $i . ' - SMA/SMK Pemda Bahorok';
+            $judul = $topikBerita[array_rand($topikBerita)].' '.$i.' - SMA/SMK Pemda Bahorok';
             Berita::updateOrCreate(
                 ['slug' => Str::slug($judul)],
                 [
                     'judul' => $judul,
-                    'ringkasan' => 'Ringkasan informasi dan dokumentasi kegiatan ' . $judul . ' yang sukses diselenggarakan di lingkungan sekolah.',
-                    'konten' => 'Dokumentasi lengkap kegiatan ' . $judul . ' yang melibatkan seluruh siswa dan dewan guru. Acara berlangsung meriah dan penuh antusiasme dari awal hingga selesai.',
+                    'ringkasan' => 'Ringkasan informasi dan dokumentasi kegiatan '.$judul.' yang sukses diselenggarakan di lingkungan sekolah.',
+                    'konten' => 'Dokumentasi lengkap kegiatan '.$judul.' yang melibatkan seluruh siswa dan dewan guru. Acara berlangsung meriah dan penuh antusiasme dari awal hingga selesai.',
                     'status' => 'terbit',
                     'diterbitkan_pada' => now()->subDays(rand(1, 100)),
                     'penulis_id' => $adminId,
@@ -159,7 +159,7 @@ class ProductionSeeder extends Seeder
         // 5. Seed Agenda (50 Agenda)
         $kegiatanAgenda = ['Rapat Guru', 'Ujian Harian', 'Praktek Laboratorium', 'Bimbingan Konseling', 'Pramuka', 'Paskibra', 'Rohis', 'Ujian Praktik'];
         for ($i = 1; $i <= 50; $i++) {
-            $judul = $kegiatanAgenda[array_rand($kegiatanAgenda)] . ' Periode ' . $i;
+            $judul = $kegiatanAgenda[array_rand($kegiatanAgenda)].' Periode '.$i;
             $mulai = now()->addDays($i - 25)->setTime(8, 0);
             Agenda::updateOrCreate(
                 ['judul' => $judul],
@@ -176,7 +176,7 @@ class ProductionSeeder extends Seeder
         $albumList = ['Kegiatan Sekolah', 'Fasilitas', 'Prestasi', 'Ekstrakurikuler'];
         for ($i = 1; $i <= 50; $i++) {
             Galeri::updateOrCreate(
-                ['judul' => 'Dokumentasi Dokumentasi Kegiatan ' . $i],
+                ['judul' => 'Dokumentasi Dokumentasi Kegiatan '.$i],
                 [
                     'album' => $albumList[array_rand($albumList)],
                     'keterangan' => 'Foto dokumentasi resmi kegiatan sekolah tahun ajaran 2026/2027.',
@@ -190,7 +190,7 @@ class ProductionSeeder extends Seeder
         for ($i = 1; $i <= 50; $i++) {
             $kelas = $kelasList[array_rand($kelasList)];
             Tugas::updateOrCreate(
-                ['judul' => 'Lembar Kerja Mandiri Bab ' . $i, 'kelas_id' => $kelas->id],
+                ['judul' => 'Lembar Kerja Mandiri Bab '.$i, 'kelas_id' => $kelas->id],
                 [
                     'deskripsi' => 'Kerjakan soal latihan secara teliti dan kumpulkan sebelum tenggat waktu berakhir.',
                     'mata_pelajaran' => $mapelList[array_rand($mapelList)],
@@ -226,7 +226,7 @@ class ProductionSeeder extends Seeder
         for ($i = 1; $i <= 50; $i++) {
             $kelas = $kelasList[array_rand($kelasList)];
             $tanggal = now()->subDays($i)->format('Y-m-d');
-            
+
             Absensi::updateOrCreate(
                 [
                     'kelas' => $kelas->nama,

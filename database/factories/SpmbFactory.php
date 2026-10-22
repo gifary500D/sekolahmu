@@ -33,7 +33,7 @@ class SpmbFactory extends Factory
             'nama_ibu' => fake()->name('female'),
             'pekerjaan_ibu' => fake()->jobTitle(),
             'telepon_ortu' => fake()->numerify('08##########'),
-            'asal_sekolah' => fake()->company() . ' School',
+            'asal_sekolah' => fake()->company().' School',
             'nilai_rata' => fake()->randomFloat(2, 60, 100),
             'tahun_lulus' => fake()->numberBetween(2020, (int) date('Y')),
             'program' => fake()->randomElement(['ipa', 'ips', 'bahasa']),

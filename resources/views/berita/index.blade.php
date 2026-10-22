@@ -17,7 +17,7 @@
             @forelse($beritaList ?? [] as $item)
                 @php
                     $pubDate = ($item->diterbitkan_pada ?? $item->created_at)?->format('d M Y') ?? date('d M Y');
-                    $imgUrl = $item->gambar_path ? asset('storage/' . $item->gambar_path) : 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop';
+                    $imgUrl = $item->gambar_path ? route('media.file', ['path' => $item->gambar_path]) : 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop';
                 @endphp
                 <div class="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow flex flex-col">
                     <img 

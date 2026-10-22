@@ -17,7 +17,7 @@
             @forelse($galeriList ?? [] as $foto)
                 <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-800 group relative">
                     <img 
-                        src="{{ $foto->gambar_path ? asset('storage/' . $foto->gambar_path) : 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=800&auto=format&fit=crop' }}" 
+                        src="{{ $foto->gambar_path ? route('media.file', ['path' => $foto->gambar_path]) : 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=800&auto=format&fit=crop' }}" 
                         alt="Galeri Sekolah" 
                         class="w-full h-48 sm:h-56 md:h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                     >

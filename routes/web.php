@@ -5,6 +5,7 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SiswaController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,43 @@ Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/berita', [PageController::class, 'beritaIndex'])->name('berita.index');
 Route::get('/agenda', [PageController::class, 'agendaIndex'])->name('agenda.index');
 Route::get('/galeri', [PageController::class, 'galeriIndex'])->name('galeri.index');
+
+// Media File Delivery Tanpa Bergantung symlink storage:link (Kompatibel cPanel & Localhost)
+Route::get('/media/{path}', function (string $path) {
+    if (str_contains($path, '..')) {
+        abort(400);
+    }
+
+    $cleanPath = ltrim(preg_replace('#^storage/#', '', $path), '/');
+
+    // 1. Storage disk public (storage/app/public/{path})
+    try {
+        $storagePath = Storage::disk('public')->path($cleanPath);
+        if (file_exists($storagePath) && is_file($storagePath)) {
+            return response()->file($storagePath);
+        }
+    } catch (Throwable $e) {
+    }
+
+    $directStorage = storage_path('app/public/'.$cleanPath);
+    if (file_exists($directStorage) && is_file($directStorage)) {
+        return response()->file($directStorage);
+    }
+
+    // 2. Public uploads folder (public/uploads/{path})
+    $publicUploads = public_path('uploads/'.$cleanPath);
+    if (file_exists($publicUploads) && is_file($publicUploads)) {
+        return response()->file($publicUploads);
+    }
+
+    // 3. Public images folder (public/images/{path})
+    $publicImages = public_path('images/'.$cleanPath);
+    if (file_exists($publicImages) && is_file($publicImages)) {
+        return response()->file($publicImages);
+    }
+
+    abort(404);
+})->where('path', '.*')->name('media.file');
 
 // Halaman Informasi Sekolah (Company Profile)
 Route::get('/tentang', [PageController::class, 'about'])->name('about');

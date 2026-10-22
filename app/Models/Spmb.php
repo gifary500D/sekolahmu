@@ -66,6 +66,18 @@ class Spmb extends Model
     }
 
     /**
+     * Dapatkan instance model User terkait (relasi eager-load atau fallback query).
+     */
+    public function getUser(): ?User
+    {
+        if ($this->relationLoaded('user') && $this->user) {
+            return $this->user;
+        }
+
+        return $this->user_record;
+    }
+
+    /**
      * Generate Nomor Pendaftaran SPMB yang unik dan persisten.
      * Format: SPMB-YYYY-0001
      */

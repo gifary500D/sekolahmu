@@ -21,17 +21,19 @@ class EnsureSpmbDiterima
         $user = $request->user();
 
         if ($user && $user->isSiswa()) {
-            $spmb = $user->spmb ?? Spmb::where('nisn', $user->nisn)->orWhere('email', $user->email)->first();
+            if (! $user->isSpmbDiterima()) {
+                $spmb = $user->getSpmb();
+                $status = $spmb ? $spmb->status : 'Belum Diterima';
 
-            if ($spmb && $spmb->status !== 'Diterima') {
                 if ($request->expectsJson() || $request->is('api/*')) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Akses dashboard ditolak. Status SPMB belum "Diterima" (Status saat ini: '.$spmb->status.').',
+                        'message' => 'Akses dashboard ditolak. Status SPMB belum "Diterima" (Status saat ini: '.$status.').',
+                        'spmb_status' => $status,
                     ], 403);
                 }
 
-                abort(403, 'Akses ditolak: Akun siswa baru hanya dapat mengakses dashboard setelah status SPMB dinyatakan "Diterima". Status Anda saat ini: '.$spmb->status.'.');
+                abort(403, 'Akses ditolak: Akun siswa baru hanya dapat mengakses dashboard setelah status SPMB dinyatakan "Diterima". Status Anda saat ini: '.$status.'.');
             }
         }
 

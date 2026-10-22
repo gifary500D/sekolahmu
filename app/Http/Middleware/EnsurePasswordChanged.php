@@ -20,14 +20,23 @@ class EnsurePasswordChanged
         $user = $request->user();
 
         if ($user && $user->isSiswa() && ! $user->password_changed) {
-            $isPasswordRoute = $request->routeIs('siswa.password.form') || $request->routeIs('siswa.password.update');
-            $isLogoutRoute = $request->routeIs('logout') || $request->is('logout');
+            $isPasswordRoute = $request->routeIs('siswa.password.form')
+                || $request->routeIs('siswa.password.update')
+                || $request->routeIs('api.password.update')
+                || $request->is('api/ubah-password')
+                || $request->is('api/password/update')
+                || $request->is('api/v1/ubah-password');
+
+            $isLogoutRoute = $request->routeIs('logout')
+                || $request->is('logout')
+                || $request->is('api/logout');
 
             if (! $isPasswordRoute && ! $isLogoutRoute) {
                 if ($request->expectsJson() || $request->is('api/*')) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Wajib mengubah kata sandi bawaan sebelum mengakses layanan.',
+                        'must_change_password' => true,
                     ], 403);
                 }
 

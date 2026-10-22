@@ -96,10 +96,27 @@ class SpmbController extends Controller
                 $spmb = Spmb::create($data);
 
                 // Sinkronisasi otomatis akun User Siswa
-                $user = User::where('nisn', $data['nisn'])->orWhere('email', $data['email'])->first();
+                $user = User::withTrashed()
+                    ->where(function ($q) use ($data) {
+                        $q->where('nisn', $data['nisn'])->orWhere('email', $data['email']);
+                    })
+                    ->first();
+
+                $tempPassword = 'Sp-'.Str::random(8).'!';
                 if (! $user) {
-                    $tempPassword = 'Sp-'.Str::random(8).'!';
-                    User::create([
+                    $user = User::create([
+                        'name' => $data['nama_lengkap'],
+                        'email' => $data['email'],
+                        'nisn' => $data['nisn'],
+                        'password' => Hash::make($tempPassword),
+                        'role' => 'siswa',
+                        'password_changed' => false,
+                    ]);
+                } else {
+                    if ($user->trashed()) {
+                        $user->restore();
+                    }
+                    $user->update([
                         'name' => $data['nama_lengkap'],
                         'email' => $data['email'],
                         'nisn' => $data['nisn'],
@@ -117,6 +134,7 @@ class SpmbController extends Controller
                         'nama_lengkap' => $spmb->nama_lengkap,
                         'jalur_pendaftaran' => $spmb->jalur_pendaftaran,
                         'status' => $spmb->status,
+                        'temp_password' => $tempPassword,
                         'created_at' => $spmb->created_at,
                     ],
                 ], 201);
@@ -250,14 +268,23 @@ class SpmbController extends Controller
         $pendaftar->save();
 
         // 5. Sinkronisasi akun User saat status dinyatakan Diterima / Lulus
+        $user = null;
+        $tempPassword = null;
         if (in_array($request->status, ['Diterima', 'Lulus'], true)) {
-            $user = User::where('nisn', $pendaftar->nisn)
-                ->orWhere('email', $pendaftar->email)
-                ->first();
+            if (! empty($pendaftar->nisn)) {
+                $user = User::withTrashed()->where('nisn', $pendaftar->nisn)->first();
+            }
+            if (! $user && ! empty($pendaftar->email)) {
+                $user = User::withTrashed()->where('email', $pendaftar->email)->first();
+            }
+
+            if ($user && $user->trashed()) {
+                $user->restore();
+            }
 
             if (! $user) {
                 $tempPassword = 'Sp-'.Str::random(8).'!';
-                User::create([
+                $user = User::create([
                     'name' => $pendaftar->nama_lengkap,
                     'email' => $pendaftar->email,
                     'nisn' => $pendaftar->nisn,
@@ -267,29 +294,46 @@ class SpmbController extends Controller
                     'password_changed' => false,
                 ]);
             } else {
-                $updateData = [
+                $userUpdate = [
                     'name' => $pendaftar->nama_lengkap,
                     'email' => $pendaftar->email,
                     'nisn' => $pendaftar->nisn,
                     'role' => 'siswa',
                 ];
                 if ($request->filled('kelas_id')) {
-                    $updateData['kelas_id'] = $request->kelas_id;
+                    $userUpdate['kelas_id'] = $request->kelas_id;
                 }
-                $user->update($updateData);
+                if (empty($user->password)) {
+                    $tempPassword = 'Sp-'.Str::random(8).'!';
+                    $userUpdate['password'] = Hash::make($tempPassword);
+                    $userUpdate['password_changed'] = false;
+                }
+                $user->update($userUpdate);
+            }
+        }
+
+        $responseData = [
+            'id' => $pendaftar->id,
+            'nomor_pendaftaran' => $pendaftar->nomor_pendaftaran,
+            'nama_lengkap' => $pendaftar->nama_lengkap,
+            'status' => $pendaftar->status,
+            'updated_at' => $pendaftar->updated_at,
+        ];
+
+        if ($user) {
+            $responseData['user_id'] = $user->id;
+            $responseData['user_email'] = $user->email;
+            $responseData['user_nisn'] = $user->nisn;
+            $responseData['role'] = $user->role;
+            if ($tempPassword) {
+                $responseData['temp_password'] = $tempPassword;
             }
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Status pendaftaran berhasil diperbarui.',
-            'data' => [
-                'id' => $pendaftar->id,
-                'nomor_pendaftaran' => $pendaftar->nomor_pendaftaran,
-                'nama_lengkap' => $pendaftar->nama_lengkap,
-                'status' => $pendaftar->status,
-                'updated_at' => $pendaftar->updated_at,
-            ],
+            'data' => $responseData,
         ], 200);
     }
 }

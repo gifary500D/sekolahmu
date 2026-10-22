@@ -208,11 +208,21 @@ class SiswaController extends Controller
             'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
         ]);
 
-        $user = auth()->user();
+        $user = auth()->user() ?? $request->user();
         $user->update([
             'password' => Hash::make($request->password),
             'password_changed' => true,
         ]);
+
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Kata sandi berhasil diperbarui. Selamat datang di Portal Siswa!',
+                'data' => [
+                    'password_changed' => true,
+                ],
+            ], 200);
+        }
 
         return redirect()->route('dashboard')->with('success', 'Kata sandi berhasil diperbarui. Selamat datang di Portal Siswa!');
     }

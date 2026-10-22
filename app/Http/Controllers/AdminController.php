@@ -185,12 +185,20 @@ class AdminController extends Controller
         $applicant->update($updateData);
 
         $tempPassword = null;
+        $user = null;
 
         // Sinkronisasi akun User saat status "Diterima"
         if ($request->status === 'Diterima') {
-            $user = User::where('nisn', $applicant->nisn)
-                ->orWhere('email', $applicant->email)
-                ->first();
+            if (! empty($applicant->nisn)) {
+                $user = User::withTrashed()->where('nisn', $applicant->nisn)->first();
+            }
+            if (! $user && ! empty($applicant->email)) {
+                $user = User::withTrashed()->where('email', $applicant->email)->first();
+            }
+
+            if ($user && $user->trashed()) {
+                $user->restore();
+            }
 
             if (! $user) {
                 $tempPassword = 'Sp-'.Str::random(8).'!';
@@ -204,16 +212,21 @@ class AdminController extends Controller
                     'password_changed' => false,
                 ]);
             } else {
-                $updateData = [
+                $userUpdate = [
                     'name' => $applicant->nama_lengkap,
                     'email' => $applicant->email,
                     'nisn' => $applicant->nisn,
                     'role' => 'siswa',
                 ];
                 if ($request->filled('kelas_id')) {
-                    $updateData['kelas_id'] = $request->kelas_id;
+                    $userUpdate['kelas_id'] = $request->kelas_id;
                 }
-                $user->update($updateData);
+                if (empty($user->password)) {
+                    $tempPassword = 'Sp-'.Str::random(8).'!';
+                    $userUpdate['password'] = Hash::make($tempPassword);
+                    $userUpdate['password_changed'] = false;
+                }
+                $user->update($userUpdate);
             }
         }
 
@@ -222,6 +235,8 @@ class AdminController extends Controller
         $msg = 'Status pendaftar '.$applicant->nama_lengkap.' berhasil diperbarui menjadi '.$request->status.'.';
         if ($tempPassword) {
             $msg .= ' Akun siswa berhasil disinkronkan dengan kata sandi sementara: '.$tempPassword;
+        } elseif ($request->status === 'Diterima' && $user) {
+            $msg .= ' Akun siswa aktif (Role: siswa, Email: '.$user->email.', NISN: '.$user->nisn.').';
         }
 
         return redirect()->route('admin.spmb.index')->with('success', $msg);
@@ -361,7 +376,7 @@ class AdminController extends Controller
      */
     public function siswaIndex()
     {
-        $siswaList = User::with('kelas')->where('role', 'siswa')->orderBy('created_at', 'desc')->paginate(20);
+        $siswaList = User::with(['kelas', 'spmb'])->where('role', 'siswa')->orderBy('created_at', 'desc')->paginate(20);
         $kelasList = Kelas::all();
 
         return view('admin.siswa.index', compact('siswaList', 'kelasList'));

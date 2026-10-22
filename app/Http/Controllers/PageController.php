@@ -5,21 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Agenda;
 use App\Models\Berita;
 use App\Models\Galeri;
-use App\Models\Kelas;
 use App\Models\Spmb;
 use App\Models\User;
+use App\Traits\AuthenticatesUsersWithDualLogin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
+    use AuthenticatesUsersWithDualLogin;
+
     /**
      * Tampilkan halaman beranda
      */
@@ -61,6 +62,14 @@ class PageController extends Controller
      */
     public function prosesLogin(Request $request)
     {
+        $loginField = trim((string) ($request->input('login') ?? $request->input('email') ?? $request->input('nisn')));
+        $password = (string) $request->input('password');
+        $remember = $request->filled('remember');
+
+        if (! $request->has('login') && $loginField !== '') {
+            $request->merge(['login' => $loginField]);
+        }
+
         $request->validate([
             'login' => 'required',
             'password' => 'required',
@@ -69,194 +78,82 @@ class PageController extends Controller
             'password.required' => 'Kata sandi wajib diisi.',
         ]);
 
-        $loginField = trim((string) $request->input('login'));
-        $password = (string) $request->input('password');
-        $remember = $request->filled('remember');
-
         // Mekanisme auto-provisioning akun demo cepat (Admin Suclyn, Guru Rina S.Pd, Siswa Alya)
         $this->provisionDemoAccountIfNeeded($loginField, $password);
 
-        // Deteksi apakah input adalah format email atau NISN
-        $field = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'nisn';
+        $user = $this->findUserByLogin($loginField);
 
-        if (auth()->attempt([$field => $loginField, 'password' => $password], $remember)) {
-            $user = auth()->user();
-
-            // Pendaftar SPMB hanya boleh mengakses sesi sistem setelah status resmi "Diterima"
-            if ($user->isSiswa()) {
-                $spmb = $user->spmb ?? Spmb::where('nisn', $user->nisn)->orWhere('email', $user->email)->first();
-                if ($spmb && $spmb->status !== 'Diterima') {
-                    auth()->logout();
-                    $request->session()->invalidate();
-                    $request->session()->regenerateToken();
-
-                    return redirect()->route('login')->withErrors([
-                        'login' => 'Akun Anda belum dapat mengakses dashboard siswa. Status pendaftaran SPMB Anda saat ini: "'.$spmb->status.'". Akses dashboard hanya dibuka setelah status dinyatakan "Diterima".',
-                    ])->withInput();
-                }
+        if (! $user || ! Hash::check($password, $user->password)) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Email / NISN atau kata sandi yang Anda masukkan salah.',
+                    'errors' => [
+                        'login' => ['Email / NISN atau kata sandi yang Anda masukkan salah.'],
+                    ],
+                ], 401);
             }
 
-            $request->session()->regenerate();
-
-            return redirect()->intended('/dashboard');
+            return redirect()->back()->withErrors([
+                'login' => 'Email / NISN atau kata sandi yang Anda masukkan salah.',
+            ])->withInput();
         }
 
-        return redirect()->back()->withErrors([
-            'login' => 'Email / NISN atau kata sandi yang Anda masukkan salah.',
-        ])->withInput();
-    }
-
-    /**
-     * Auto-provisioning akun demo cepat (Admin Suclyn, Guru Rina S.Pd, Siswa Alya)
-     * sebelum autentikasi dijalankan, agar 100% berfungsi di cPanel tanpa seed database manual.
-     */
-    protected function provisionDemoAccountIfNeeded(string $loginField, string $password): void
-    {
-        $normalizedLogin = strtolower(trim($loginField));
-        $hashedPassword = Hash::make($password ?: 'password');
-
-        // 1. Admin Suclyn (suclyn@sekolah.sch.id)
-        if (in_array($normalizedLogin, ['suclyn@sekolah.sch.id', 'admin@sekolahmu.sch.id', 'admin@sekolah.sch.id'])) {
-            $admin = User::where('email', 'suclyn@sekolah.sch.id')->first();
-            if (! $admin) {
-                User::create([
-                    'name' => 'Admin Suclyn',
-                    'email' => 'suclyn@sekolah.sch.id',
-                    'password' => $hashedPassword,
-                    'role' => 'admin',
-                    'password_changed' => true,
-                ]);
-            } else {
-                $admin->update([
-                    'name' => 'Admin Suclyn',
-                    'password' => $hashedPassword,
-                    'role' => 'admin',
-                    'password_changed' => true,
-                ]);
+        // Pendaftar SPMB hanya boleh mengakses sesi sistem setelah status resmi "Diterima"
+        if ($user->isSiswa() && ! $user->isSpmbDiterima()) {
+            auth()->logout();
+            if ($request->hasSession()) {
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
             }
 
-            return;
+            $spmb = $user->getSpmb();
+            $status = $spmb ? $spmb->status : 'Belum Diterima';
+
+            $errorMessage = 'Akun Anda belum dapat mengakses dashboard siswa. Status pendaftaran SPMB Anda saat ini: "'.$status.'". Akses dashboard hanya dibuka setelah status dinyatakan "Diterima".';
+
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $errorMessage,
+                    'spmb_status' => $status,
+                ], 403);
+            }
+
+            return redirect()->route('login')->withErrors([
+                'login' => $errorMessage,
+            ])->withInput();
         }
 
-        // 2. Guru Rina S.Pd (rina.kartika@demo.sch.id)
-        if (in_array($normalizedLogin, ['rina.kartika@demo.sch.id', 'rina.spd@demo.sch.id', 'rina@sekolah.sch.id', 'rina@demo.sch.id'])) {
-            $demoKelas = Kelas::firstOrCreate(
-                ['nama' => 'X-MIPA-1'],
-                [
-                    'tingkat' => '10',
-                    'program' => 'ipa',
-                ]
-            );
+        auth()->login($user, $remember);
 
-            $guru = User::where('email', 'rina.kartika@demo.sch.id')->first();
-            if (! $guru) {
-                $guru = User::create([
-                    'name' => 'Rina Kartika, S.Pd.',
-                    'email' => 'rina.kartika@demo.sch.id',
-                    'password' => $hashedPassword,
-                    'role' => 'guru',
-                    'password_changed' => true,
-                ]);
-            } else {
-                $guru->update([
-                    'name' => 'Rina Kartika, S.Pd.',
-                    'password' => $hashedPassword,
-                    'role' => 'guru',
-                    'password_changed' => true,
-                ]);
-            }
+        if ($request->expectsJson() || $request->is('api/*')) {
+            $token = $user->createToken('api-token')->plainTextToken;
 
-            // Kaitkan kelas binaan dengan wali kelas Rina agar relasi dashboard guru tidak null
-            if (! $demoKelas->wali_kelas_id || $demoKelas->wali_kelas_id === $guru->id) {
-                $demoKelas->update(['wali_kelas_id' => $guru->id]);
-            }
-
-            return;
+            return response()->json([
+                'success' => true,
+                'message' => 'Login berhasil.',
+                'data' => [
+                    'token' => $token,
+                    'token_type' => 'Bearer',
+                    'user' => [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'nisn' => $user->nisn,
+                        'role' => $user->role,
+                        'kelas_id' => $user->kelas_id,
+                        'password_changed' => (bool) $user->password_changed,
+                        'must_change_password' => ! $user->password_changed,
+                        'spmb_status' => $user->getSpmb()?->status ?? 'Diterima',
+                    ],
+                ],
+            ], 200);
         }
 
-        // 3. Siswa Alya beserta NISN-nya
-        $demoAlyaEmail = 'alya.murid@demo.sch.id';
-        $demoAlyaNisn = '0081234567';
+        $request->session()->regenerate();
 
-        if (in_array($normalizedLogin, [$demoAlyaEmail, $demoAlyaNisn, 'alya@sekolah.sch.id', 'alya@demo.sch.id'])) {
-            $demoKelas = Kelas::firstOrCreate(
-                ['nama' => 'X-MIPA-1'],
-                [
-                    'tingkat' => '10',
-                    'program' => 'ipa',
-                ]
-            );
-
-            $siswa = User::where('email', $demoAlyaEmail)
-                ->orWhere('nisn', $demoAlyaNisn)
-                ->first();
-
-            if (! $siswa) {
-                $siswa = User::create([
-                    'name' => 'Alya Murid',
-                    'email' => $demoAlyaEmail,
-                    'nisn' => $demoAlyaNisn,
-                    'password' => $hashedPassword,
-                    'role' => 'siswa',
-                    'kelas_id' => $demoKelas->id,
-                    'password_changed' => true,
-                ]);
-            } else {
-                $siswa->update([
-                    'name' => 'Alya Murid',
-                    'email' => $demoAlyaEmail,
-                    'nisn' => $demoAlyaNisn,
-                    'password' => $hashedPassword,
-                    'role' => 'siswa',
-                    'kelas_id' => $siswa->kelas_id ?: $demoKelas->id,
-                    'password_changed' => true,
-                ]);
-            }
-
-            // Buat / perbarui profil SPMB dengan status "Diterima"
-            // agar siswa tidak dicegat oleh verifikasi SPMB / EnsureSpmbDiterima
-            if (Schema::hasTable('spmb')) {
-                $spmbData = [
-                    'nama_lengkap' => 'Alya Murid',
-                    'gender' => 'perempuan',
-                    'tempat_lahir' => 'Bahorok',
-                    'tanggal_lahir' => '2008-05-15',
-                    'nisn' => $demoAlyaNisn,
-                    'nik' => '1207010101080099',
-                    'agama' => 'Islam',
-                    'email' => $demoAlyaEmail,
-                    'telepon' => '081234567800',
-                    'alamat' => 'Jl. Pendidikan No. 10 Bahorok',
-                    'kota' => 'Langkat',
-                    'provinsi' => 'Sumatera Utara',
-                    'nama_ayah' => 'Bapak Alya',
-                    'pekerjaan_ayah' => 'Wiraswasta',
-                    'nama_ibu' => 'Ibu Alya',
-                    'pekerjaan_ibu' => 'Guru',
-                    'telepon_ortu' => '081234567801',
-                    'asal_sekolah' => 'SMP Negeri 1 Bahorok',
-                    'nilai_rata' => 91.5,
-                    'tahun_lulus' => 2026,
-                    'program' => 'ipa',
-                    'jalur_pendaftaran' => 'Zonasi',
-                    'status' => 'Diterima',
-                ];
-
-                if (Schema::hasColumn('spmb', 'note')) {
-                    $spmbData['note'] = 'Akun demo siswa resmi terverifikasi dan diterima.';
-                }
-
-                $spmb = Spmb::where('nisn', $demoAlyaNisn)->orWhere('email', $demoAlyaEmail)->first();
-                if (! $spmb) {
-                    $spmbData['nomor_pendaftaran'] = 'SPMB-DEMO-001';
-                    Spmb::create($spmbData);
-                } else {
-                    $spmb->update($spmbData);
-                }
-            }
-
-            return;
-        }
+        return redirect()->intended('/dashboard');
     }
 
     /**
@@ -353,16 +250,36 @@ class PageController extends Controller
                 // Simpan data SPMB
                 $spmbRecord = Spmb::create($data);
 
-                // Buat akun User otomatis dengan kata sandi acak sementara yang unik
+                // Buat atau aktifkan akun User otomatis dengan kata sandi acak sementara yang unik
                 $tempPassword = 'Sp-'.Str::random(8).'!';
-                User::create([
-                    'name' => $data['nama_lengkap'],
-                    'email' => $data['email'],
-                    'nisn' => $data['nisn'],
-                    'password' => Hash::make($tempPassword),
-                    'role' => 'siswa',
-                    'password_changed' => false,
-                ]);
+                $existingUser = User::withTrashed()
+                    ->where(function ($q) use ($data) {
+                        $q->where('nisn', $data['nisn'])->orWhere('email', $data['email']);
+                    })
+                    ->first();
+
+                if ($existingUser) {
+                    if ($existingUser->trashed()) {
+                        $existingUser->restore();
+                    }
+                    $existingUser->update([
+                        'name' => $data['nama_lengkap'],
+                        'email' => $data['email'],
+                        'nisn' => $data['nisn'],
+                        'password' => Hash::make($tempPassword),
+                        'role' => 'siswa',
+                        'password_changed' => false,
+                    ]);
+                } else {
+                    User::create([
+                        'name' => $data['nama_lengkap'],
+                        'email' => $data['email'],
+                        'nisn' => $data['nisn'],
+                        'password' => Hash::make($tempPassword),
+                        'role' => 'siswa',
+                        'password_changed' => false,
+                    ]);
+                }
 
                 return [
                     'spmb' => $spmbRecord,
@@ -439,6 +356,19 @@ class PageController extends Controller
             $user->password_changed = true;
         }
         $user->save();
+
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Profil dan kata sandi berhasil diperbarui.',
+                'data' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'password_changed' => (bool) $user->password_changed,
+                ],
+            ]);
+        }
 
         return redirect()->route('profile.form')->with('success', 'Profil dan kata sandi berhasil diperbarui.');
     }

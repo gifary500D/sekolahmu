@@ -62,6 +62,14 @@
                             <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
                                 <td class="py-4 px-6 font-bold text-slate-900 dark:text-white">
                                     {{ $siswa->name }}
+                                    @php
+                                        $spmbRec = $siswa->spmb ?? $siswa->spmb_record;
+                                    @endphp
+                                    @if($spmbRec)
+                                        <span class="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200 mt-1">
+                                            SPMB: {{ $spmbRec->status }}
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="py-4 px-6">
                                     <span class="font-mono text-xs block font-semibold text-blue-700 dark:text-blue-400">NISN: {{ $siswa->nisn ?? '-' }}</span>

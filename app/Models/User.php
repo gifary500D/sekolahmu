@@ -61,6 +61,31 @@ class User extends Authenticatable
     }
 
     /**
+     * Dapatkan instance record pendaftaran SPMB (relasi eager-load atau fallback query).
+     */
+    public function getSpmb(): ?Spmb
+    {
+        if ($this->relationLoaded('spmb') && $this->spmb) {
+            return $this->spmb;
+        }
+
+        return $this->spmb_record;
+    }
+
+    /**
+     * Periksa apakah status SPMB siswa resmi Diterima atau merupakan siswa langsung tanpa SPMB.
+     */
+    public function isSpmbDiterima(): bool
+    {
+        $spmb = $this->getSpmb();
+        if (! $spmb) {
+            return true;
+        }
+
+        return in_array($spmb->status, ['Diterima', 'Lulus'], true);
+    }
+
+    /**
      * Check if user has a specific role
      */
     public function hasRole(string $role): bool

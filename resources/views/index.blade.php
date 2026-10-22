@@ -15,7 +15,7 @@
             <!-- Content -->
             <div class="text-white text-center md:text-left">
                 <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                    Selamat Datang di <span class="text-amber-300">SMA Pemda Bahorok</span>
+                    Selamat Datang di <span class="text-amber-300">SMA/SMK Pemda Bahorok</span>
                 </h1>
                 <p class="text-base sm:text-lg md:text-xl mb-8 text-blue-100 max-w-xl mx-auto md:mx-0">
                     Membangun generasi muda yang berkarakter, cerdas, dan berdaya saing global.
@@ -87,7 +87,7 @@
             <div class="order-2 md:order-1">
                 <h2 class="section-title dark:text-white">Tentang Kami</h2>
                 <p class="text-gray-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed mb-6">
-                    SMA Pemda Bahorok adalah institusi pendidikan terkemuka di Kabupaten Langkat yang berkomitmen untuk memberikan pendidikan berkualitas tinggi dengan pendekatan holistik. Kami percaya bahwa setiap siswa memiliki potensi unik yang perlu dikembangkan secara optimal.
+                    SMA/SMK Pemda Bahorok adalah institusi pendidikan terkemuka di Kabupaten Langkat yang berkomitmen untuk memberikan pendidikan berkualitas tinggi dengan pendekatan holistik. Kami percaya bahwa setiap siswa memiliki potensi unik yang perlu dikembangkan secara optimal.
                 </p>
                 <p class="text-gray-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed mb-8">
                     Dengan fasilitas modern, tenaga pengajar berpengalaman, dan lingkungan belajar yang kondusif, kami siap membentuk generasi pemimpin masa depan yang berakhlak mulia dan berdaya saing tinggi.
@@ -140,12 +140,12 @@
                 <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 relative group">
                     <img 
                         src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=1738&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" 
-                        alt="Gedung SMA Pemda Bahorok" 
+                        alt="Gedung SMA/SMK Pemda Bahorok" 
                         class="w-full h-[380px] sm:h-[420px] object-cover group-hover:scale-105 transition-transform duration-500"
                     >
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end p-6">
                         <div class="text-white">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">Kampus Utama</span>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">GEDUNG UTAMA</span>
                             <h3 class="text-lg font-bold">Gedung Pembelajaran Terpadu</h3>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
         <div class="text-center mb-12 sm:mb-16">
             <h2 class="section-title mx-auto max-w-2xl dark:text-white">Tenaga Pengajar</h2>
             <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-                Daftar dewan guru dan staf pengajar berdedikasi tinggi di SMA Pemda Bahorok
+                Daftar dewan guru dan staf pengajar berdedikasi tinggi di SMA/SMK Pemda Bahorok
             </p>
         </div>
 
@@ -254,38 +254,28 @@
         <div class="text-center mb-12 sm:mb-16">
             <h2 class="section-title mx-auto max-w-2xl dark:text-white">Program Unggulan Kami</h2>
             <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-                Kami menawarkan berbagai program pendidikan yang dirancang untuk mengembangkan potensi siswa secara holistik
+                Menyelenggarakan program terpadu jenjang SMA (MIPA &amp; IPS) dan SMK (Program Keahlian Terapan &amp; Kejuruan) untuk membekali peserta didik sukses melanjutkan studi ke perguruan tinggi maupun siap kerja di dunia industri.
             </p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Card 1 -->
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 group">
-                <div class="w-14 h-14 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Program Akademik</h3>
-                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                    Program pembelajaran intensif dengan metode inovatif untuk meningkatkan prestasi akademik siswa di semua mata pelajaran.
-                </p>
-            </div>
-
-            <!-- Card 2 -->
+            <!-- Card 1: SMA MIPA -->
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 group">
                 <div class="w-14 h-14 bg-cyan-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Program IPA</h3>
+                <div class="mb-2">
+                    <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-950/80 dark:text-cyan-300">Jenjang SMA</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">SMA: Peminatan MIPA</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                    Fokus pada pengembangan kemampuan sains dan matematika dengan pendekatan praktik dan eksperimen laboratorium.
+                    Penguatan riset sains, matematika terpadu, fisika, kimia, dan biologi dengan sarana praktikum laboratorium modern guna mencetak calon saintis, dokter, dan akademisi unggul.
                 </p>
             </div>
 
-            <!-- Card 3 -->
+            <!-- Card 2: SMA IPS -->
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 group">
                 <div class="w-14 h-14 bg-emerald-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
@@ -293,48 +283,76 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 010 18M12 3a14.5 14.5 0 000 18" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Program IPS</h3>
+                <div class="mb-2">
+                    <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300">Jenjang SMA</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">SMA: Peminatan IPS</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                    Pengembangan pemahaman ilmu sosial, sejarah, dan budaya dengan perspektif global untuk mencetak pemimpin masa depan.
+                    Pendalaman sosiologi, ekonomi kerakyatan, geografi, dan kajian sosial humaniora berwawasan global untuk mencetak calon pemimpin bangsa, diplomat, ekonom, dan praktisi hukum.
                 </p>
             </div>
 
-            <!-- Card 4 -->
+            <!-- Card 3: SMA Bahasa & Humaniora -->
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 group">
                 <div class="w-14 h-14 bg-amber-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3.75h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m6.334-12.138a48.996 48.996 0 014.166 2.372" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Program Bahasa</h3>
+                <div class="mb-2">
+                    <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300">Jenjang SMA</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">SMA: Bahasa &amp; Literasi</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                    Pelatihan intensif dalam berbagai bahasa asing untuk meningkatkan kompetensi komunikasi internasional siswa.
+                    Pengembangan kemahiran komunikasi multibahasa, sastra, diplomasi budaya, dan literasi digital guna memperluas daya saing siswa di kancah nasional maupun internasional.
                 </p>
             </div>
 
-            <!-- Card 5 -->
+            <!-- Card 4: SMK Teknik Komputer & Jaringan -->
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 group">
-                <div class="w-14 h-14 bg-rose-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <div class="w-14 h-14 bg-blue-900 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Program IT</h3>
+                <div class="mb-2">
+                    <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300">Jenjang SMK Kejuruan</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">SMK: Teknik Komputer &amp; Jaringan</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                    Pengembangan keterampilan teknologi informasi untuk mempersiapkan siswa menghadapi era digital dan industri 4.0.
+                    Program keahlian terapan rekayasa perangkat keras, konfigurasi router &amp; server, administrasi jaringan komputer, cybersecurity, dan komputasi awan siap industri digital.
                 </p>
             </div>
 
-            <!-- Card 6 -->
+            <!-- Card 5: SMK Bisnis & Manajemen Terapan -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                <div class="w-14 h-14 bg-rose-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m1-3l1 3m5-3l1 3m-1-3l-1 3" />
+                    </svg>
+                </div>
+                <div class="mb-2">
+                    <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300">Jenjang SMK Kejuruan</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">SMK: Manajemen &amp; Bisnis Terapan</h3>
+                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                    Kompetensi terapan administrasi perkantoran modern, pembukuan akuntansi digital, manajemen operasional, dan kewirausahaan retail yang selaras dengan kebutuhan dunia usaha.
+                </p>
+            </div>
+
+            <!-- Card 6: SMK Kejuruan Terapan & Vokasi Industri -->
             <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 group">
                 <div class="w-14 h-14 bg-indigo-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233l1.838-1.837a2.652 2.652 0 10-3.75-3.75l-1.838 1.837m3.75 3.75l-4.5 4.5" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Program Seni &amp; Budaya</h3>
+                <div class="mb-2">
+                    <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300">Jenjang SMK Kejuruan</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">SMK: Kejuruan Terapan &amp; Vokasi</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                    Pengembangan kreativitas dan apresiasi seni melalui berbagai kegiatan seni pertunjukan dan seni rupa daerah maupun nasional.
+                    Pembelajaran berbasis teaching factory (TEFA), sertifikasi uji kompetensi keahlian nasional, dan Praktik Kerja Lapangan (PKL) langsung bersama Dunia Usaha dan Dunia Industri (DUDI).
                 </p>
             </div>
         </div>
@@ -450,7 +468,7 @@
             <span class="inline-block text-amber-500 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Informasi Terbaru</span>
             <h2 class="section-title mx-auto max-w-2xl">Berita &amp; Pengumuman Sekolah</h2>
             <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
-                Ikuti perkembangan, artikel, dan informasi resmi seputar kegiatan akademik SMA Pemda Bahorok
+                Ikuti perkembangan, artikel, dan informasi resmi seputar kegiatan akademik SMA/SMK Pemda Bahorok
             </p>
         </div>
 
@@ -477,7 +495,7 @@
                     <div class="p-6">
                         <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider block mb-2">18 Oktober 2026</span>
                         <h3 class="font-bold text-slate-900 text-lg mb-2">Upacara Peringatan Hari Sumpah Pemuda</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">Siswa-siswi SMA Pemda Bahorok mengikuti upacara dengan khidmat mengenakan pakaian adat Nusantara.</p>
+                        <p class="text-xs text-slate-600 leading-relaxed">Siswa-siswi SMA/SMK Pemda Bahorok mengikuti upacara dengan khidmat mengenakan pakaian adat Nusantara.</p>
                     </div>
                 </div>
                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
@@ -556,7 +574,7 @@
             <span class="inline-block text-amber-400 font-bold tracking-widest text-xs sm:text-sm uppercase mb-2">Dokumentasi</span>
             <h2 class="text-3xl sm:text-4xl font-bold mb-4">Galeri Foto Kegiatan Sekolah</h2>
             <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-                Momen kebersamaan, fasilitas, dan aktivitas belajar mengajar di lingkungan SMA Pemda Bahorok
+                Momen kebersamaan, fasilitas, dan aktivitas belajar mengajar di lingkungan SMA/SMK Pemda Bahorok
             </p>
         </div>
 
@@ -635,7 +653,7 @@
                     allowfullscreen=""
                     loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"
-                    title="Lokasi SMA Pemda Bahorok">
+                    title="Lokasi SMA/SMK Pemda Bahorok">
                 </iframe>
             </div>
 
@@ -701,7 +719,7 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white relative z-10">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Siap Bergabung Bersama Kami?</h2>
         <p class="text-base sm:text-lg md:text-xl mb-8 text-blue-100">
-            Daftarkan dirimu sekarang dan jadilah bagian dari keluarga besar SMA Pemda Bahorok
+            Daftarkan dirimu sekarang dan jadilah bagian dari keluarga besar SMA/SMK Pemda Bahorok
         </p>
         <a href="/daftar" class="inline-block bg-amber-400 text-blue-950 px-10 py-4 rounded-lg font-bold hover:bg-amber-300 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/30">
             Daftar Sekarang

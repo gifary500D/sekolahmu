@@ -22,7 +22,7 @@
         <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white"><span class="dynamic-greeting" data-greeting>{{ $greetings }}</span>, {{ auth()->user()->name ?? 'Bapak/Ibu Guru' }}</h1>
-                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Kelola absensi kelas, penugasan mata pelajaran, dan penilaian siswa SMA Pemda Bahorok.</p>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Kelola absensi kelas, penugasan mata pelajaran, dan penilaian siswa SMA/SMK Pemda Bahorok.</p>
             </div>
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-sm font-medium border border-blue-200 dark:border-blue-800">

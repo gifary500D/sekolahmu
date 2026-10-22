@@ -9,7 +9,7 @@
         <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Masuk ke Portal</h1>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">SMA Pemda Bahorok, Kabupaten Langkat</p>
+            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">SMA/SMK Pemda Bahorok, Kabupaten Langkat</p>
         </div>
 
         <!-- Errors -->

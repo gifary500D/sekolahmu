@@ -13,7 +13,7 @@
                     Panel Guru &amp; Pengajar
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Rekapitulasi &amp; Input Absensi Siswa</h1>
-                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Centang kehadiran harian per siswa di kelas binaan SMA Pemda Bahorok.</p>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Centang kehadiran harian per siswa di kelas binaan SMA/SMK Pemda Bahorok.</p>
             </div>
             <div class="flex items-center gap-3">
                 <a href="{{ route('guru.absensi.export', ['kelas' => $selectedKelas?->nama]) }}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm">

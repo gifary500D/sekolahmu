@@ -13,7 +13,7 @@
                     Panel Administrator
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Manajemen Pengguna Sistem</h1>
-                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Kelola akun Admin, Guru, dan Siswa SMA Pemda Bahorok.</p>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Kelola akun Admin, Guru, dan Siswa SMA/SMK Pemda Bahorok.</p>
             </div>
             <div>
                 <a href="/dashboard" class="inline-flex items-center px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-semibold transition-colors">

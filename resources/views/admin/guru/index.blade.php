@@ -13,7 +13,7 @@
                     Panel Administrator
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Manajemen Data Guru &amp; Staf Pengajar</h1>
-                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Daftar tenaga pendidik dan administrator aktif di SMA Pemda Bahorok.</p>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Daftar tenaga pendidik dan administrator aktif di SMA/SMK Pemda Bahorok.</p>
             </div>
             <div class="flex items-center gap-3">
                 <a href="{{ route('admin.users.index') }}" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm">

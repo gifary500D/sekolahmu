@@ -9,7 +9,7 @@
         <div class="text-center mb-12">
             <h1 class="text-3xl sm:text-4xl font-extrabold mb-4">Galeri Foto Kegiatan Sekolah</h1>
             <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-                Momen kebersamaan, fasilitas modern, dan aktivitas belajar mengajar di lingkungan SMA Pemda Bahorok.
+                Momen kebersamaan, fasilitas modern, dan aktivitas belajar mengajar di lingkungan SMA/SMK Pemda Bahorok.
             </p>
         </div>
 

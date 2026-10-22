@@ -8,7 +8,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
             <h1 class="text-3xl md:text-4xl font-bold mb-2">Pendaftaran Siswa Baru</h1>
-            <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA Pemda Bahorok</p>
+            <p class="text-blue-100">Daftarkan dirimu untuk menjadi bagian dari SMA/SMK Pemda Bahorok</p>
         </div>
     </div>
 </section>
@@ -418,9 +418,9 @@
                                     class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                 >
                                     <option value="">-- Pilih Program --</option>
-                                    <option value="ipa" {{ old('program') == 'ipa' ? 'selected' : '' }}>Program IPA (Sains)</option>
-                                    <option value="ips" {{ old('program') == 'ips' ? 'selected' : '' }}>Program IPS (Sosial)</option>
-                                    <option value="bahasa" {{ old('program') == 'bahasa' ? 'selected' : '' }}>Program Bahasa</option>
+                                    <option value="ipa" {{ old('program') == 'ipa' ? 'selected' : '' }}>SMA - Peminatan MIPA (Matematika &amp; Sains)</option>
+                                    <option value="ips" {{ old('program') == 'ips' ? 'selected' : '' }}>SMA - Peminatan IPS (Sosial Humaniora)</option>
+                                    <option value="bahasa" {{ old('program') == 'bahasa' ? 'selected' : '' }}>SMK - Program Keahlian Terapan &amp; Kejuruan</option>
                                 </select>
                             </div>
 
@@ -474,7 +474,7 @@
                                     class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
                                 >
                                 <span class="ml-3 text-gray-700 dark:text-slate-300">
-                                    Saya setuju dengan tata tertib dan peraturan yang berlaku di SMA Pemda Bahorok
+                                    Saya setuju dengan tata tertib dan peraturan yang berlaku di SMA/SMK Pemda Bahorok
                                 </span>
                             </label>
 

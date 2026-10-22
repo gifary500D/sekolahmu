@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title') - SMA Pemda Bahorok</title>
+    <title>@yield('title') - SMA/SMK Pemda Bahorok</title>
     
     <!-- Anti-flicker Theme Script -->
     <script>
@@ -49,7 +49,7 @@
                         </div>
                         <div>
                             <span class="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400 block">Yayasan Pendidikan</span>
-                            <h1 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white leading-tight">SMA Pemda Bahorok</h1>
+                            <h1 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white leading-tight">SMA/SMK Pemda Bahorok</h1>
                         </div>
                     </a>
                 </div>
@@ -164,10 +164,10 @@
                 <!-- Col 1: Brand & Bio -->
                 <div class="space-y-4">
                     <div class="flex items-center gap-3">
-                        <img src="{{ asset('images/logo-skansa.png') }}" alt="Logo SMA Pemda Bahorok" class="w-12 h-12 object-contain">
+                        <img src="{{ asset('images/logo-skansa.png') }}" alt="Logo SMA/SMK Pemda Bahorok" class="w-12 h-12 object-contain">
                         <div>
                             <span class="text-[11px] font-bold uppercase tracking-widest text-blue-400 block">Yayasan Pendidikan</span>
-                            <h3 class="text-xl font-extrabold text-white">SMA Pemda Bahorok</h3>
+                            <h3 class="text-xl font-extrabold text-white">SMA/SMK Pemda Bahorok</h3>
                         </div>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed">
@@ -217,7 +217,7 @@
 
             <!-- Copyright & Bottom Bar -->
             <div class="border-t border-blue-900/50 pt-6 text-center text-xs text-slate-400">
-                <p>&copy; 2026 SMA Pemda Bahorok. Seluruh hak cipta dilindungi undang-undang.</p>
+                <p>&copy; 2026 SMA/SMK Pemda Bahorok. Seluruh hak cipta dilindungi undang-undang.</p>
             </div>
         </div>
     </footer>

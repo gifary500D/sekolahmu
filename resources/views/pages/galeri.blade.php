@@ -11,7 +11,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Galeri Sekolah</h1>
         <p class="text-base sm:text-lg text-blue-100 max-w-2xl mx-auto">
-            Momen dan dokumentasi kegiatan berharga SMA Pemda Bahorok
+            Momen dan dokumentasi kegiatan berharga SMA/SMK Pemda Bahorok
         </p>
     </div>
 </section>
@@ -76,7 +76,7 @@
         $photos = [
             ['id'=>1,  'cat'=>'akademik',  'title'=>'Upacara Bendera',             'desc'=>'Pelaksanaan upacara bendera hari Senin bersama seluruh warga sekolah.',          'date'=>'Oktober 2026', 'ratio'=>'portrait'],
             ['id'=>2,  'cat'=>'kegiatan',  'title'=>'Festival Seni Budaya',        'desc'=>'Penampilan tari tradisional pada festival budaya tahunan sekolah.',              'date'=>'September 2026','ratio'=>'landscape'],
-            ['id'=>3,  'cat'=>'olahraga',  'title'=>'Pertandingan Futsal',         'desc'=>'Tim futsal SMA Pemda Bahorok dalam pertandingan antar sekolah.',                'date'=>'September 2026','ratio'=>'portrait'],
+            ['id'=>3,  'cat'=>'olahraga',  'title'=>'Pertandingan Futsal',         'desc'=>'Tim futsal SMA/SMK Pemda Bahorok dalam pertandingan antar sekolah.',                'date'=>'September 2026','ratio'=>'portrait'],
             ['id'=>4,  'cat'=>'fasilitas', 'title'=>'Laboratorium Komputer',       'desc'=>'Fasilitas laboratorium komputer berstandar modern untuk siswa.',                 'date'=>'Agustus 2026', 'ratio'=>'landscape'],
             ['id'=>5,  'cat'=>'akademik',  'title'=>'Pameran Karya Ilmiah',        'desc'=>'Siswa memamerkan hasil penelitian ilmiah pada ajang Science Fair sekolah.',      'date'=>'Agustus 2026', 'ratio'=>'portrait'],
             ['id'=>6,  'cat'=>'kegiatan',  'title'=>'Pentas Drama Teater',         'desc'=>'Penampilan drama kolosal dari ekstrakurikuler teater sekolah.',                  'date'=>'Juli 2026',    'ratio'=>'landscape'],
@@ -108,7 +108,7 @@
                     {{-- alt wajib diisi dengan deskripsi gambar sesuai BRD --}}
                     <img
                         src=""
-                        alt="{{ $photo['title'] }} - SMA Pemda Bahorok"
+                        alt="{{ $photo['title'] }} - SMA/SMK Pemda Bahorok"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden"
                         onerror="this.classList.add('hidden')"
                     >
@@ -191,7 +191,7 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Ingin Bergabung Bersama Kami?</h2>
         <p class="text-base sm:text-lg text-blue-100 mb-8">
-            Daftarkan diri dan jadilah bagian dari keluarga besar SMA Pemda Bahorok
+            Daftarkan diri dan jadilah bagian dari keluarga besar SMA/SMK Pemda Bahorok
         </p>
         <a href="{{ url('/daftar') }}"
            class="inline-block bg-[#FFC20E] text-[#0F2F6B] px-10 py-4 rounded-lg font-bold hover:bg-yellow-300 transition-all duration-300 hover:shadow-xl">

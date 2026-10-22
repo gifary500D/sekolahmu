@@ -142,7 +142,7 @@ class ProductionSeeder extends Seeder
         $adminId = $adminUser ? $adminUser->id : null;
         $topikBerita = ['Prestasi Gemilang', 'Kegiatan Ekstrakurikuler', 'Penyuluhan Kesehatan', 'Porseni Antar Kelas', 'Pelatihan Olimpiade Sains', 'Kunjungan Edukatif', 'Ujian Sekolah Berbasis Digital', 'Peringatan Hari Besar Nasional'];
         for ($i = 1; $i <= 50; $i++) {
-            $judul = $topikBerita[array_rand($topikBerita)] . ' ' . $i . ' - SMA Pemda Bahorok';
+            $judul = $topikBerita[array_rand($topikBerita)] . ' ' . $i . ' - SMA/SMK Pemda Bahorok';
             Berita::updateOrCreate(
                 ['slug' => Str::slug($judul)],
                 [

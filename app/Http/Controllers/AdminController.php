@@ -79,7 +79,7 @@ class AdminController extends Controller
         </style></head><body>';
 
         $html .= '<div class="title">LAPORAN DATA PENDAFTARAN SPMB</div>';
-        $html .= '<div class="subtitle">SMA PEMDA BAHOROK · Tanggal Unduh: '.date('d F Y, H:i').' WIB</div>';
+        $html .= '<div class="subtitle">SMA/SMK PEMDA BAHOROK · Tanggal Unduh: '.date('d F Y, H:i').' WIB</div>';
 
         $html .= '<table>';
         $html .= '<thead><tr>

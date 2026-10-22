@@ -6,7 +6,7 @@
 <!-- Hero Section -->
 <section class="py-12 sm:py-16 bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Tentang SMA Pemda Bahorok</h1>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Tentang SMA/SMK Pemda Bahorok</h1>
         <p class="text-lg text-blue-100 max-w-2xl mx-auto">Mengenal lebih jauh tentang institusi pendidikan terkemuka kami</p>
     </div>
 </section>
@@ -22,8 +22,8 @@
                 <div class="mb-10">
                     <h3 class="text-2xl font-semibold text-amber-500 mb-4">Visi</h3>
                     <p class="text-gray-700 dark:text-slate-300 text-lg leading-relaxed">
-                        Menjadi sekolah menengah atas unggul yang menghasilkan peserta didik berkarakter, cerdas, 
-                        kreatif, dan berdaya saing tinggi di tingkat nasional maupun internasional.
+                        Menjadi sekolah menengah unggulan (SMA/SMK) yang menghasilkan peserta didik berkarakter, cerdas, 
+                        kreatif, terampil, dan berdaya saing tinggi di tingkat nasional maupun internasional.
                     </p>
                 </div>
 
@@ -52,7 +52,7 @@
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 mt-12">Sejarah Singkat</h2>
                 <div class="prose max-w-none text-gray-700 dark:text-slate-300">
                     <p class="mb-4">
-                        SMA Pemda Bahorok didirikan sebagai salah satu institusi pendidikan terkemuka di Bahorok, Langkat. 
+                        SMA/SMK Pemda Bahorok didirikan sebagai salah satu institusi pendidikan terkemuka di Bahorok, Langkat. 
                         Dengan dedikasi dan pengalaman, sekolah kami telah mencetak ribuan alumni yang sukses dan berpengaruh di berbagai bidang.
                     </p>
                     <p class="mb-4">
@@ -61,7 +61,7 @@
                         fondasi utama dalam setiap kegiatan pembelajaran.
                     </p>
                     <p>
-                        Dengan berbagai penghargaan dan prestasi yang telah diraih, SMA Pemda Bahorok terus berinovasi dan berkembang untuk 
+                        Dengan berbagai penghargaan dan prestasi yang telah diraih, SMA/SMK Pemda Bahorok terus berinovasi dan berkembang untuk 
                         memenuhi standar pendidikan unggul dan kebutuhan zaman.
                     </p>
                 </div>
@@ -159,7 +159,7 @@
 <section class="py-16 sm:py-20 bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-6">Ingin Bergabung Dengan Kami?</h2>
-        <p class="text-lg text-blue-100 mb-8">Daftarkan diri Anda dan menjadi bagian dari keluarga besar SMA Pemda Bahorok</p>
+        <p class="text-lg text-blue-100 mb-8">Daftarkan diri Anda dan menjadi bagian dari keluarga besar SMA/SMK Pemda Bahorok</p>
         <a href="/daftar" class="inline-block bg-amber-400 text-blue-950 px-10 py-4 rounded-lg font-bold hover:bg-amber-300 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/30">
             Daftar Sekarang
         </a>

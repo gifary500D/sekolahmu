@@ -68,6 +68,11 @@
                                 <option value="Sosiologi" {{ old('mata_pelajaran') == 'Sosiologi' ? 'selected' : '' }}>Sosiologi</option>
                                 <option value="Ekonomi" {{ old('mata_pelajaran') == 'Ekonomi' ? 'selected' : '' }}>Ekonomi</option>
                             </optgroup>
+                            <optgroup label="Peminatan Kejuruan Terapan (SMK)">
+                                <option value="Teknologi Informasi dan Jaringan" {{ old('mata_pelajaran') == 'Teknologi Informasi dan Jaringan' ? 'selected' : '' }}>Teknologi Informasi dan Jaringan</option>
+                                <option value="Administrasi dan Akuntansi Terapan" {{ old('mata_pelajaran') == 'Administrasi dan Akuntansi Terapan' ? 'selected' : '' }}>Administrasi dan Akuntansi Terapan</option>
+                                <option value="Keahlian Kejuruan Terapan" {{ old('mata_pelajaran') == 'Keahlian Kejuruan Terapan' ? 'selected' : '' }}>Keahlian Kejuruan Terapan</option>
+                            </optgroup>
                         </select>
                     </div>
 

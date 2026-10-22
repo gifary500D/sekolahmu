@@ -9,7 +9,7 @@
         <div class="text-center mb-12">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Berita &amp; Pengumuman Sekolah</h1>
             <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-                Ikuti perkembangan terbaru, artikel kegiatan, dan pengumuman penting dari civitas akademika SMA Pemda Bahorok.
+                Ikuti perkembangan terbaru, artikel kegiatan, dan pengumuman penting dari civitas akademika SMA/SMK Pemda Bahorok.
             </p>
         </div>
 
@@ -50,12 +50,12 @@
                         <div>
                             <span class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider block mb-2">18 Oktober 2026</span>
                             <h3 class="font-bold text-slate-900 dark:text-white text-base sm:text-lg mb-2">Upacara Peringatan Hari Sumpah Pemuda</h3>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">Siswa-siswi SMA Pemda Bahorok mengikuti upacara dengan khidmat mengenakan pakaian adat Nusantara. Acara diisi dengan pembacaan teks ikrar Sumpah Pemuda serta penampilan paduan suara sekolah.</p>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">Siswa-siswi SMA/SMK Pemda Bahorok mengikuti upacara dengan khidmat mengenakan pakaian adat Nusantara. Acara diisi dengan pembacaan teks ikrar Sumpah Pemuda serta penampilan paduan suara sekolah.</p>
                         </div>
                         <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
                             <button 
                                 type="button" 
-                                onclick="openNewsModal('Upacara Peringatan Hari Sumpah Pemuda', '18 Oktober 2026', 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800&auto=format&fit=crop', 'Siswa-siswi SMA Pemda Bahorok mengikuti upacara dengan khidmat mengenakan pakaian adat Nusantara. Acara diisi dengan pembacaan teks ikrar Sumpah Pemuda serta penampilan paduan suara sekolah yang membawakan lagu-lagu nasional.')"
+                                onclick="openNewsModal('Upacara Peringatan Hari Sumpah Pemuda', '18 Oktober 2026', 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800&auto=format&fit=crop', 'Siswa-siswi SMA/SMK Pemda Bahorok mengikuti upacara dengan khidmat mengenakan pakaian adat Nusantara. Acara diisi dengan pembacaan teks ikrar Sumpah Pemuda serta penampilan paduan suara sekolah yang membawakan lagu-lagu nasional.')"
                                 class="text-xs font-bold text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 inline-flex items-center gap-1 group transition-colors"
                             >
                                 Baca Selengkapnya <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>

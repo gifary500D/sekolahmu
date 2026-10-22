@@ -9,7 +9,7 @@
         <div class="text-center mb-12">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Agenda Kegiatan Sekolah</h1>
             <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-                Catat tanggal penting, jadwal ujian, kegiatan ekstrakurikuler, dan acara resmi SMA Pemda Bahorok.
+                Catat tanggal penting, jadwal ujian, kegiatan ekstrakurikuler, dan acara resmi SMA/SMK Pemda Bahorok.
             </p>
         </div>
 

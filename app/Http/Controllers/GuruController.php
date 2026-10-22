@@ -279,7 +279,7 @@ class GuruController extends Controller
         </style></head><body>';
 
         $html .= '<div class="title">REKAPITULASI KEHADIRAN SISWA - KELAS ' . strtoupper(htmlspecialchars($kelasName)) . '</div>';
-        $html .= '<div class="subtitle">SMA PEMDA BAHOROK · Tanggal Ekspor: ' . date('d F Y, H:i') . ' WIB</div>';
+        $html .= '<div class="subtitle">SMA/SMK PEMDA BAHOROK · Tanggal Ekspor: ' . date('d F Y, H:i') . ' WIB</div>';
 
         $html .= '<table>';
         $html .= '<thead><tr>

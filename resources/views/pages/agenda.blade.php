@@ -11,7 +11,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Agenda Sekolah</h1>
         <p class="text-base sm:text-lg text-blue-100 max-w-2xl mx-auto">
-            Pantau seluruh jadwal kegiatan, acara, dan momen penting SMA Pemda Bahorok
+            Pantau seluruh jadwal kegiatan, acara, dan momen penting SMA/SMK Pemda Bahorok
         </p>
     </div>
 </section>
@@ -306,7 +306,7 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Ingin Bergabung Bersama Kami?</h2>
         <p class="text-base sm:text-lg text-blue-100 mb-8">
-            Daftarkan diri dan jadilah bagian dari keluarga besar SMA Pemda Bahorok
+            Daftarkan diri dan jadilah bagian dari keluarga besar SMA/SMK Pemda Bahorok
         </p>
         <a href="{{ url('/daftar') }}"
            class="inline-block bg-[#FFC20E] text-[#0F2F6B] px-10 py-4 rounded-lg font-bold hover:bg-yellow-300 transition-all duration-300 hover:shadow-xl">

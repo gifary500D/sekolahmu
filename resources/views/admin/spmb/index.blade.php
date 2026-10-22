@@ -13,7 +13,7 @@
                     Panel Administrator
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Verifikasi Pendaftar SPMB</h1>
-                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Kelola dan perbarui status seleksi pendaftaran siswa baru SMA Pemda Bahorok.</p>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Kelola dan perbarui status seleksi pendaftaran siswa baru SMA/SMK Pemda Bahorok.</p>
             </div>
             <div class="flex items-center gap-3">
                 <a href="{{ route('admin.spmb.export') }}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm flex items-center gap-1.5">

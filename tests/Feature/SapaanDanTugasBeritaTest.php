@@ -20,6 +20,27 @@ class SapaanDanTugasBeritaTest extends TestCase
         $this->assertEquals('Asia/Jakarta', config('app.timezone'));
     }
 
+    public function test_identitas_sekolah_sma_smk_dan_seksi_program_selaras(): void
+    {
+        $response = $this->withoutVite()->get('/');
+        $response->assertOk();
+
+        // 1. Identitas SMA/SMK Pemda Bahorok
+        $response->assertSee('SMA/SMK Pemda Bahorok');
+        $response->assertDontSee('SMA Pemda Bahorok');
+
+        // 2. Istilah Kampus Utama diganti menjadi Gedung Utama
+        $response->assertSee('GEDUNG UTAMA');
+        $response->assertDontSee('Kampus Utama');
+
+        // 3. Selaras Seksi Program SMA & SMK
+        $response->assertSee('SMA: Peminatan MIPA');
+        $response->assertSee('SMA: Peminatan IPS');
+        $response->assertSee('SMK: Teknik Komputer &amp; Jaringan', false);
+        $response->assertSee('SMK: Manajemen &amp; Bisnis Terapan', false);
+        $response->assertSee('SMK: Kejuruan Terapan &amp; Vokasi', false);
+    }
+
     public function test_dashboard_admin_guru_siswa_menampilkan_sapaan_dinamis(): void
     {
         $admin = User::factory()->create(['role' => 'admin', 'password_changed' => true]);

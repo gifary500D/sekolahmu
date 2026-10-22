@@ -7,7 +7,7 @@
 <section class="py-12 sm:py-16 bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl md:text-5xl font-bold mb-4">Berita & Informasi</h1>
-        <p class="text-lg text-blue-100 max-w-2xl mx-auto">Dapatkan update terbaru seputar kegiatan, prestasi, dan perkembangan SMA Pemda Bahorok</p>
+        <p class="text-lg text-blue-100 max-w-2xl mx-auto">Dapatkan update terbaru seputar kegiatan, prestasi, dan perkembangan SMA/SMK Pemda Bahorok</p>
     </div>
 </section>
 
@@ -55,7 +55,7 @@
                         <div class="flex items-center gap-4 text-blue-100 text-sm">
                             <span>15 Oktober 2024</span>
                             <span>•</span>
-                            <span>Admin SMA</span>
+                            <span>Admin SMA/SMK</span>
                         </div>
                     </div>
                 </div>
@@ -235,7 +235,7 @@
                         20 September 2024
                     </p>
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-500 transition-colors leading-tight">Tim Basket Lolos ke Babak Semifinal</h3>
-                    <p class="text-gray-600 dark:text-slate-400 text-sm mb-4 flex-grow">Tim basket putra SMA Pemda Bahorok berhasil melampaui babak penyisihan dengan performa spektakuler melawan tim unggulan.</p>
+                    <p class="text-gray-600 dark:text-slate-400 text-sm mb-4 flex-grow">Tim basket putra SMA/SMK Pemda Bahorok berhasil melampaui babak penyisihan dengan performa spektakuler melawan tim unggulan.</p>
                     <a href="#" class="text-amber-500 font-semibold text-sm hover:text-amber-600 transition-colors inline-flex items-center gap-2 group/link">
                         Baca Selengkapnya
                         <svg class="w-4 h-4 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,7 +268,7 @@
 <section class="py-16 sm:py-20 bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-6">Ingin Bergabung Dengan Kami?</h2>
-        <p class="text-lg text-blue-100 mb-8">Daftarkan diri Anda dan menjadi bagian dari keluarga besar SMA Pemda Bahorok</p>
+        <p class="text-lg text-blue-100 mb-8">Daftarkan diri Anda dan menjadi bagian dari keluarga besar SMA/SMK Pemda Bahorok</p>
         <a href="/daftar" class="inline-block bg-amber-400 text-blue-950 px-10 py-4 rounded-lg font-bold hover:bg-amber-300 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/30">
             Daftar Sekarang
         </a>
